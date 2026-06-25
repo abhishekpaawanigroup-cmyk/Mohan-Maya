@@ -20,16 +20,7 @@ const isLocalhost = (origin) =>
   /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
 
 app.use(
-  cors({
-    origin(origin, callback) {
-      const allowed =
-        !origin ||
-        env.clientOrigins.includes(origin) ||
-        (env.nodeEnv !== "production" && isLocalhost(origin));
-      // Never throw: pass `false` so cors simply omits the ACAO header.
-      return callback(null, allowed);
-    },
-  })
+  cors()
 );
 
 app.use(express.json());
