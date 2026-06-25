@@ -26,3 +26,14 @@ export async function fetchYouTubeVideos({ pageToken = "", maxResults = 12 } = {
     total: data.total ?? 0,
   };
 }
+
+/**
+ * Fetch public channel statistics (subscribers, total videos, total views).
+ * Powers the Community page's live stat cards.
+ * @returns {Promise<{ title: string, subscriberCount: number, videoCount: number, viewCount: number, url: string }>}
+ */
+export async function fetchYouTubeChannel(signal) {
+  const res = await fetch(`${API_URL}/api/youtube/channel`, { signal });
+  if (!res.ok) throw new Error(`Channel request failed (${res.status})`);
+  return res.json();
+}
