@@ -72,7 +72,7 @@ export default function FeaturedVideo({ video }) {
         <span className="pointer-events-none absolute -top-10 -right-10 h-40 w-40 rounded-full bg-[#fe4462]/10 blur-3xl" />
 
         <span className="relative inline-flex w-fit items-center gap-2 rounded-full border border-[#fe4462]/30 bg-[#fe4462]/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-[#fe4462]">
-          ✦ Recently Uploaded
+         Recently Uploaded
         </span>
 
         <h3 className="relative mt-5 text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-tight text-gray-900 dark:text-white line-clamp-3 group-hover:text-[#fe4462] transition-colors">
@@ -99,3 +99,5 @@ export default function FeaturedVideo({ video }) {
     </motion.article>
   );
 }
+
+

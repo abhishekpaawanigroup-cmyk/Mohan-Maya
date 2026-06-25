@@ -7,6 +7,7 @@ import { usePageMeta } from "../../../hooks/useHooks";
 import { useYouTubeVideos } from "../../../hooks/useYouTubeVideos";
 import { useYouTubeChannel } from "../../../hooks/useYouTubeChannel";
 import Tabs from "./Tabs";
+import ChannelHeader from "./ChannelHeader";
 import YouTubeTab from "./YouTubeTab";
 import ComingSoon from "./ComingSoon";
 import CommunityStats from "./CommunityStats";
@@ -130,7 +131,17 @@ export default function SocialVideos() {
 
             <Tabs tabs={TABS} active={tab} onChange={setTab} />
 
-            <div className="mt-12">
+            {tab === "youtube" && (
+              <div className="mt-10">
+                <ChannelHeader
+                  channel={channel}
+                  status={channelStatus}
+                  fallbackUrl={LINKS.youtube}
+                />
+              </div>
+            )}
+
+            <div className="mt-10">
               {tab === "youtube" ? (
                 <YouTubeTab
                   videos={youtube.videos}
@@ -170,7 +181,7 @@ export default function SocialVideos() {
               <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-sm">
                 ✦ Join the community
               </span>
-              <h2 className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+              <h2 className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
                 Stay Connected with Mohan Maya
               </h2>
               <p className="mt-4 text-white/90 max-w-xl mx-auto text-base sm:text-lg leading-relaxed">
