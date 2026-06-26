@@ -6,6 +6,7 @@ import Breadcrumb from "./Breadcrumb";
 const ABOUT_HERO_IMAGE = "/About/Hero/about-banner.jpeg";
 
 /**
+ * 
  * Reusable inner-page hero, styled to match the About page hero
  * (same background image, dark overlay, typography and spacing).
  *

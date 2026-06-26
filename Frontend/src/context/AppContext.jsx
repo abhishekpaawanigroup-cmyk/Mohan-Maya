@@ -29,6 +29,8 @@ export function AppProvider({ children }) {
   const successTimer = useRef(null);
   // Attached to the header cart button so fly-to-cart knows where to land.
   const cartIconRef = useRef(null);
+  // Guards against stacking confirmation circles on rapid clicks (one at a time).
+  const flyingRef = useRef(false);
 
   // Apply the dark class to <html> so Tailwind's dark: variants work app-wide.
   useEffect(() => {
@@ -66,7 +68,8 @@ export function AppProvider({ children }) {
     successTimer.current = setTimeout(() => setCartSuccess(false), 650);
   }, []);
 
-  // Commits the actual cart state update + toast (no animation).
+  // Commits the actual cart state update. No toast — the circular fly-to-cart
+  // animation + the cart-icon tick/count are the only add-to-cart feedback.
   const commitAddToCart = useCallback(
     (product, qty = 1) => {
       setCart((prev) => {
@@ -76,41 +79,45 @@ export function AppProvider({ children }) {
         }
         return [...prev, { ...product, qty }];
       });
-      addToast(`${product.name} added to cart`, "success");
     },
-    [setCart, addToast]
+    [setCart]
   );
 
-  // Add to cart. When motion is allowed, play a small indicator that rises into
-  // the cart icon; the cart updates + tick fires when it lands (handleFlyerDone).
-  // The third arg is kept for call-site compatibility but is no longer used —
-  // the effect originates at the cart icon, not the source element.
+  // Add to cart. When motion is allowed, play a single confirmation circle that
+  // scales in at screen-centre and flies into the cart icon; the cart updates +
+  // tick fire when it lands (handleFlyerDone). Only one animation runs at a time
+  // — rapid clicks still add the item instantly (no stacked circles). The third
+  // arg is kept for call-site compatibility but is unused.
   const addToCart = useCallback(
     // eslint-disable-next-line no-unused-vars
     (product, qty = 1, source = null) => {
       const cartEl = cartIconRef.current;
 
-      if (cartEl && product?.image && !prefersReducedMotion()) {
+      if (cartEl && !flyingRef.current && !prefersReducedMotion()) {
         const to = cartEl.getBoundingClientRect();
         if (to.width) {
+          flyingRef.current = true;
           flyId += 1;
-          setFlyers((prev) => [...prev, { id: flyId, image: product.image, to, product, qty }]);
+          setFlyers([{ id: flyId, to, product, qty }]);
           return; // commit happens in handleFlyerDone when it lands
         }
       }
 
+      // Reduced motion, no cart icon, or an animation already in flight: commit
+      // immediately so the item is never lost and the count stays live.
       commitAddToCart(product, qty);
       triggerCartBounce();
     },
     [commitAddToCart, triggerCartBounce]
   );
 
-  // Called when the indicator reaches the cart: commit + bounce + tick + clean up.
+  // Called when the circle reaches the cart: commit + bounce + tick + clean up.
   const handleFlyerDone = useCallback(
     (flyer) => {
       commitAddToCart(flyer.product, flyer.qty);
       triggerCartBounce();
-      setFlyers((prev) => prev.filter((f) => f.id !== flyer.id));
+      setFlyers([]);
+      flyingRef.current = false;
     },
     [commitAddToCart, triggerCartBounce]
   );
