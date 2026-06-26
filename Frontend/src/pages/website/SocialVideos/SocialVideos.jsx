@@ -35,8 +35,9 @@ export default function SocialVideos() {
   );
 
   const [tab, setTab] = useState("youtube");
-  // Loaded once on mount; state persists while switching tabs (no refetch).
-  const youtube = useYouTubeVideos(12);
+  // Loads the channel's full upload history once on mount; pagination is
+  // client-side, so state persists while switching tabs (no refetch).
+  const youtube = useYouTubeVideos();
   // Live channel stats (subscribers / videos / views) for the dashboard cards.
   const { channel, status: channelStatus } = useYouTubeChannel();
   const activePlatform = TABS.find((t) => t.key === tab);
@@ -147,8 +148,6 @@ export default function SocialVideos() {
                   videos={youtube.videos}
                   status={youtube.status}
                   error={youtube.error}
-                  hasMore={youtube.hasMore}
-                  loadMore={youtube.loadMore}
                   retry={youtube.retry}
                 />
               ) : (
@@ -163,7 +162,7 @@ export default function SocialVideos() {
       <SocialHighlights platforms={TABS} channel={channel} status={channelStatus} />
 
       {/* ── Stay Connected CTA ── */}
-      <section className="pb-16 sm:pb-20 lg:pb-24 bg-[#f4edee] dark:bg-[#0d0508]">
+      <section className="p-16 sm:p-20 lg:p-24 bg-[#f4edee] dark:bg-[#0d0508]">
         <div className="max-w-7xl mx-auto px-5">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -179,7 +178,7 @@ export default function SocialVideos() {
 
             <div className="relative z-10">
               <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-sm">
-                ✦ Join the community
+                 Join the community
               </span>
               <h2 className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
                 Stay Connected with Mohan Maya

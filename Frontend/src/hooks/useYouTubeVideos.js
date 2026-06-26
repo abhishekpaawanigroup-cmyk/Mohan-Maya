@@ -1,73 +1,75 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchYouTubeVideos } from "../services/youtubeApi";
 
+const PAGE = 50; // YouTube's max page size — fewest requests to load everything
+const MAX_PAGES = 20; // safety cap (1000 videos) against a runaway pagination loop
+
 /**
- * Loads the channel's latest YouTube uploads from the backend with "Load More"
- * pagination.
+ * Loads the channel's ENTIRE upload history from the backend, walking
+ * `nextPageToken` until the channel is exhausted, then exposes the full deduped
+ * list. Display pagination is handled client-side by the consumer, so the page
+ * count always reflects the real number of videos.
  *
- * - Fetches the first page once on mount (no polling — fresh content arrives via
- *   the backend's short cache whenever the page is revisited/reloaded).
- * - `loadMore` appends the next page using the API's nextPageToken.
- * - Exposes clean status/error so the UI can show skeletons, errors and a
- *   Load More button.
- *
- * status: "loading" | "loadingMore" | "ready" | "error"
+ * status: "loading" | "ready" | "error"
  */
-export function useYouTubeVideos(pageSize = 12) {
+export function useYouTubeVideos() {
   const [videos, setVideos] = useState([]);
-  const [nextToken, setNextToken] = useState(null);
+  const [total, setTotal] = useState(0);
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState(null);
   const abortRef = useRef(null);
 
-  const fetchPage = useCallback(
-    async (token) => {
-      const isFirst = !token;
-      abortRef.current?.abort();
-      const ac = new AbortController();
-      abortRef.current = ac;
+  const loadAll = useCallback(async () => {
+    abortRef.current?.abort();
+    const ac = new AbortController();
+    abortRef.current = ac;
+    setStatus("loading");
+    setError(null);
 
-      setStatus(isFirst ? "loading" : "loadingMore");
-      setError(null);
-      try {
+    try {
+      const all = [];
+      const seen = new Set(); // dedupe by videoId across pages
+      let token = "";
+
+      for (let i = 0; i < MAX_PAGES; i++) {
         const data = await fetchYouTubeVideos(
-          { pageToken: token, maxResults: pageSize },
+          { pageToken: token, maxResults: PAGE },
           ac.signal
         );
         if (ac.signal.aborted) return;
-        setVideos((prev) => (isFirst ? data.videos : [...prev, ...data.videos]));
-        setNextToken(data.nextPageToken);
-        setStatus("ready");
-      } catch (e) {
-        if (e?.name === "AbortError") return;
-        setError(e);
-        setStatus("error");
+
+        for (const v of data.videos) {
+          if (v.videoId && !seen.has(v.videoId)) {
+            seen.add(v.videoId);
+            all.push(v);
+          }
+        }
+
+        token = data.nextPageToken;
+        if (!token) break;
       }
-    },
-    [pageSize]
-  );
+
+      if (ac.signal.aborted) return;
+      setVideos(all);
+      setTotal(all.length);
+      setStatus("ready");
+    } catch (e) {
+      if (e?.name === "AbortError") return;
+      setError(e);
+      setStatus("error");
+    }
+  }, []);
 
   useEffect(() => {
     // Deferred so the initial fetch isn't a synchronous setState in the effect.
-    const t = setTimeout(() => fetchPage(""), 0);
+    const t = setTimeout(loadAll, 0);
     return () => {
       clearTimeout(t);
       abortRef.current?.abort();
     };
-  }, [fetchPage]);
+  }, [loadAll]);
 
-  const loadMore = useCallback(() => {
-    if (nextToken && status !== "loadingMore") fetchPage(nextToken);
-  }, [nextToken, status, fetchPage]);
+  const retry = useCallback(() => loadAll(), [loadAll]);
 
-  const retry = useCallback(() => fetchPage(""), [fetchPage]);
-
-  return {
-    videos,
-    status,
-    error,
-    hasMore: Boolean(nextToken),
-    loadMore,
-    retry,
-  };
+  return { videos, total, status, error, retry };
 }

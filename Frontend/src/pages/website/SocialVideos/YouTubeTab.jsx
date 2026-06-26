@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiAlertCircle, FiInbox, FiRefreshCw } from "react-icons/fi";
 import ScrollReveal from "../../../components/common/ScrollReveal";
@@ -8,16 +8,17 @@ import FeaturedVideo from "./FeaturedVideo";
 import Pagination from "./Pagination";
 
 // auto-rows-fr keeps every row the same height → perfectly uniform cards.
-const GRID = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 auto-rows-fr";
-const PER_PAGE = 6; // videos shown per page beneath the featured one
+const GRID = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 auto-rows-fr";
+const PER_PAGE = 8; // videos shown per page beneath the featured one
 
-/** Renders the YouTube tab: featured latest video + paginated grid of the rest. */
-export default function YouTubeTab({ videos, status, error, hasMore, loadMore, retry }) {
+/**
+ * YouTube tab: a featured latest video plus a paginated grid of the rest.
+ * The hook loads the channel's full upload history up-front, so pagination here
+ * is purely client-side — every page is instant and the count is exact.
+ */
+export default function YouTubeTab({ videos, status, error, retry }) {
   const [page, setPage] = useState(1);
   const gridRef = useRef(null);
-  // Set when "Next" on the last page kicks off a fetch; advances once it lands.
-  const pendingNextRef = useRef(false);
-  const prevStatusRef = useRef(status);
 
   const scrollToGrid = () => {
     const el = gridRef.current;
@@ -25,17 +26,6 @@ export default function YouTubeTab({ videos, status, error, hasMore, loadMore, r
     const top = el.getBoundingClientRect().top + window.scrollY - 110;
     window.scrollTo({ top, behavior: "smooth" });
   };
-
-  // After a "load more" triggered by Next resolves, advance to the new page.
-  useEffect(() => {
-    const prev = prevStatusRef.current;
-    prevStatusRef.current = status;
-    if (prev === "loadingMore" && status === "ready" && pendingNextRef.current) {
-      pendingNextRef.current = false;
-      setPage((p) => p + 1);
-      scrollToGrid();
-    }
-  }, [status]);
 
   // ── First load — skeletons (featured + grid). ──
   if (status === "loading" && videos.length === 0) {
@@ -52,7 +42,7 @@ export default function YouTubeTab({ videos, status, error, hasMore, loadMore, r
           </div>
         </div>
         <div className={GRID}>
-          {Array.from({ length: 6 }).map((_, i) => (
+          {Array.from({ length: 8 }).map((_, i) => (
             <VideoSkeleton key={i} />
           ))}
         </div>
@@ -94,7 +84,7 @@ export default function YouTubeTab({ videos, status, error, hasMore, loadMore, r
     );
   }
 
-  // ── Loaded content: featured + paginated grid. ──
+  // ── Loaded content: featured + client-paginated grid. ──
   const [featured, ...rest] = videos;
   const totalPages = Math.max(1, Math.ceil(rest.length / PER_PAGE));
   const safePage = Math.min(page, totalPages);
@@ -103,16 +93,6 @@ export default function YouTubeTab({ videos, status, error, hasMore, loadMore, r
   const goTo = (p) => {
     setPage(p);
     scrollToGrid();
-  };
-  const goPrev = () => {
-    if (safePage > 1) goTo(safePage - 1);
-  };
-  const goNext = () => {
-    if (safePage < totalPages) goTo(safePage + 1);
-    else if (hasMore && status !== "loadingMore") {
-      pendingNextRef.current = true;
-      loadMore();
-    }
   };
 
   return (
@@ -127,7 +107,7 @@ export default function YouTubeTab({ videos, status, error, hasMore, loadMore, r
               More Videos
             </h3>
             <span className="text-sm font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
-              Page {safePage} of {totalPages}
+              {videos.length} videos · Page {safePage} of {totalPages}
             </span>
           </div>
 
@@ -150,22 +130,7 @@ export default function YouTubeTab({ videos, status, error, hasMore, loadMore, r
             </AnimatePresence>
           </div>
 
-          {/* Inline note if a Load More request failed but we still have videos. */}
-          {status === "error" && (
-            <p className="text-center text-sm text-[#fe4462] mt-6">
-              Couldn't load more right now. Please try again.
-            </p>
-          )}
-
-          <Pagination
-            page={safePage}
-            totalPages={totalPages}
-            onChange={goTo}
-            onPrev={goPrev}
-            onNext={goNext}
-            nextLoading={status === "loadingMore"}
-            nextHasMore={hasMore}
-          />
+          <Pagination page={safePage} totalPages={totalPages} onChange={goTo} />
         </div>
       )}
     </div>

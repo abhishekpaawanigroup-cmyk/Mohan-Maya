@@ -1,85 +1,104 @@
+import { motion } from "framer-motion";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
-/** Build a compact page list with ellipses, e.g. 1 … 4 5 6 … 12. */
-function pageItems(page, total) {
-  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
-  const items = [1];
-  if (page > 3) items.push("left-ellipsis");
-  const start = Math.max(2, page - 1);
-  const end = Math.min(total - 1, page + 1);
-  for (let i = start; i <= end; i++) items.push(i);
-  if (page < total - 2) items.push("right-ellipsis");
-  items.push(total);
-  return items;
-}
+const WINDOW = 3; // how many page numbers are visible at once
 
 /**
- * Theme-consistent pagination control. `onPrev` / `onNext` are separate from
- * `onChange` so the parent can hook "Next" on the final page into fetching more
- * videos from the API. `nextLoading` shows a spinner; `nextHasMore` keeps Next
- * enabled past the last loaded page.
+ * A sliding window of `WINDOW` page numbers, centred on the current page when
+ * possible: 1 2 3 → 2 3 4 → 3 4 5 … Ellipses mark hidden ranges on either side.
  */
-export default function Pagination({
-  page,
-  totalPages,
-  onChange,
-  onPrev,
-  onNext,
-  nextLoading = false,
-  nextHasMore = false,
-}) {
-  if (totalPages <= 1 && !nextHasMore) return null;
+function pageWindow(page, total) {
+  if (total <= WINDOW) {
+    return { nums: Array.from({ length: total }, (_, i) => i + 1), left: false, right: false };
+  }
+  const start = Math.min(Math.max(page - 1, 1), total - WINDOW + 1);
+  const nums = Array.from({ length: WINDOW }, (_, i) => start + i);
+  return { nums, left: start > 1, right: start + WINDOW - 1 < total };
+}
 
-  const items = pageItems(page, totalPages);
-  const prevDisabled = page <= 1;
-  const nextDisabled = page >= totalPages && !nextHasMore;
+const arrowBase =
+  "grid place-items-center h-10 w-10 rounded-full border border-white/60 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl text-gray-600 dark:text-gray-300 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:border-[#fe4462] enabled:hover:text-[#fe4462] enabled:hover:-translate-y-0.5 enabled:active:scale-95";
 
-  const arrowBase =
-    "grid place-items-center h-10 w-10 rounded-full border border-white/60 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl text-gray-600 dark:text-gray-300 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:border-[#fe4462] enabled:hover:text-[#fe4462] enabled:hover:-translate-y-0.5";
+const ellipsisBase =
+  "grid place-items-center h-10 min-w-10 px-2 rounded-full text-gray-400 dark:text-gray-500 transition-colors duration-300 hover:text-[#fe4462] active:scale-95 select-none";
+
+/**
+ * Modern, theme-consistent pagination. The active page is a gradient pill that
+ * smoothly slides between numbers via a shared layout animation (layoutId).
+ * Purely client-side: `onChange(nextPage)` is the only callback.
+ */
+export default function Pagination({ page, totalPages, onChange }) {
+  if (totalPages <= 1) return null;
+
+  const { nums, left, right } = pageWindow(page, totalPages);
+  const go = (p) => {
+    if (p >= 1 && p <= totalPages && p !== page) onChange(p);
+  };
 
   return (
-    <nav aria-label="Video pagination" className="mt-12 flex items-center justify-center gap-2">
-      <button type="button" onClick={onPrev} disabled={prevDisabled} aria-label="Previous page" className={arrowBase}>
+    <motion.nav
+      aria-label="Video pagination"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="mt-12 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2"
+    >
+      <button
+        type="button"
+        onClick={() => go(page - 1)}
+        disabled={page <= 1}
+        aria-label="Previous page"
+        className={arrowBase}
+      >
         <FiChevronLeft size={18} />
       </button>
 
-      <div className="flex items-center gap-1.5">
-        {items.map((it) =>
-          typeof it === "string" ? (
-            <span key={it} className="px-1.5 text-gray-400 dark:text-gray-500 select-none">
-              …
-            </span>
-          ) : (
-            <button
-              key={it}
-              type="button"
-              onClick={() => onChange(it)}
-              aria-current={it === page ? "page" : undefined}
-              className={`h-10 min-w-10 px-3 rounded-full text-sm font-semibold transition-all duration-300 ${
-                it === page
-                  ? "bg-gradient-to-r from-[#fe4462] to-[#d93550] text-white shadow-md shadow-[#fe4462]/40"
-                  : "border border-white/60 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl text-gray-600 dark:text-gray-300 hover:border-[#fe4462] hover:text-[#fe4462] hover:-translate-y-0.5"
-              }`}
-            >
-              {it}
-            </button>
-          )
-        )}
-      </div>
+      {/* Hidden earlier pages → jump to the first page */}
+      {left && (
+        <button type="button" onClick={() => go(1)} aria-label="Jump to first page" className={ellipsisBase}>
+          …
+        </button>
+      )}
+
+      {nums.map((n) => (
+        <button
+          key={n}
+          type="button"
+          onClick={() => go(n)}
+          aria-current={n === page ? "page" : undefined}
+          className={`relative grid place-items-center h-10 min-w-10 px-3 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 active:scale-95 ${
+            n === page
+              ? "text-white"
+              : "text-gray-600 dark:text-gray-300 border border-white/60 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl hover:border-[#fe4462] hover:text-[#fe4462]"
+          }`}
+        >
+          {n === page && (
+            <motion.span
+              layoutId="yt-page-active"
+              transition={{ type: "spring", stiffness: 500, damping: 36 }}
+              className="absolute inset-0 rounded-full bg-gradient-to-r from-[#fe4462] to-[#d93550] shadow-md shadow-[#fe4462]/40"
+            />
+          )}
+          <span className="relative z-10">{n}</span>
+        </button>
+      ))}
+
+      {/* Hidden later pages → jump to the last page */}
+      {right && (
+        <button type="button" onClick={() => go(totalPages)} aria-label="Jump to last page" className={ellipsisBase}>
+          …
+        </button>
+      )}
 
       <button
         type="button"
-        onClick={onNext}
-        disabled={nextDisabled || nextLoading}
+        onClick={() => go(page + 1)}
+        disabled={page >= totalPages}
         aria-label="Next page"
         className={arrowBase}
       >
-        {nextLoading ? (
-          <span className="h-4 w-4 rounded-full border-2 border-[#fe4462]/40 border-t-[#fe4462] animate-spin" />
-        ) : (
-          <FiChevronRight size={18} />
-        )}
+        <FiChevronRight size={18} />
       </button>
-    </nav>
+    </motion.nav>
   );
 }

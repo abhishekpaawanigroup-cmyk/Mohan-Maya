@@ -4,6 +4,7 @@ import {
   FaGift,
   FaHandsHelping,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const WhyChooseUs = () => {
   return (
@@ -96,10 +97,14 @@ const WhyChooseUs = () => {
               />
  
             </div>
- 
-            <button className="mt-10 px-8 py-4 bg-[#fe4462] border border-[#fe4462] rounded-full text-white font-semibold shadow-lg hover:bg-transparent hover:text-[#fe4462] hover:border-[#fe4462] duration-300 cursor-pointer">
+
+            <Link 
+             to="/shop"
+            className="mt-10 px-8 py-4 bg-[#fe4462] border border-[#fe4462] rounded-full text-white font-semibold shadow-lg hover:bg-transparent hover:text-[#fe4462] hover:border-[#fe4462] duration-300 cursor-pointer"
+              >
               Explore Collection
-            </button>
+              </Link>
+      
  
           </div>
  
