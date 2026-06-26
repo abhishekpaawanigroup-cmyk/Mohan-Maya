@@ -17,10 +17,10 @@ function pageWindow(page, total) {
 }
 
 const arrowBase =
-  "grid place-items-center h-10 w-10 rounded-full border border-white/60 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl text-gray-600 dark:text-gray-300 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:border-[#fe4462] enabled:hover:text-[#fe4462] enabled:hover:-translate-y-0.5 enabled:active:scale-95";
+  "grid place-items-center h-10 w-10 rounded-full border border-white/60 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl text-gray-600 dark:text-gray-300 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:border-[var(--accent)] enabled:hover:text-[var(--accent)] enabled:hover:-translate-y-0.5 enabled:active:scale-95";
 
 const ellipsisBase =
-  "grid place-items-center h-10 min-w-10 px-2 rounded-full text-gray-400 dark:text-gray-500 transition-colors duration-300 hover:text-[#fe4462] active:scale-95 select-none";
+  "grid place-items-center h-10 min-w-10 px-2 rounded-full text-gray-400 dark:text-gray-500 transition-colors duration-300 hover:text-[var(--accent)] active:scale-95 select-none";
 
 /**
  * Modern, theme-consistent pagination. The active page is a gradient pill that
@@ -69,14 +69,14 @@ export default function Pagination({ page, totalPages, onChange }) {
           className={`relative grid place-items-center h-10 min-w-10 px-3 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 active:scale-95 ${
             n === page
               ? "text-white"
-              : "text-gray-600 dark:text-gray-300 border border-white/60 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl hover:border-[#fe4462] hover:text-[#fe4462]"
+              : "text-gray-600 dark:text-gray-300 border border-white/60 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl hover:border-[var(--accent)] hover:text-[var(--accent)]"
           }`}
         >
           {n === page && (
             <motion.span
               layoutId="yt-page-active"
               transition={{ type: "spring", stiffness: 500, damping: 36 }}
-              className="absolute inset-0 rounded-full bg-gradient-to-r from-[#fe4462] to-[#d93550] shadow-md shadow-[#fe4462]/40"
+              className="absolute inset-0 rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] shadow-md shadow-[var(--ring)]"
             />
           )}
           <span className="relative z-10">{n}</span>

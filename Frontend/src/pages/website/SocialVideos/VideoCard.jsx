@@ -28,7 +28,7 @@ export default function VideoCard({ video }) {
 
         {/* Play indicator */}
         <span className="absolute inset-0 grid place-items-center pointer-events-none">
-          <span className="relative grid place-items-center h-16 w-16 rounded-full bg-white/95 text-[#fe4462] shadow-2xl scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
+          <span className="relative grid place-items-center h-16 w-16 rounded-full bg-white/95 text-[var(--accent)] shadow-2xl scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
             <span className="absolute inset-0 rounded-full bg-white/60 animate-ping opacity-0 group-hover:opacity-40" />
             <FiPlay className="relative ml-1" size={26} />
           </span>
@@ -43,10 +43,10 @@ export default function VideoCard({ video }) {
       <div className="p-5 flex flex-col flex-1">
         {date && (
           <p className="mb-2 inline-flex items-center gap-1.5 text-xs font-medium text-gray-400 dark:text-gray-500">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#fe4462]" /> {date}
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> {date}
           </p>
         )}
-        <h3 className="font-bold text-[15px] leading-snug text-gray-900 dark:text-white line-clamp-2 min-h-[2.65rem] group-hover:text-[#fe4462] transition-colors">
+        <h3 className="font-bold text-[15px] leading-snug text-gray-900 dark:text-white line-clamp-2 min-h-[2.65rem] group-hover:text-[var(--accent)] transition-colors">
           {title}
         </h3>
 
@@ -55,7 +55,7 @@ export default function VideoCard({ video }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Watch "${title}" on YouTube`}
-          className="mt-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#fe4462] to-[#d93550] hover:shadow-lg hover:shadow-[#fe4462]/40 text-white text-sm font-semibold px-4 py-3 rounded-full transition-all duration-300 group-hover:gap-3"
+          className="mt-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:shadow-lg hover:shadow-[var(--ring)] text-white text-sm font-semibold px-4 py-3 rounded-full transition-all duration-300 group-hover:gap-3"
         >
           <FaYoutube size={16} /> Watch on YouTube <FiExternalLink size={13} />
         </a>

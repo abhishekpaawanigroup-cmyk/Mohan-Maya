@@ -15,8 +15,8 @@ export default function SocialHighlights({ platforms, channel, status }) {
   return (
     <section className="relative py-16 sm:py-20 bg-[#f4edee] dark:bg-[#0d0508] overflow-hidden">
       {/* Decorative accents */}
-      <div className="pointer-events-none absolute top-0 right-0 w-72 h-72 rounded-full bg-[#fe4462]/10 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 left-0 w-72 h-72 rounded-full bg-[#ed9ba8]/20 blur-3xl" />
+      <div className="pointer-events-none absolute top-0 right-0 w-72 h-72 rounded-full bg-[var(--soft)] blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 left-0 w-72 h-72 rounded-full bg-[var(--glow)] blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-5">
         <SectionHeading
@@ -62,7 +62,7 @@ export default function SocialHighlights({ platforms, channel, status }) {
                   >
                     <Icon size={26} />
                   </span>
-                  <span className="grid place-items-center h-9 w-9 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-300 transition-all duration-500 group-hover:bg-[#fe4462] group-hover:text-white group-hover:rotate-45">
+                  <span className="grid place-items-center h-9 w-9 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-300 transition-all duration-500 group-hover:bg-[var(--accent)] group-hover:text-white group-hover:rotate-45">
                     <FiArrowUpRight size={18} />
                   </span>
                 </div>

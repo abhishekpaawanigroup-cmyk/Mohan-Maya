@@ -54,7 +54,7 @@ export default function YouTubeTab({ videos, status, error, retry }) {
   if (status === "error" && videos.length === 0) {
     return (
       <div className="mx-auto max-w-lg text-center py-14 px-8 rounded-3xl border border-white/60 dark:border-white/10 bg-white/70 dark:bg-white/[0.04] backdrop-blur-xl shadow-[0_10px_40px_-18px_rgba(0,0,0,0.25)]">
-        <span className="mx-auto grid place-items-center h-16 w-16 rounded-2xl bg-[#fe4462]/10 text-[#fe4462] mb-5">
+        <span className="mx-auto grid place-items-center h-16 w-16 rounded-2xl bg-[var(--soft)] text-[var(--accent)] mb-5">
           <FiAlertCircle size={28} />
         </span>
         <h3 className="text-xl font-bold text-gray-900 dark:text-white">Couldn't load videos</h3>
@@ -63,7 +63,7 @@ export default function YouTubeTab({ videos, status, error, retry }) {
         </p>
         <button
           onClick={retry}
-          className="mt-6 inline-flex items-center gap-2 bg-gradient-to-r from-[#fe4462] to-[#d93550] text-white font-semibold px-7 py-3 rounded-full shadow-lg shadow-[#fe4462]/30 hover:-translate-y-0.5 transition-all duration-300"
+          className="mt-6 inline-flex items-center gap-2 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-white font-semibold px-7 py-3 rounded-full shadow-lg shadow-[var(--ring)] hover:-translate-y-0.5 transition-all duration-300"
         >
           <FiRefreshCw size={16} /> Try again
         </button>
@@ -75,7 +75,7 @@ export default function YouTubeTab({ videos, status, error, retry }) {
   if (status === "ready" && videos.length === 0) {
     return (
       <div className="mx-auto max-w-lg text-center py-14 px-8 rounded-3xl border border-white/60 dark:border-white/10 bg-white/70 dark:bg-white/[0.04] backdrop-blur-xl shadow-[0_10px_40px_-18px_rgba(0,0,0,0.25)]">
-        <span className="mx-auto grid place-items-center h-16 w-16 rounded-2xl bg-[#fe4462]/10 text-[#fe4462] mb-5">
+        <span className="mx-auto grid place-items-center h-16 w-16 rounded-2xl bg-[var(--soft)] text-[var(--accent)] mb-5">
           <FiInbox size={28} />
         </span>
         <h3 className="text-xl font-bold text-gray-900 dark:text-white">No videos yet</h3>

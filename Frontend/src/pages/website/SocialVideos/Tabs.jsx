@@ -20,14 +20,14 @@ export default function Tabs({ tabs, active, onChange }) {
               className={`relative inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-full text-sm font-semibold transition-colors duration-300 ${
                 isActive
                   ? "text-white"
-                  : "text-gray-600 dark:text-gray-300 hover:text-[#fe4462]"
+                  : "text-gray-600 dark:text-gray-300 hover:text-[var(--accent)]"
               }`}
             >
               {isActive && (
                 <motion.span
                   layoutId="activeTabPill"
                   transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                  className="absolute inset-0 rounded-full bg-gradient-to-r from-[#fe4462] to-[#d93550] shadow-md shadow-[#fe4462]/40"
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] shadow-md shadow-[var(--ring)]"
                 />
               )}
               <span className="relative z-10 flex items-center gap-2">
