@@ -1,6 +1,7 @@
 import FeaturedProduct from "./FeaturedProduct";
 import TrendyCollection from "./TrendyCollection";
 import Hero from "./Hero";
+import MeetCharacters from "./MeetCharacters";
 import Testimonials from "./Testimonial";
 import BestSellers from "./Best-seller";
 import SeasonalCollection from "./Season-collection";
@@ -19,6 +20,7 @@ const Home = () => {
   return (
     <>
       <Hero />
+      <MeetCharacters />
       <FeaturedProduct />
       <FeaturesSection />
       <SeasonalCollection />

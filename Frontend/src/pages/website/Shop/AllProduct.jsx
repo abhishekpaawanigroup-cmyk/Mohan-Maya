@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { FiSliders, FiInbox, FiX } from "react-icons/fi";
 import ProductFilters from "./Filter";
 import ProductModal from "./ProductModal";
@@ -24,6 +24,13 @@ const Products = () => {
   const [page, setPage] = useState(1);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  const prefersReducedMotion = useReducedMotion();
+  const productsTopRef = useRef(null);
+  const gridWrapRef = useRef(null);
+  // Height the grid is locked to during a page transition so the column never
+  // collapses (and the page never jumps) while the old grid swaps for the new.
+  const [lockedHeight, setLockedHeight] = useState(null);
 
   // Show skeletons while the debounced search is catching up with typing.
   const loading = search !== debouncedSearch;
@@ -98,6 +105,20 @@ const Products = () => {
   const safePage = Math.min(page, totalPages);
   const paginated = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
+  // Pagination handler: lock the current grid height (prevents collapse/jump
+  // mid-transition), change the page, then smoothly scroll the product section
+  // — not the whole window — back to the top.
+  const goToPage = (next) => {
+    const target = Math.min(Math.max(1, next), totalPages);
+    if (target === safePage) return;
+    if (gridWrapRef.current) setLockedHeight(gridWrapRef.current.offsetHeight);
+    setPage(target);
+    productsTopRef.current?.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  };
+
   const resetFilters = () => {
     setSelectedCategory("All Products");
     setSelectedCharacter("All Characters");
@@ -150,7 +171,10 @@ const Products = () => {
 
           {/* Products */}
           <div className="flex-1">
-            <div className="flex items-center justify-between mb-6">
+            <div
+              ref={productsTopRef}
+              className="flex items-center justify-between mb-6 scroll-mt-24"
+            >
               <p className="text-sm text-gray-600 dark:text-gray-300">
                 {loading ? "Loading…" : `${filtered.length} product${filtered.length !== 1 ? "s" : ""} found`}
               </p>
@@ -171,23 +195,48 @@ const Products = () => {
               </div>
             ) : (
               <>
-                <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-                  <AnimatePresence mode="popLayout">
-                    {paginated.map((product) => (
-                      <ProductCard
-                        key={product.id}
-                        product={product}
-                        onQuickView={setQuickViewProduct}
-                      />
-                    ))}
+                {/* The wrapper holds a locked min-height during transitions so the
+                    column never collapses while the grid fades/slides between pages. */}
+                <div
+                  ref={gridWrapRef}
+                  style={lockedHeight ? { minHeight: lockedHeight } : undefined}
+                >
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.div
+                      key={safePage}
+                      initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{
+                        opacity: 0,
+                        y: prefersReducedMotion ? 0 : -8,
+                        transition: { duration: prefersReducedMotion ? 0 : 0.12, ease: "easeIn" },
+                      }}
+                      transition={{
+                        duration: prefersReducedMotion ? 0 : 0.28,
+                        ease: [0.4, 0, 0.2, 1],
+                      }}
+                      onAnimationComplete={(definition) => {
+                        // Release the height lock once the new grid has settled.
+                        if (definition?.opacity === 1) setLockedHeight(null);
+                      }}
+                      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"
+                    >
+                      {paginated.map((product) => (
+                        <ProductCard
+                          key={product.id}
+                          product={product}
+                          onQuickView={setQuickViewProduct}
+                        />
+                      ))}
+                    </motion.div>
                   </AnimatePresence>
-                </motion.div>
+                </div>
 
                 {/* Pagination */}
                 {totalPages > 1 && (
                   <nav aria-label="Pagination" className="flex items-center justify-center gap-2 mt-12">
                     <button
-                      onClick={() => setPage(Math.max(1, safePage - 1))}
+                      onClick={() => goToPage(safePage - 1)}
                       disabled={safePage === 1}
                       aria-label="Previous page"
                       className="h-10 px-3 rounded-lg border border-gray-300 dark:border-white/10 dark:text-white disabled:opacity-40 hover:border-[#fe4462] hover:text-[#fe4462] transition"
@@ -197,7 +246,7 @@ const Products = () => {
                     {Array.from({ length: totalPages }).map((_, i) => (
                       <button
                         key={`page-${i + 1}`}
-                        onClick={() => setPage(i + 1)}
+                        onClick={() => goToPage(i + 1)}
                         aria-label={`Go to page ${i + 1}`}
                         aria-current={safePage === i + 1 ? "page" : undefined}
                         className={`w-10 h-10 rounded-lg font-medium transition ${
@@ -210,7 +259,7 @@ const Products = () => {
                       </button>
                     ))}
                     <button
-                      onClick={() => setPage(Math.min(totalPages, safePage + 1))}
+                      onClick={() => goToPage(safePage + 1)}
                       disabled={safePage === totalPages}
                       aria-label="Next page"
                       className="h-10 px-3 rounded-lg border border-gray-300 dark:border-white/10 dark:text-white disabled:opacity-40 hover:border-[#fe4462] hover:text-[#fe4462] transition"
