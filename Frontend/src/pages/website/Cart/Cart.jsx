@@ -45,7 +45,7 @@ export default function Cart() {
   // ── Empty state ──────────────────────────────────────────
   if (!cart.length) {
     return (
-      <section className="relative overflow-hidden min-h-screen flex items-center bg-[#f4edee] dark:bg-[#0d0508] pt-28 pb-20">
+      <section className="relative overflow-hidden min-h-screen flex items-center bg-[#fbfefb] dark:bg-[#0d0508] pt-28 pb-20">
         <div aria-hidden="true" className="pointer-events-none absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-[#fe4462]/10 blur-3xl" />
         <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 -right-24 h-[460px] w-[460px] rounded-full bg-[#c48212]/10 blur-3xl" />
 
@@ -91,7 +91,7 @@ export default function Cart() {
       />
 
       {/* ── Cart body ── */}
-      <section className="bg-[#f4edee] dark:bg-[#0d0508] py-12 sm:py-16">
+      <section className="bg-[#fbfefb] dark:bg-[#0d0508] py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-5 sm:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 items-start">
             {/* Items list */}
@@ -124,7 +124,7 @@ export default function Cart() {
                       {/* Image */}
                       <Link
                         to="/shop"
-                        className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#f0e0e3] dark:bg-white/10 grid place-items-center"
+                        className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#fbfefb] dark:bg-white/10 grid place-items-center"
                       >
                         <img
                           src={item.image}
@@ -157,7 +157,7 @@ export default function Cart() {
                             <button
                               onClick={() => updateQty(item.id, item.qty - 1)}
                               disabled={item.qty <= 1}
-                              className="grid h-9 w-9 place-items-center text-gray-600 dark:text-gray-300 transition-colors hover:text-[#fe4462] disabled:opacity-40"
+                              className="grid h-10 w-10 sm:h-9 sm:w-9 place-items-center text-gray-600 dark:text-gray-300 transition-colors hover:text-[#fe4462] disabled:opacity-40"
                               aria-label={`Decrease ${item.name} quantity`}
                             >
                               <FiMinus size={14} />
@@ -167,7 +167,7 @@ export default function Cart() {
                             </span>
                             <button
                               onClick={() => updateQty(item.id, item.qty + 1)}
-                              className="grid h-9 w-9 place-items-center text-gray-600 dark:text-gray-300 transition-colors hover:text-[#fe4462]"
+                              className="grid h-10 w-10 sm:h-9 sm:w-9 place-items-center text-gray-600 dark:text-gray-300 transition-colors hover:text-[#fe4462]"
                               aria-label={`Increase ${item.name} quantity`}
                             >
                               <FiPlus size={14} />
@@ -183,7 +183,7 @@ export default function Cart() {
                           <button
                             onClick={() => removeFromCart(item.id)}
                             aria-label={`Remove ${item.name}`}
-                            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-gray-400 transition-colors hover:bg-[#fe4462]/10 hover:text-[#fe4462]"
+                            className="grid h-10 w-10 sm:h-9 sm:w-9 shrink-0 place-items-center rounded-full text-gray-400 transition-colors hover:bg-[#fe4462]/10 hover:text-[#fe4462]"
                           >
                             <FiTrash2 size={17} />
                           </button>
@@ -233,7 +233,7 @@ export default function Cart() {
                   {coupon ? (
                     <div className="flex items-center justify-between rounded-xl bg-green-50 px-3 py-2 dark:bg-green-500/10">
                       <span className="text-sm font-medium text-green-700 dark:text-green-400">
-                        {couponCode} — {coupon.label}
+                        {couponCode} -{coupon.label}
                       </span>
                       <button
                         onClick={removeCoupon}
@@ -301,7 +301,7 @@ function Row({ label, value, accent = "" }) {
   );
 }
 
-/** Coupon input — local state, lifts the code up on apply. */
+/** Coupon input -local state, lifts the code up on apply. */
 function CouponForm({ onApply }) {
   return (
     <form

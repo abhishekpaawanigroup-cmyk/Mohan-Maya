@@ -1,13 +1,13 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Product3DCanvas from "../../../components/product/Product3DCanvas";
+import HeartIcon from "../../../components/common/HeartIcon";
 import {
   Plus,
   Minus,
   RotateCcw,
   X,
   ShoppingBag,
-  Heart,
   Share2,
   Star,
   Check,
@@ -162,7 +162,7 @@ export default function ProductModal({ product = {}, onClose }) {
         </button>
 
         {/* ── LEFT: media ─────────────────────────── */}
-        <div className="relative bg-gradient-to-br from-[#ffe7ec] to-[#f7e3e6] dark:from-[#1f1015] dark:to-[#140a0d] p-5 sm:p-8 flex flex-col lg:sticky lg:top-0">
+        <div className="relative bg-gradient-to-br from-[#fbfefb] to-[#f1f3f5] dark:from-[#1f1015] dark:to-[#140a0d] p-5 sm:p-8 flex flex-col lg:sticky lg:top-0">
           {/* media tabs */}
           <div className="inline-flex self-start gap-1 p-1 rounded-full bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm mb-4">
             {[
@@ -289,10 +289,11 @@ export default function ProductModal({ product = {}, onClose }) {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => toggleWishlist(product)}
+                aria-pressed={wished}
                 className={iconBtn}
                 aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
               >
-                <Heart size={18} className={wished ? "fill-[#fe4462] text-[#fe4462]" : ""} />
+                <HeartIcon active={wished} size={18} outlineClassName="text-current" />
               </button>
               <button onClick={handleShare} className={iconBtn} aria-label="Share product">
                 <Share2 size={18} />

@@ -6,7 +6,7 @@ import { usePageMeta } from "../../hooks/useHooks";
 export default function NotFound() {
   usePageMeta("Page Not Found - Mohan Maya", "The page you're looking for doesn't exist or has been moved.");
   return (
-    <section className="min-h-screen flex items-center justify-center bg-[#f0e0e3] dark:bg-[#0d0508] px-5 pt-20">
+    <section className="min-h-screen flex items-center justify-center bg-[#fbfefb] dark:bg-[#0d0508] px-5 pt-20">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

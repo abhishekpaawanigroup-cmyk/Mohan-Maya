@@ -5,11 +5,11 @@ import { motion } from "framer-motion";
 import SectionHeading from "../../../components/common/SectionHeading";
 
 /**
- * "Meet Our Characters" — a clean, premium horizontal slider placed directly
+ * "Meet Our Characters" -a clean, premium horizontal slider placed directly
  * below the Hero. Shows 5 cards per view on desktop (responsive down to 1),
  * the rest reachable via a carousel. Navigation arrows sit at the bottom-right:
  * the left arrow only appears once you've scrolled forward, and the right arrow
- * fades out at the last set — both transition smoothly with position.
+ * fades out at the last set -both transition smoothly with position.
  */
 const characters = [
   { name: "Krishna", image: "/Featured-images/mm4.png" },
@@ -21,7 +21,7 @@ const characters = [
   { name: "Govinda", image: "/bestseller-image/mm6.png" },
 ];
 
-const GAP = 20; // px — must match the track's gap-5
+const GAP = 20; // px -must match the track's gap-5
 
 // Cards visible per breakpoint (5 on desktop, fewer as the viewport narrows).
 function getPerView(width) {
@@ -60,7 +60,7 @@ export default function MeetCharacters() {
   const trackTransform = `translateX(calc(${safeIndex} * (100% + ${GAP}px) / ${perView} * -1))`;
 
   return (
-    <section className="relative overflow-hidden py-20 bg-[#f4edee] dark:bg-[#0d0508]">
+    <section className="relative overflow-hidden py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
       {/* Soft blurred gradient orbs for depth (decorative, non-interactive) */}
      
       
@@ -93,12 +93,12 @@ export default function MeetCharacters() {
                   style={{ width: cardWidth }}
                   className="group shrink-0"
                 >
-                  <div className="flex flex-col items-center rounded-xl border border-white/40 bg-white/70 p-4 shadow-sm ring-1 ring-black/5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl dark:border-white/10 dark:bg-white/5 dark:ring-white/10">
+                  <div className="flex flex-col items-center rounded-xl border border-[#00000024] bg-white/70 p-4 shadow-sm ring-1 ring-black/5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl dark:border-white/10 dark:bg-white/5 dark:ring-white/10">
                     {/* Portrait with subtle zoom on hover */}
-                    <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gradient-to-b from-[#f7eef0] to-[#efe2e5] dark:from-white/[0.07] dark:to-white/[0.02]">
+                    <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gradient-to-b from-[#fbfefb] to-[#c7cdd3] dark:from-white/[0.07] dark:to-white/[0.02]">
                       <img
                         src={char.image}
-                        alt={`${char.name} — handcrafted Mohan Maya figurine`}
+                        alt={`${char.name} -handcrafted Mohan Maya figurine`}
                         loading="lazy"
                         decoding="async"
                         className="h-full w-full object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-105"

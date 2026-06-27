@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard } from "swiper/modules";
-import { FiEye, FiHeart, FiShoppingBag, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiEye, FiShoppingBag, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import ActionButton from "../../../components/common/ActionButton";
+import HeartIcon from "../../../components/common/HeartIcon";
 import ProductPreviewModal from "./Productmodal";
 import SectionHeading from "../../../components/common/SectionHeading";
 import { featuredProducts } from "../../../data/products";
@@ -17,7 +18,7 @@ const FeaturedProduct = () => {
   const swiperRef = useRef(null);
 
   return (
-    <section className="bg-[#f4edee] dark:bg-[#0d0508] pb-20 pt-10">
+    <section className="bg-[#fbfefb] dark:bg-[#0d0508] pb-20 pt-10">
       <div className="mx-auto px-4 sm:px-8 relative max-w-[1440px]">
         <SectionHeading badge="Top Sale" title="Featured Characters" className="mb-14" />
 
@@ -39,7 +40,7 @@ const FeaturedProduct = () => {
           {featuredProducts.map((item) => (
             <SwiperSlide key={item.id}>
               <div className="flex flex-col h-full" data-fly-card>
-                <div className="group relative bg-[#d1aaaa8a] dark:bg-white/5 overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 rounded-full">
+                <div className="group relative bg-[#c1bbbb8a] dark:bg-white/5 overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 rounded-full">
                   <div className="h-80 flex items-center justify-center overflow-hidden">
                     <img
                       src={item.image}
@@ -64,15 +65,12 @@ const FeaturedProduct = () => {
                         className="bg-[#fe4462] hover:bg-[#d93550] text-white"
                       />
                       <ActionButton
-                        icon={FiHeart}
-                        label="Add to Wishlist"
+                        label={isWishlisted(item.id) ? "In Wishlist" : "Add to Wishlist"}
                         onClick={() => toggleWishlist(item)}
-                        className={`text-white ${
-                          isWishlisted(item.id)
-                            ? "bg-[#d93550] hover:bg-[#fe4462]"
-                            : "bg-[#fe4462] hover:bg-[#d93550]"
-                        }`}
-                      />
+                        className="bg-white/15 hover:bg-white/25 backdrop-blur-md"
+                      >
+                        <HeartIcon active={isWishlisted(item.id)} size={22} />
+                      </ActionButton>
                     </div>
                   </div>
                 </div>
@@ -100,7 +98,7 @@ const FeaturedProduct = () => {
           ))}
         </Swiper>
 
-        {/* Navigation — dots centered between the arrows, all below the cards */}
+        {/* Navigation -dots centered between the arrows, all below the cards */}
         <div className="flex items-center justify-center gap-4 mt-10">
           <button
             onClick={() => swiperRef.current?.slidePrev()}

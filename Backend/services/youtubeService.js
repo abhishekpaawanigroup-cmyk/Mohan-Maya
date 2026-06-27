@@ -6,11 +6,11 @@ import { cache } from "../utils/cache.js";
 const API_BASE = "https://www.googleapis.com/youtube/v3";
 const { apiKey, channelId } = env.youtube;
 
-// Cache lifetimes — tuned to balance freshness against YouTube's daily quota.
+// Cache lifetimes -tuned to balance freshness against YouTube's daily quota.
 const TTL = {
-  uploadsPlaylist: 24 * 60 * 60 * 1000, // 24h — the uploads-playlist id never really changes
-  videos: 10 * 60 * 1000, // 10m — new uploads appear within ten minutes
-  channel: 30 * 60 * 1000, // 30m — subscriber/view counts
+  uploadsPlaylist: 24 * 60 * 60 * 1000, // 24h -the uploads-playlist id never really changes
+  videos: 10 * 60 * 1000, // 10m -new uploads appear within ten minutes
+  channel: 30 * 60 * 1000, // 30m -subscriber/view counts
 };
 
 const yt = axios.create({ baseURL: API_BASE, timeout: 10_000 });
@@ -67,7 +67,7 @@ export async function getLatestVideos({ pageToken = "", maxResults = 12 } = {}) 
     });
 
     const videos = (data.items || [])
-      // Private/deleted uploads can appear with no resourceId — skip them.
+      // Private/deleted uploads can appear with no resourceId -skip them.
       .filter((item) => item.snippet?.resourceId?.videoId)
       .map((item) => ({
         title: item.snippet.title,

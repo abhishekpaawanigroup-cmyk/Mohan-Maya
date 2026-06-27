@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard } from "swiper/modules";
-import { FiHeart, FiEye, FiShoppingBag, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiEye, FiShoppingBag, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import ActionButton from "../../../components/common/ActionButton";
+import HeartIcon from "../../../components/common/HeartIcon";
 import ProductPreviewModal from "./Productmodal";
 import { trendyData, trendyTabs } from "../../../data/products";
 import { useApp } from "../../../context/AppContext";
@@ -19,7 +20,7 @@ const TrendyCollection = () => {
   const items = trendyData[activeTab] || [];
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-[#f4edee] dark:bg-[#0d0508]">
+    <section className="py-12 sm:py-16 lg:py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-8 mb-14">
@@ -75,7 +76,7 @@ const TrendyCollection = () => {
           {items.map((item) => (
             <SwiperSlide key={item.id}>
               <div className="flex flex-col h-full" data-fly-card>
-                <div className="group relative bg-[#d1aaaa8a] dark:bg-white/5 overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 rounded-full">
+                <div className="group relative bg-[#c1bbbb8a] dark:bg-white/5 overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 rounded-full">
                   <div className="h-80 flex items-center justify-center overflow-hidden">
                     <img
                       src={item.image}
@@ -100,15 +101,12 @@ const TrendyCollection = () => {
                         className="bg-[#fe4462] hover:bg-[#d93550] text-white"
                       />
                       <ActionButton
-                        icon={FiHeart}
-                        label="Add to Wishlist"
+                        label={isWishlisted(item.id) ? "In Wishlist" : "Add to Wishlist"}
                         onClick={() => toggleWishlist(item)}
-                        className={`text-white ${
-                          isWishlisted(item.id)
-                            ? "bg-[#d93550] hover:bg-[#fe4462]"
-                            : "bg-[#fe4462] hover:bg-[#d93550]"
-                        }`}
-                      />
+                        className="bg-white/15 hover:bg-white/25 backdrop-blur-md"
+                      >
+                        <HeartIcon active={isWishlisted(item.id)} size={22} />
+                      </ActionButton>
                     </div>
                   </div>
                 </div>
@@ -136,7 +134,7 @@ const TrendyCollection = () => {
           ))}
         </Swiper>
 
-        {/* Navigation — dots centered between the arrows, all below the cards */}
+        {/* Navigation -dots centered between the arrows, all below the cards */}
         <div className="flex items-center justify-center gap-4 mt-10">
           <button
             onClick={() => swiperRef.current?.slidePrev()}

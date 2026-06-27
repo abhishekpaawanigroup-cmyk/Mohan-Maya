@@ -80,7 +80,7 @@ export default function Checkout() {
   // Empty cart guard
   if (!cart.length) {
     return (
-      <section className="pt-28 pb-20 bg-[#f4edee] dark:bg-[#0d0508] min-h-screen flex items-center">
+      <section className="pt-28 pb-20 bg-[#fbfefb] dark:bg-[#0d0508] min-h-screen flex items-center">
         <div className="max-w-md mx-auto text-center px-5">
           <FiShoppingBag size={56} className="text-gray-300 mx-auto mb-4" />
           <h1 className="text-2xl font-bold dark:text-white">Your cart is empty</h1>
@@ -92,7 +92,7 @@ export default function Checkout() {
   }
 
   return (
-    <section className="pt-28 pb-20 bg-[#f4edee] dark:bg-[#0d0508] min-h-screen">
+    <section className="pt-28 pb-20 bg-[#fbfefb] dark:bg-[#0d0508] min-h-screen">
       <div className="max-w-6xl mx-auto px-5">
         <ScrollReveal className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-[#fe4462]">Checkout</h1>
@@ -184,7 +184,7 @@ export default function Checkout() {
               <div className="space-y-3 max-h-[40vh] sm:max-h-72 overflow-y-auto pr-1">
                 {cart.map((item) => (
                   <div key={item.id} className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-lg bg-[#f0e0e3] dark:bg-white/10 overflow-hidden flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-lg bg-[#fbfefb] dark:bg-white/10 overflow-hidden flex items-center justify-center shrink-0">
                       <img src={item.image} alt={item.name} className="w-full h-full object-contain" loading="lazy" />
                     </div>
                     <div className="flex-1 min-w-0">

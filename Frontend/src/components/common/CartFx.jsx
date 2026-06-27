@@ -19,7 +19,7 @@ function sampleBezier(p0, p1, p2, ts) {
 /**
  * Premium add-to-cart confirmation. A circular badge (cart icon + check +
  * "Added to Cart") scales/fades in at screen centre, holds briefly (~0.4s),
- * then flies along a natural curved path into the header cart icon — shrinking,
+ * then flies along a natural curved path into the header cart icon -shrinking,
  * rotating and fading out just before it lands. On completion `onDone` commits
  * the cart update and bounces the icon.
  *

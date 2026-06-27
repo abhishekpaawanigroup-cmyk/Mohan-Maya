@@ -4,7 +4,7 @@ import SectionHeading from "../../../components/common/SectionHeading";
 import { formatCompact } from "../../../utils/format";
 
 /**
- * Premium platform "highlight" cards — each social channel presented as a
+ * Premium platform "highlight" cards -each social channel presented as a
  * dashboard tile. YouTube shows the LIVE subscriber count from the channel API;
  * platforms without a connected API show a clear "Follow us" prompt instead of
  * fabricated numbers. Links stay in sync with the page's TABS / footer.
@@ -13,10 +13,7 @@ export default function SocialHighlights({ platforms, channel, status }) {
   const subsLoading = status === "loading";
 
   return (
-    <section className="relative py-16 sm:py-20 bg-[#f4edee] dark:bg-[#0d0508] overflow-hidden">
-      {/* Decorative accents */}
-      <div className="pointer-events-none absolute top-0 right-0 w-72 h-72 rounded-full bg-[var(--soft)] blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 left-0 w-72 h-72 rounded-full bg-[var(--glow)] blur-3xl" />
+    <section className="relative py-16 sm:py-20 bg-[#fbfefb] dark:bg-[#0d0508] overflow-hidden">
 
       <div className="relative max-w-7xl mx-auto px-5">
         <SectionHeading

@@ -68,7 +68,7 @@ export function AppProvider({ children }) {
     successTimer.current = setTimeout(() => setCartSuccess(false), 650);
   }, []);
 
-  // Commits the actual cart state update. No toast — the circular fly-to-cart
+  // Commits the actual cart state update. No toast -the circular fly-to-cart
   // animation + the cart-icon tick/count are the only add-to-cart feedback.
   const commitAddToCart = useCallback(
     (product, qty = 1) => {
@@ -86,7 +86,7 @@ export function AppProvider({ children }) {
   // Add to cart. When motion is allowed, play a single confirmation circle that
   // scales in at screen-centre and flies into the cart icon; the cart updates +
   // tick fire when it lands (handleFlyerDone). Only one animation runs at a time
-  // — rapid clicks still add the item instantly (no stacked circles). Navigation
+  // -rapid clicks still add the item instantly (no stacked circles). Navigation
   // to the Cart page happens only when the user clicks the cart icon, never here.
   // The third arg is kept for call-site compatibility but is unused.
   const addToCart = useCallback(
@@ -125,7 +125,7 @@ export function AppProvider({ children }) {
 
   const removeFromCart = useCallback(
     (id) => {
-      // Silent update — the list animates the item out (no toast).
+      // Silent update -the list animates the item out (no toast).
       setCart((prev) => prev.filter((i) => i.id !== id));
     },
     [setCart]
@@ -149,7 +149,7 @@ export function AppProvider({ children }) {
 
   const toggleWishlist = useCallback(
     (product) => {
-      // Toggle silently — the heart icon's filled/outline state is the only
+      // Toggle silently -the heart icon's filled/outline state is the only
       // feedback (no toast). The functional updater stays pure, so Strict Mode's
       // double-invoke can't duplicate the item.
       setWishlist((prev) =>

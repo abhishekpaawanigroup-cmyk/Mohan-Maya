@@ -44,7 +44,7 @@ export default function RecommendedProducts({
   if (!recs.length) return null;
 
   return (
-    <section className={`py-16 bg-[#f4edee] dark:bg-[#0d0508] ${className}`}>
+    <section className={`py-16 bg-[#fbfefb] dark:bg-[#0d0508] ${className}`}>
       <div className="max-w-7xl mx-auto px-5">
         <ScrollReveal className="mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#fe4462]">{title}</h2>

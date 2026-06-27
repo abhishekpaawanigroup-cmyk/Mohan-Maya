@@ -37,7 +37,7 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="px-4 sm:px-6 py-16 sm:py-20 bg-[#f4edee] dark:bg-[#0d0508]">
+    <section className="px-4 sm:px-6 py-16 sm:py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -45,7 +45,7 @@ export default function Newsletter() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="max-w-4xl mx-auto"
       >
-        {/* Clean, minimal card — a subtle brand top accent sets it apart from
+        {/* Clean, minimal card -a subtle brand top accent sets it apart from
             the surrounding sections without being flashy. */}
         <div className="relative overflow-hidden rounded-xl bg-white dark:bg-[#160c11] border border-gray-200 dark:border-white/10 shadow-sm px-6 sm:px-10 lg:px-14 py-10 sm:py-14 text-center">
           <div className="absolute inset-x-0 top-0 h-1 bg-[#fe4462]" aria-hidden="true" />

@@ -107,7 +107,7 @@ const Products = () => {
 
   // Pagination handler: lock the current grid height (prevents collapse/jump
   // mid-transition), change the page, then smoothly scroll the product section
-  // — not the whole window — back to the top.
+  // -not the whole window -back to the top.
   const goToPage = (next) => {
     const target = Math.min(Math.max(1, next), totalPages);
     if (target === safePage) return;

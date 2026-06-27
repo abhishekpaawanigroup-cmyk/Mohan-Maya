@@ -155,7 +155,7 @@ export default function Faq() {
         cta={{ label: "Contact Us", to: "/contact" }}
       />
 
-      <section className="py-16 sm:py-20 lg:py-24 bg-[[#f4edee] dark:bg-[#0d0508]]">
+      <section className="py-16 sm:py-20 lg:py-24 bg-[[#fbfefb] dark:bg-[#0d0508]]">
         <div className="max-w-3xl mx-auto px-5">
           {/* Search */}
           <ScrollReveal direction="up">
@@ -220,7 +220,7 @@ export default function Faq() {
       </section>
 
       {/* Contact CTA */}
-      <section className="p-16 sm:p-20 lg:p-24 bg-[#f4edee] dark:bg-[#0d0508]">
+      <section className="p-16 sm:p-20 lg:p-24 bg-[#fbfefb] dark:bg-[#0d0508]">
         <div className="max-w-7xl mx-auto px-5">
           <ScrollReveal direction="up">
             <div className="group relative overflow-hidden rounded-3xl shadow-xl">

@@ -101,7 +101,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
         </button>
 
         {/* ── LEFT: media ─────────────────────────── */}
-        <div className="relative bg-gradient-to-br from-[#ffe7ec] to-[#f7e3e6] dark:from-[#1f1015] dark:to-[#140a0d] p-5 sm:p-7 flex flex-col lg:sticky lg:top-0">
+        <div className="relative bg-gradient-to-br from-[#fbfefb] to-[#f1f3f5] dark:from-[#1f1015] dark:to-[#140a0d] p-5 sm:p-7 flex flex-col lg:sticky lg:top-0">
           {/* Toggle: View Images / View in 3D */}
           <div
             className="inline-flex self-start gap-1 p-1 rounded-full bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm mb-4"
@@ -348,10 +348,20 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => toggleWishlist(product)}
+              aria-pressed={wished}
               className="flex items-center justify-center gap-2 border-2 border-[#fe4462] text-[#fe4462] font-semibold px-5 py-3.5 rounded-2xl hover:bg-[#fe4462] hover:text-white transition"
               aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
             >
-              <Heart size={18} className={wished ? "fill-current" : ""} />
+              {/* Keyed by state so each toggle re-mounts and pops */}
+              <motion.span
+                key={wished ? "on" : "off"}
+                initial={{ scale: 0.4 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 600, damping: 14 }}
+                className="grid place-items-center"
+              >
+                <Heart size={18} className={wished ? "fill-current" : ""} />
+              </motion.span>
               <span className="sm:hidden lg:inline">{wished ? "Saved" : "Wishlist"}</span>
             </motion.button>
           </div>

@@ -6,7 +6,7 @@ import { formatVideoDate } from "../../../utils/format";
 
 /**
  * Hero treatment for the channel's most recent upload. Large split layout —
- * a prominent thumbnail beside the title / meta / watch CTA — with a pulsing
+ * a prominent thumbnail beside the title / meta / watch CTA -with a pulsing
  * "Latest Video" badge so it clearly stands out from the grid below.
  */
 export default function FeaturedVideo({ video }) {
@@ -29,7 +29,7 @@ export default function FeaturedVideo({ video }) {
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`Watch the latest video "${title}" on YouTube`}
-        className="relative block aspect-video lg:aspect-auto overflow-hidden bg-[#f0e0e3] dark:bg-white/5"
+        className="relative block aspect-video lg:aspect-auto overflow-hidden bg-[#fbfefb] dark:bg-white/5"
       >
         {thumbnail && imgOk && (
           <img

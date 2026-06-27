@@ -15,7 +15,7 @@ const missing = required.filter((key) => !process.env[key]);
 if (missing.length) {
   console.error(
     `\n[config] Missing required environment variable(s): ${missing.join(", ")}\n` +
-      `Add them to Backend/.env — e.g.\n` +
+      `Add them to Backend/.env -e.g.\n` +
       `  YOUTUBE_API_KEY=your_api_key\n` +
       `  YOUTUBE_CHANNEL_ID=your_channel_id\n`
   );

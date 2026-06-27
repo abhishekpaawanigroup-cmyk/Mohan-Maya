@@ -3,7 +3,7 @@ import { FaYoutube } from "react-icons/fa";
 import { FiPlay, FiExternalLink } from "react-icons/fi";
 import { formatVideoDate } from "../../../utils/format";
 
-/** A single YouTube video card — thumbnail, title, publish date, watch button. */
+/** A single YouTube video card -thumbnail, title, publish date, watch button. */
 export default function VideoCard({ video }) {
   const { title, thumbnail, videoId, publishedAt } = video;
   const href = `https://www.youtube.com/watch?v=${videoId}`;
@@ -12,7 +12,7 @@ export default function VideoCard({ video }) {
 
   return (
     <article className="group relative flex flex-col h-full rounded-3xl overflow-hidden bg-white/80 dark:bg-white/[0.04] border border-white/60 dark:border-white/10 backdrop-blur-xl shadow-[0_10px_40px_-18px_rgba(0,0,0,0.25)] hover:shadow-[0_24px_55px_-18px_rgba(254,68,98,0.4)] hover:-translate-y-1.5 transition-all duration-500">
-      <div className="relative aspect-video overflow-hidden bg-[#f0e0e3] dark:bg-white/5">
+      <div className="relative aspect-video overflow-hidden bg-[#fbfefb] dark:bg-white/5">
         {thumbnail && imgOk && (
           <img
             src={thumbnail}
@@ -23,7 +23,7 @@ export default function VideoCard({ video }) {
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
         )}
-        {/* Cinematic gradient — strengthens on hover */}
+        {/* Cinematic gradient -strengthens on hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
 
         {/* Play indicator */}

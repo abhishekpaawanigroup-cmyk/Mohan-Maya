@@ -5,7 +5,7 @@ import LazyVideo from "../../../components/common/LazyVideo";
 
 const SeasonalCollection = () => {
   return (
-    <section className="py-20 bg-[#f5f0e8] dark:bg-[#0d0508]">
+    <section className="py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Heading */}
@@ -65,7 +65,7 @@ const SeasonalCollection = () => {
           <div className="flex flex-col gap-6">
 
             {/* Winter */}
-            <div className="group relative overflow-hidden rounded-lg h-[184px] shadow-lg cursor-pointer bg-[#d4cbf9]">
+            <div className="group relative overflow-hidden rounded-lg h-[184px] shadow-lg cursor-pointer bg-[#c5c2d4]">
               <img
                 src="/season/mm5.png"
                 alt="Winter"
@@ -88,7 +88,7 @@ const SeasonalCollection = () => {
             </div>
 
             {/* Summer */}
-            <div className="group relative overflow-hidden rounded-lg h-[184px] shadow-lg cursor-pointer bg-[#d2e591]">
+            <div className="group relative overflow-hidden rounded-lg h-[184px] shadow-lg cursor-pointer bg-[#c5ccae]">
               <img
                 src="/season/mm6.png"
                 alt="Summer"
@@ -111,7 +111,7 @@ const SeasonalCollection = () => {
             </div>
 
             {/* Christmas */}
-            <div className="group relative overflow-hidden rounded-lg h-[184px] shadow-lg cursor-pointer bg-[#e18888]">
+            <div className="group relative overflow-hidden rounded-lg h-[184px] shadow-lg cursor-pointer bg-[#d8a9a9]">
               <img
                 src="/season/mm7.png"
                 alt="Christmas"

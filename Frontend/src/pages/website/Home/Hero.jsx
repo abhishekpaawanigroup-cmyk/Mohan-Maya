@@ -3,9 +3,9 @@ import LazyVideo from "../../../components/common/LazyVideo";
 
 const Hero = () => {
   return (
-    <div className="relative pb-10 mt-20 bg-[#f4edee] dark:bg-[#0d0508]">
+    <div className="relative pb-10 mt-20 bg-[#fbfefb] dark:bg-[#0d0508]">
       {/* Hero Video Section */}
-      <div className="w-full h-[300px] sm:h-[600px] lg:h-[835px] relative overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-black/50 after:z-10">
+      <div className="w-full h-[600px] sm:h-[700px] lg:h-[835px] relative overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-black/50 after:z-10">
         <LazyVideo
           src="/hero/mohan-maya.mp4"
           className="w-full h-full object-cover"

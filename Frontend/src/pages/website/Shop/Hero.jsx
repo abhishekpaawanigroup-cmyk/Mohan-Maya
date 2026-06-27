@@ -40,9 +40,9 @@ const Hero = () => {
  
         <div className="grid lg:grid-cols-2 gap-10 items-center w-full h-full">
  
-          {/* Left */}
- 
-          <div className="flex flex-col items-start gap-8">
+          {/* Left (centered on mobile where the model is hidden) */}
+
+          <div className="flex flex-col items-center md:items-start gap-8 text-center md:text-left">
  
             {/* Breadcrumb - above all hero text */}
             <Breadcrumb items={[{ label: "Home", to: "/" }, { label: "Shop" }]} light />
@@ -73,7 +73,7 @@ const Hero = () => {
  
               </h1>
  
-              <p className="text-gray-300 text-sm md:text-lg max-w-xl">
+              <p className="text-gray-300 text-sm md:text-lg max-w-xl mx-auto md:mx-0">
  
                 Discover beautifully handcrafted miniature creations
                 designed with precision, passion, and timeless artistry.
@@ -100,9 +100,9 @@ const Hero = () => {
  
           </div>
  
-          {/* Right */}
- 
-          <div className="relative flex justify-center items-center self-center lg:self-stretch h-[300px] sm:h-[420px] lg:h-full">
+          {/* Right - hidden on mobile (≤768px), shown from tablet up */}
+
+          <div className="relative hidden md:flex justify-center items-center self-center lg:self-stretch h-[300px] sm:h-[420px] lg:h-full">
  
          
  

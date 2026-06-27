@@ -13,7 +13,8 @@ const ABOUT_HERO_IMAGE = "/About/Hero/about-banner.jpeg";
  * Props:
  *  - title:      main heading (rendered as the page <h1>)
  *  - subtitle:   supporting line below the title
- *  - image:      background image (defaults to the About hero banner)
+ *  - image:      poster/background image shown while the video loads (defaults to the About hero banner)
+ *  - video:      background video source (defaults to the shared site hero clip)
  *  - align:      "left" (default, matches About) or "center"
  *  - breadcrumb: optional [{ label, to? }] rendered above the title
  *  - cta:        optional { label, to } rendered as a primary button below the subtitle
@@ -22,15 +23,24 @@ export default function PageHero({
   title,
   subtitle,
   image = ABOUT_HERO_IMAGE,
-  align = "left",
+  video = "/hero/hero-all.mp4",
+  align = "center",
   breadcrumb,
   cta,
+  children,
 }) {
   const alignment = align === "center" ? "text-center mx-auto items-center" : "text-left";
 
+  // Highlight only the last word of the heading in the brand accent -matches
+  // the Home/About/Shop heroes. Inline span inherits all typography so the
+  // accent word stays fully responsive at every breakpoint.
+  const titleWords = String(title).trim().split(/\s+/);
+  const accentWord = titleWords.pop();
+  const leadingTitle = titleWords.join(" ");
+
   return (
     <section
-      className="relative h-screen max-h-[1000px] overflow-hidden"
+      className="relative h-screen max-h-[800px] overflow-hidden"
       aria-label={title}
     >
       {/* Background video (poster falls back to the page image while it loads) */}
@@ -39,10 +49,11 @@ export default function PageHero({
         muted
         loop
         playsInline
+        preload="metadata"
         poster={image}
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="/hero/hero-all.mp4" type="video/mp4" />
+        <source src={video} type="video/mp4" />
       </video>
 
       {/* Dark gradient overlay for text readability */}
@@ -79,7 +90,8 @@ export default function PageHero({
               }}
               className="text-4xl md:text-6xl font-bold leading-tight mb-4"
             >
-              {title}
+              {leadingTitle && `${leadingTitle} `}
+              <span className="text-[#fe4462]">{accentWord}</span>
             </motion.h1>
 
             {subtitle && (
@@ -109,6 +121,19 @@ export default function PageHero({
                   {cta.label}
                   <FaArrowRight className="group-hover:translate-x-1 duration-300" />
                 </Link>
+              </motion.div>
+            )}
+
+            {/* Optional custom content (e.g. platform switcher) */}
+            {children && (
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+                }}
+                className={`mt-8 ${align === "center" ? "flex justify-center" : ""}`}
+              >
+                {children}
               </motion.div>
             )}
           </motion.div>

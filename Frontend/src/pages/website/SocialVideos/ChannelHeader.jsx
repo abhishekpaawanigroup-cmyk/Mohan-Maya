@@ -14,7 +14,7 @@ function subscribeUrl(channel, fallback) {
   return fallback;
 }
 
-/** The red, YouTube-style Subscribe CTA — hover scale + shadow, click press. */
+/** The red, YouTube-style Subscribe CTA -hover scale + shadow, click press. */
 function SubscribeButton({ href, compact = false }) {
   return (
     <motion.a

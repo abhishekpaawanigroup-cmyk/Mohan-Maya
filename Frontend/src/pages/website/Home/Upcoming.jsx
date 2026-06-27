@@ -20,7 +20,7 @@ const UpcomingCollection = () => {
   <source src="/hero/hero-all.mp4" type="video/mp4" />
 </video>
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-[1px]" />
+      <div className="absolute inset-0 bg-[#00000094] backdrop-blur-[1px]" />
 
       {/* Content */}
       <div className="relative z-10 flex items-start justify-start h-full">

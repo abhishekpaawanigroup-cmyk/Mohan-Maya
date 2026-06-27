@@ -14,7 +14,7 @@ const PER_PAGE = 8; // videos shown per page beneath the featured one
 /**
  * YouTube tab: a featured latest video plus a paginated grid of the rest.
  * The hook loads the channel's full upload history up-front, so pagination here
- * is purely client-side — every page is instant and the count is exact.
+ * is purely client-side -every page is instant and the count is exact.
  */
 export default function YouTubeTab({ videos, status, error, retry }) {
   const [page, setPage] = useState(1);
@@ -27,7 +27,7 @@ export default function YouTubeTab({ videos, status, error, retry }) {
     window.scrollTo({ top, behavior: "smooth" });
   };
 
-  // ── First load — skeletons (featured + grid). ──
+  // ── First load -skeletons (featured + grid). ──
   if (status === "loading" && videos.length === 0) {
     return (
       <div className="space-y-10">
@@ -50,7 +50,7 @@ export default function YouTubeTab({ videos, status, error, retry }) {
     );
   }
 
-  // ── Hard error with nothing to show — retry. ──
+  // ── Hard error with nothing to show -retry. ──
   if (status === "error" && videos.length === 0) {
     return (
       <div className="mx-auto max-w-lg text-center py-14 px-8 rounded-3xl border border-white/60 dark:border-white/10 bg-white/70 dark:bg-white/[0.04] backdrop-blur-xl shadow-[0_10px_40px_-18px_rgba(0,0,0,0.25)]">

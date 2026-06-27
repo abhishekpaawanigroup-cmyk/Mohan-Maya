@@ -638,7 +638,7 @@ export default function Reviews({ title = "Customer Reviews & Ratings" }) {
   };
 
   return (
-    <section className="py-16 sm:py-20 bg-[#f5f0e8] dark:bg-[#0d0508]">
+    <section className="py-16 sm:py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
       <div className="max-w-7xl mx-auto px-5">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">{title}</h2>

@@ -9,7 +9,7 @@ const LINKS = {
 
 /**
  * SINGLE source of truth for the Community page. Everything platform-specific —
- * data, icons, links and the visual theme — is driven from here, so adding a
+ * data, icons, links and the visual theme -is driven from here, so adding a
  * new platform is just another entry in this array.
  *
  * Theme fields feed CSS custom properties on the page wrapper (see `themeVars`),

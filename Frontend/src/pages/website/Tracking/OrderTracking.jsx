@@ -41,7 +41,7 @@ export default function OrderTracking() {
   const step = order ? currentStep(order) : -1;
 
   return (
-    <section className="pt-28 pb-20 bg-[#f4edee] dark:bg-[#0d0508] min-h-screen">
+    <section className="pt-28 pb-20 bg-[#fbfefb] dark:bg-[#0d0508] min-h-screen">
       <div className="max-w-3xl mx-auto px-5">
         <ScrollReveal className="text-center mb-10">
           <span className="inline-block text-[#fe4462] border border-[#fe4462] px-4 py-2 text-sm font-bold uppercase rounded-full">
@@ -153,7 +153,7 @@ export default function OrderTracking() {
               <div className="space-y-3">
                 {order.items.map((item) => (
                   <div key={item.id} className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-lg bg-[#f0e0e3] dark:bg-white/10 overflow-hidden flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-lg bg-[#fbfefb] dark:bg-white/10 overflow-hidden flex items-center justify-center shrink-0">
                       <img src={item.image} alt={item.name} className="w-full h-full object-contain" loading="lazy" />
                     </div>
                     <div className="flex-1 min-w-0">

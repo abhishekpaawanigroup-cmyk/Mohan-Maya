@@ -45,7 +45,7 @@ export default function Wishlist() {
   // ── Empty state ──────────────────────────────────────────
   if (!wishlist.length) {
     return (
-      <section className="relative overflow-hidden min-h-screen flex items-center bg-[#f4edee] dark:bg-[#0d0508] pt-28 pb-20">
+      <section className="relative overflow-hidden min-h-screen flex items-center bg-[#fbfefb] dark:bg-[#0d0508] pt-28 pb-20">
         <div aria-hidden="true" className="pointer-events-none absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-[#fe4462]/10 blur-3xl" />
         <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 -right-24 h-[460px] w-[460px] rounded-full bg-[#c48212]/10 blur-3xl" />
 
@@ -87,7 +87,7 @@ export default function Wishlist() {
       />
 
       {/* ── Wishlist body ── */}
-      <section className="bg-[#f4edee] dark:bg-[#0d0508] py-12 sm:py-16">
+      <section className="bg-[#fbfefb] dark:bg-[#0d0508] py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-5 sm:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 items-start">
             {/* Items list */}
@@ -192,7 +192,7 @@ function WishlistItem({ item, onMoveToCart, onRemove }) {
       {/* Image */}
       <Link
         to="/shop"
-        className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#f0e0e3] dark:bg-white/10 grid place-items-center"
+        className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#fbfefb] dark:bg-white/10 grid place-items-center"
       >
         {!imgLoaded && <span className="absolute inset-3 skeleton rounded-lg" />}
         <img
@@ -234,7 +234,7 @@ function WishlistItem({ item, onMoveToCart, onRemove }) {
           <button
             onClick={() => onRemove(item)}
             aria-label={`Remove ${item.name} from wishlist`}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-gray-400 transition-colors hover:bg-[#fe4462]/10 hover:text-[#fe4462]"
+            className="grid h-10 w-10 sm:h-9 sm:w-9 shrink-0 place-items-center rounded-full text-gray-400 transition-colors hover:bg-[#fe4462]/10 hover:text-[#fe4462]"
           >
             <FiTrash2 size={17} />
           </button>

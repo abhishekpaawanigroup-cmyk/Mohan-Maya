@@ -302,7 +302,7 @@ export default function TermsConditions() {
         cta={{ label: "Contact Us", to: "/contact" }}
       />
 
-      <section className="py-16 sm:py-20 bg-[#f4edee] dark:bg-[#0d0508]">
+      <section className="py-16 sm:py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
         <div className="max-w-6xl mx-auto px-5">
           {/* Meta row */}
           <ScrollReveal className="flex flex-wrap items-center justify-between gap-4 mb-8">
@@ -366,7 +366,7 @@ export default function TermsConditions() {
 
               {/* Footer CTA */}
               <ScrollReveal>
-                <div className="bg-[#fff8f9] dark:bg-white/5 border border-[#ffd8df] dark:border-white/10 rounded-2xl p-6 sm:p-8 text-center">
+                <div className="bg-[#fbfefb] dark:bg-white/5 border border-[#ffd8df] dark:border-white/10 rounded-2xl p-6 sm:p-8 text-center">
                   <h3 className="text-lg font-bold dark:text-white">Need clarification?</h3>
                   <p className="text-gray-600 dark:text-gray-300 text-sm mt-2 mb-5">
                     Our team is happy to walk you through any of these terms.

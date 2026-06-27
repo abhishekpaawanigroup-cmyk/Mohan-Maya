@@ -106,9 +106,9 @@ export default function Auth() {
     }`;
 
   return (
-    <section className="min-h-screen md:min-h-[900px] max-w-7xl m-auto pt-20 grid grid-cols-1 lg:grid-cols-2 bg-[#f4edee] dark:bg-[#0d0508]">
-      {/* ── Left: brand / value panel ── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#1b1016] to-[#0d0508] text-white flex items-center">
+    <section className="min-h-screen md:min-h-[900px] max-w-7xl m-auto pt-20 grid grid-cols-1 lg:grid-cols-2 bg-[#fbfefb] dark:bg-[#0d0508]">
+      {/* ── Left: brand / value panel (hidden on mobile so the auth form is first) ── */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#1b1016] to-[#0d0508] text-white hidden lg:flex items-center">
         {/* Subtle theme graphics */}
         <div className="pointer-events-none absolute -top-24 -left-24 w-80 h-80 rounded-full bg-[#fe4462]/25 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 right-0 w-72 h-72 rounded-full bg-[#c48212]/20 blur-3xl" />

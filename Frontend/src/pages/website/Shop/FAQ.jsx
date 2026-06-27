@@ -30,7 +30,7 @@ const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="py-20 bg-[#f4edee] dark:bg-[#0d0508]">
+    <section className="py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
       <div className="max-w-7xl mx-auto px-4">
 
         <div className="grid lg:grid-cols-2 gap-16 items-start">
@@ -53,7 +53,7 @@ const FAQSection = () => {
               or returns? Find quick answers below.
             </p>
 
-            <div className="mt-8 p-6 rounded-2xl bg-[#fff8f9] dark:bg-white/5 border border-[#ffd8df] dark:border-white/10">
+            <div className="mt-8 p-6 rounded-2xl bg-[#fbfefb] dark:bg-white/5 border border-[#ffd8df] dark:border-white/10">
               <h4 className="font-semibold text-lg mb-2 dark:text-white">
                 Still have questions?
               </h4>

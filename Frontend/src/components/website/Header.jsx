@@ -85,10 +85,10 @@ export default function Header() {
       <motion.header
         className={`w-full fixed top-0 z-50 border-b-0 transition-all duration-300 ${
           scrolled
-            ? "bg-[#e8d3d3b8] dark:bg-[#0d0508]/90 backdrop-blur-lg shadow-lg border-b border-white/20 dark:border-white/5"
+            ? "bg-[#fbfefbcc] dark:bg-[#0d0508]/90 backdrop-blur-lg shadow-lg border-b border-white/20 dark:border-white/5"
             : darkMode
             ? "bg-[#1a0a0e]"
-            : "bg-[#f0e0e3]"
+            : "bg-[#fbfefb]"
         }`}
         initial={{ y: -80 }}
         animate={{ y: 0 }}
@@ -156,7 +156,7 @@ export default function Header() {
               {darkMode ? <FiSun size={22} /> : <FiMoon size={22} />}
             </motion.button>
 
-            {/* Wishlist — solid red heart when items are saved; opens the Wishlist page */}
+            {/* Wishlist -solid red heart when items are saved; opens the Wishlist page */}
             <button
               onClick={() => navigate("/wishlist")}
               className="p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
@@ -169,7 +169,7 @@ export default function Header() {
               )}
             </button>
 
-            {/* Cart — fly-to-cart animation lands here; click opens the Cart page */}
+            {/* Cart -fly-to-cart animation lands here; click opens the Cart page */}
             <button
               ref={cartIconRef}
               onClick={() => navigate("/cart")}
@@ -188,7 +188,7 @@ export default function Header() {
                 </motion.span>
               )}
 
-              {/* Success tick — brief pop confirming the item was added */}
+              {/* Success tick -brief pop confirming the item was added */}
               <AnimatePresence>
                 {cartSuccess && (
                   <motion.span

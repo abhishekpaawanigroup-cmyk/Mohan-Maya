@@ -7,7 +7,7 @@ import ScrollReveal from "../../../components/common/ScrollReveal";
  */
 export default function OurStory() {
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-[#f4edee] dark:bg-[#0d0508]">
+    <section className="py-16 sm:py-20 lg:py-24 bg-[#fbfefb] dark:bg-[#0d0508]">
       <div className="max-w-7xl mx-auto px-5">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 

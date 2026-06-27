@@ -188,7 +188,7 @@ export default function PrivacyPolicy() {
         cta={{ label: "Contact Us", to: "/contact" }}
       />
 
-      <section className="py-16 sm:py-20 bg-[#f4edee] dark:bg-[#0d0508]">
+      <section className="py-16 sm:py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
         <div className="max-w-6xl mx-auto px-5">
           <ScrollReveal className="mb-8">
             <p className="text-sm text-gray-400">Last updated: {LAST_UPDATED}</p>
@@ -244,7 +244,7 @@ export default function PrivacyPolicy() {
 
             {/* CTA */}
             <ScrollReveal>
-              <div className="bg-[#fff8f9] dark:bg-white/5 border border-[#ffd8df] dark:border-white/10 rounded-2xl p-6 sm:p-8 text-center">
+              <div className="bg-[#fbfefb] dark:bg-white/5 border border-[#ffd8df] dark:border-white/10 rounded-2xl p-6 sm:p-8 text-center">
                 <h3 className="text-lg font-bold dark:text-white">Still have questions?</h3>
                 <p className="text-gray-600 dark:text-gray-300 text-sm mt-2 mb-5">
                   We're happy to explain how your data is handled.

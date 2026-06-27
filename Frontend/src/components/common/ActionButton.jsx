@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const ActionButton = ({ icon: Icon, label, onClick, className = "" }) => {
+const ActionButton = ({ icon: Icon, label, onClick, className = "", children }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
   return (
@@ -12,7 +12,7 @@ const ActionButton = ({ icon: Icon, label, onClick, className = "" }) => {
         className={`w-14 h-14 rounded-full bg-[#c1965e] text-white flex items-center justify-center text-xl transition-all duration-300 hover:bg-[#bf9456] hover:scale-110 hover:shadow-lg ${className}`}
         aria-label={label}
       >
-        <Icon size={22} />
+        {children ?? <Icon size={22} />}
       </button>
 
       {/* Tooltip */}

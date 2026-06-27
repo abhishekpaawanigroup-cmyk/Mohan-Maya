@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchYouTubeVideos } from "../services/youtubeApi";
 
-const PAGE = 50; // YouTube's max page size — fewest requests to load everything
+const PAGE = 50; // YouTube's max page size -fewest requests to load everything
 const MAX_PAGES = 20; // safety cap (1000 videos) against a runaway pagination loop
 
 /**

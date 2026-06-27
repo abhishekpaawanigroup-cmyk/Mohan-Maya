@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { FiHeart, FiEye, FiShoppingBag, FiStar } from "react-icons/fi";
+import { FiEye, FiShoppingBag, FiStar } from "react-icons/fi";
+import HeartIcon from "./HeartIcon";
 import { useApp } from "../../context/AppContext";
 
 /**
@@ -31,7 +32,7 @@ export default function ProductCard({ product, onQuickView }) {
       className="group bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col"
     >
       {/* Image */}
-      <div className="relative overflow-hidden pt-6 pb-2 bg-[#f0e0e3] dark:bg-white/5">
+      <div className="relative overflow-hidden pt-6 pb-2 bg-[#e5e5e5] dark:bg-white/5">
         {!imgLoaded && <div className="absolute inset-6 skeleton rounded-full" />}
         <img
           ref={imgRef}
@@ -54,13 +55,11 @@ export default function ProductCard({ product, onQuickView }) {
         <div className="absolute top-3 right-3 flex flex-col gap-2">
           <button
             onClick={() => toggleWishlist(product)}
-            className="bg-white dark:bg-[#1a0a0e] p-2.5 rounded-full shadow-md hover:scale-110 transition"
+            aria-pressed={wished}
+            className="grid h-9 w-9 place-items-center rounded-full bg-black/25 backdrop-blur-sm shadow-md transition-all duration-300 hover:bg-black/40 hover:scale-110 active:scale-95"
             aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
           >
-            <FiHeart
-              size={18}
-              className={`transition ${wished ? "fill-[#fe4462] text-[#fe4462]" : "text-gray-500"}`}
-            />
+            <HeartIcon active={wished} size={18} />
           </button>
           {onQuickView && (
             <button

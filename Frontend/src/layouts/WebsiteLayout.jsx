@@ -21,7 +21,7 @@ const WebsiteLayout = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className="bg-[#f0e0e3] dark:bg-[#0d0508] min-h-screen transition-colors duration-300">
+    <div className="bg-[#fbfefb] dark:bg-[#0d0508] min-h-screen transition-colors duration-300">
       <ScrollProgress />
       <ScrollToTop />
       <ToastContainer />

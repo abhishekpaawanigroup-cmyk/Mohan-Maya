@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Breadcrumb from "../../../components/common/Breadcrumb";
+import PageHero from "../../../components/common/PageHero";
 import SectionHeading from "../../../components/common/SectionHeading";
 import { usePageMeta } from "../../../hooks/useHooks";
 import { useYouTubeVideos } from "../../../hooks/useYouTubeVideos";
@@ -13,11 +13,6 @@ import ComingSoon from "./ComingSoon";
 import CommunityStats from "./CommunityStats";
 import SocialHighlights from "./SocialHighlights";
 
-// Shared rise-in for hero items.
-const fade = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
 // Crossfade used whenever the active platform changes (premium theme switch).
 const swap = {
   initial: { opacity: 0, y: 10 },
@@ -39,135 +34,57 @@ export default function SocialVideos() {
   // Live channel stats (subscribers / videos / views) for the dashboard cards.
   const { channel, status: channelStatus } = useYouTubeChannel();
 
-  // Active platform drives the whole page theme via CSS variables.
+  // Active platform drives the content-section + stats theme via CSS variables.
   const theme = platformMap[tab];
-  const ActiveIcon = theme.Icon;
+
+  // Switch the in-page feed to a platform, then glide down to the content.
+  const goToPlatform = (key) => {
+    setTab(key);
+    if (typeof document !== "undefined") {
+      document.getElementById("community-content")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
     <div style={themeVars(theme)} className="transition-colors duration-500">
-      {/* ── Hero ── */}
-      <section
-        className="relative h-screen max-h-[1000px] overflow-hidden bg-cover bg-center"
-        aria-label="Latest Videos & Social Content"
+      {/* ── Hero (matches the website's default page hero) ── */}
+      <PageHero
+        title="Our Community"
+        subtitle="Explore the latest videos, tutorials, showcases and updates from Mohan Maya - fresh handcrafted content every week."
+        breadcrumb={[{ label: "Home", to: "/" }, { label: "Community" }]}
+        video="/social/bg.mp4"
+        image="/social/bg.png"
       >
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="/hero/hero-all.mp4" type="video/mp4" />
-        </video>
-
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/65 to-black/80" />
-
-        {/* Per-platform colour wash — crossfades on tab switch */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={tab}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            aria-hidden="true"
-            className="absolute inset-0 pointer-events-none"
-            style={{ background: `radial-gradient(120% 90% at 12% 18%, ${theme.glow}, transparent 55%)` }}
-          />
-        </AnimatePresence>
-
-        <div className="relative z-10 h-full flex items-center">
-          <div className="max-w-[1440px] w-full mx-auto px-6 md:px-12 text-white">
-            <motion.div
-              className="max-w-2xl"
-              initial="hidden"
-              animate="show"
-              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } } }}
-            >
-              <motion.div variants={fade} className="mb-4">
-                <Breadcrumb items={[{ label: "Home", to: "/" }, { label: "Community" }]} light />
-              </motion.div>
-
-              {/* Animated platform chip */}
-              <motion.div variants={fade} className="mb-5">
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={tab}
-                    {...swap}
-                    transition={{ duration: 0.35 }}
-                    className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-white"
-                    style={{
-                      background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent2})`,
-                      boxShadow: `0 10px 26px -10px ${theme.ring}`,
-                    }}
-                  >
-                    <ActiveIcon size={14} /> {theme.name}
-                  </motion.span>
-                </AnimatePresence>
-              </motion.div>
-
-              <motion.h1
-                variants={fade}
-                className="text-4xl md:text-6xl font-bold leading-tight mb-4"
+        {/* Platform switcher -picks the active feed (with a clear active state) */}
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+          {PLATFORMS.map((p) => {
+            const Icon = p.Icon;
+            const isActive = tab === p.key;
+            return (
+              <button
+                key={p.key}
+                onClick={() => goToPlatform(p.key)}
+                aria-pressed={isActive}
+                aria-label={`Show ${p.label} content`}
+                className={`group inline-flex items-center gap-2 rounded-full px-5 py-3 font-semibold text-white transition-all duration-300 ${
+                  isActive ? "scale-105 ring-2 ring-white/80" : "opacity-80 hover:opacity-100 hover:-translate-y-0.5"
+                }`}
+                style={{
+                  background: `linear-gradient(135deg, ${p.accent}, ${p.accent2})`,
+                  boxShadow: isActive ? `0 14px 32px -10px ${p.ring}` : `0 8px 20px -14px ${p.ring}`,
+                }}
               >
-                Latest{" "}
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={tab}
-                    {...swap}
-                    transition={{ duration: 0.35 }}
-                    className="inline-block text-[var(--accent)] transition-colors duration-500"
-                  >
-                    {theme.name}
-                  </motion.span>
-                </AnimatePresence>{" "}
-                Content
-              </motion.h1>
-
-              <motion.p
-                variants={fade}
-                className="text-lg md:text-xl text-gray-200 max-w-xl leading-relaxed min-h-[3.5rem]"
-              >
-                <AnimatePresence mode="wait">
-                  <motion.span key={tab} {...swap} transition={{ duration: 0.35 }} className="inline-block">
-                    {theme.tagline}
-                  </motion.span>
-                </AnimatePresence>
-              </motion.p>
-
-              {/* External links to each channel — each in its own brand colour */}
-              <motion.div variants={fade} className="mt-8 flex flex-wrap gap-3 sm:gap-4">
-                {PLATFORMS.map((p) => {
-                  const Icon = p.Icon;
-                  return (
-                    <a
-                      key={p.key}
-                      href={p.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group inline-flex items-center gap-2 px-5 py-3 rounded-full font-semibold text-white border border-transparent transition-all duration-300 hover:-translate-y-0.5"
-                      style={{
-                        background: `linear-gradient(135deg, ${p.accent}, ${p.accent2})`,
-                        boxShadow: `0 10px 28px -12px ${p.ring}`,
-                      }}
-                    >
-                      <Icon size={18} className="transition-transform duration-300 group-hover:scale-110" /> {p.label}
-                    </a>
-                  );
-                })}
-              </motion.div>
-            </motion.div>
-          </div>
+                <Icon size={18} className="transition-transform duration-300 group-hover:scale-110" /> {p.label}
+              </button>
+            );
+          })}
         </div>
-      </section>
+      </PageHero>
 
-      {/* ── Community stats + content (shared soft background) ── */}
-      <div className="relative [display:flow-root] bg-[#f4edee] dark:bg-[#0d0508]">
-        <CommunityStats channel={channel} status={channelStatus} />
-
+      {/* ── Videos content ── */}
+      <div id="community-content" className="relative [display:flow-root] scroll-mt-24 bg-[#fbfefb] dark:bg-[#0d0508]">
         <section className="relative pt-16 sm:pt-20 pb-16 sm:pb-20 overflow-hidden">
-          {/* Decorative accents — crossfade to the active platform colour */}
+          {/* Decorative accents -crossfade to the active platform colour */}
           <AnimatePresence mode="wait">
             <motion.div
               key={tab}
@@ -178,8 +95,6 @@ export default function SocialVideos() {
               aria-hidden="true"
               className="pointer-events-none absolute inset-0"
             >
-              <div className="absolute top-24 -left-20 w-72 h-72 rounded-full blur-3xl" style={{ background: theme.glow }} />
-              <div className="absolute bottom-10 -right-20 w-72 h-72 rounded-full blur-3xl" style={{ background: theme.glow }} />
             </motion.div>
           </AnimatePresence>
 
@@ -220,11 +135,14 @@ export default function SocialVideos() {
         </section>
       </div>
 
+      {/* ── Community stats (now below the videos, themed per platform) ── */}
+      <CommunityStats platform={theme} channel={channel} status={channelStatus} />
+
       {/* ── Platform highlight cards ── */}
       <SocialHighlights platforms={PLATFORMS} channel={channel} status={channelStatus} />
 
       {/* ── Stay Connected CTA (adopts the active platform gradient) ── */}
-      <section className="p-16 sm:p-20 lg:p-24 bg-[#f4edee] dark:bg-[#0d0508]">
+      <section className="px-4 py-14 sm:p-20 lg:p-24 bg-[#fbfefb] dark:bg-[#0d0508]">
         <div className="max-w-7xl mx-auto px-5">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -232,11 +150,10 @@ export default function SocialVideos() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="relative overflow-hidden rounded-[2rem] px-6 py-14 sm:px-12 sm:py-20 text-center shadow-2xl"
-            style={{
-              background: `linear-gradient(135deg, rgb(22, 16, 16), rgb(204, 0, 0))`,
-              boxShadow: `0 30px 70px -25px ${theme.ring}`,
-            }}
           >
+            {/* Brand gradient backdrop */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#260b0b] to-[#bb0000]" />
+
             {/* Layered decorative glows + subtle grid */}
             <div className="pointer-events-none absolute -top-20 -right-10 w-72 h-72 rounded-full bg-white/15 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-24 -left-10 w-80 h-80 rounded-full bg-black/15 blur-3xl" />

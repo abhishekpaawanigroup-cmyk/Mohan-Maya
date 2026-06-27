@@ -1,6 +1,6 @@
 /**
  * Format a number into a short, human-friendly string with a single decimal
- * for thousands/millions/billions — e.g. 1234 → "1.2K", 2_500_000 → "2.5M".
+ * for thousands/millions/billions -e.g. 1234 → "1.2K", 2_500_000 → "2.5M".
  * Drops a trailing ".0" so round values read cleanly (12000 → "12K").
  */
 export function formatCompact(value) {
@@ -21,7 +21,7 @@ export function formatCompact(value) {
 }
 
 /**
- * Format an ISO date string as a short, readable date — e.g. "5 Jun 2026".
+ * Format an ISO date string as a short, readable date -e.g. "5 Jun 2026".
  * Returns "" for missing/unparseable values so callers can hide the line.
  */
 export function formatVideoDate(value) {

@@ -13,7 +13,7 @@ const app = express();
 //
 // In development we also reflect ANY localhost / 127.0.0.1 origin regardless of
 // port, because Vite silently bumps to 5174, 5175, … when its default port is
-// taken — and a hard-coded allowlist would then reject the browser and surface
+// taken -and a hard-coded allowlist would then reject the browser and surface
 // as a 500. Disallowed origins are rejected *cleanly* (no ACAO header) rather
 // than by throwing, so the browser blocks them without a confusing 500.
 const isLocalhost = (origin) =>

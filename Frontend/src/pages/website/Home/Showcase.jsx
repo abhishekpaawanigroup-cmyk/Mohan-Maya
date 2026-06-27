@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard } from "swiper/modules";
-import { FiEye, FiHeart, FiShoppingBag, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiEye, FiShoppingBag, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import ActionButton from "../../../components/common/ActionButton";
+import HeartIcon from "../../../components/common/HeartIcon";
 import ProductPreviewModal from "./Productmodal";
 import SectionHeading from "../../../components/common/SectionHeading";
 import { newArrivals } from "../../../data/products";
@@ -17,7 +18,7 @@ const Showcase = () => {
   const swiperRef = useRef(null);
 
   return (
-    <section className="bg-[#f4edee] dark:bg-[#0d0508] pb-20 pt-12">
+    <section className="bg-[#fbfefb] dark:bg-[#0d0508] pb-20 pt-12">
       <div className="mx-auto px-4 sm:px-8 relative max-w-[1440px]">
         <SectionHeading badge="Just In" title="New Arrivals" className="mb-14" />
 
@@ -65,15 +66,12 @@ const Showcase = () => {
                         className="bg-[#fe4462] hover:bg-[#d93550] text-white"
                       />
                       <ActionButton
-                        icon={FiHeart}
-                        label="Add to Wishlist"
+                        label={isWishlisted(item.id) ? "In Wishlist" : "Add to Wishlist"}
                         onClick={() => toggleWishlist(item)}
-                        className={`text-white ${
-                          isWishlisted(item.id)
-                            ? "bg-[#d93550] hover:bg-[#fe4462]"
-                            : "bg-[#fe4462] hover:bg-[#d93550]"
-                        }`}
-                      />
+                        className="bg-white/15 hover:bg-white/25 backdrop-blur-md"
+                      >
+                        <HeartIcon active={isWishlisted(item.id)} size={22} />
+                      </ActionButton>
                     </div>
                   </div>
                 </div>
@@ -101,7 +99,7 @@ const Showcase = () => {
           ))}
         </Swiper>
 
-        {/* Navigation — dots centered between the arrows, all below the cards */}
+        {/* Navigation -dots centered between the arrows, all below the cards */}
         <div className="flex items-center justify-center gap-4 mt-10">
           <button
             onClick={() => swiperRef.current?.slidePrev()}
