@@ -19,7 +19,7 @@ import { useModalA11y } from "../../hooks/useHooks";
 const SEED_REVIEWS = [
   {
     id: "r1",
-    name: "Ananya Verma",
+    name: "Vandana Sharma",
     rating: 5,
     title: "Absolutely stunning craftsmanship",
     text: "The detailing on this miniature is incredible - far beyond what I expected. Packaging was premium and delivery was quick. Worth every rupee!",
@@ -41,7 +41,7 @@ const SEED_REVIEWS = [
   },
   {
     id: "r3",
-    name: "Priya Nair",
+    name: "Priya Sharma",
     rating: 5,
     title: "Perfect gift!",
     text: "Bought this for my brother and he was thrilled. The character looks exactly like the photos. Highly recommend.",
@@ -63,7 +63,7 @@ const SEED_REVIEWS = [
   },
   {
     id: "r5",
-    name: "Sneha Iyer",
+    name: "Ananya Sharma",
     rating: 5,
     title: "Exceeded expectations",
     text: "The colours are vibrant and the finish is flawless. It's now the centerpiece of my shelf.",
@@ -85,7 +85,7 @@ const SEED_REVIEWS = [
   },
   {
     id: "r7",
-    name: "Meera Joshi",
+    name: "Naina Bhardwaj",
     rating: 3,
     title: "Lovely but fragile",
     text: "Gorgeous piece, though it needs careful handling. Arrived safely thanks to the sturdy packaging.",

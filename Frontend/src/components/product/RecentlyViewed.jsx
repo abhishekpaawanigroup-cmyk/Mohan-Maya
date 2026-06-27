@@ -3,20 +3,27 @@ import { AnimatePresence } from "framer-motion";
 import ProductCard from "../common/ProductCard";
 import ScrollReveal from "../common/ScrollReveal";
 import { useApp } from "../../context/AppContext";
+import { featuredProducts } from "../../data/products";
 
 // Same Quick View popup used by the Shop page. Lazy so the heavy 3D bundle only
 // loads when a user actually opens a product.
 const ProductModal = lazy(() => import("../../pages/website/Shop/ProductModal"));
 
 /**
- * Shows the products a user has recently opened. Renders nothing when the
- * history is empty. `excludeId` hides the product currently being viewed.
+ * Shows the products a user has recently opened. `excludeId` hides the product
+ * currently being viewed.
+ *
+ * Recently-viewed history is built from Quick View opens and persisted in
+ * localStorage, so a first-time visitor (e.g. a fresh browser on the live site)
+ * has none yet. To keep the section meaningful in that case, we fall back to a
+ * set of featured products until the user builds real history.
  */
 export default function RecentlyViewed({
   title = "Recently Viewed",
   excludeId = null,
   count = 4,
   onQuickView,
+  fallback = featuredProducts,
   className = "",
 }) {
   const { recentlyViewed } = useApp();
@@ -24,7 +31,12 @@ export default function RecentlyViewed({
   // shared ProductModal ourselves so the feature works in any section.
   const [quickView, setQuickView] = useState(null);
   const handleQuickView = onQuickView || setQuickView;
-  const items = recentlyViewed.filter((p) => p.id !== excludeId).slice(0, count);
+
+  const history = recentlyViewed.filter((p) => p.id !== excludeId);
+  // Use real history when available; otherwise seed with featured products so
+  // the section still renders on a fresh visit instead of disappearing.
+  const source = history.length > 0 ? history : fallback;
+  const items = source.filter((p) => p.id !== excludeId).slice(0, count);
 
   if (items.length === 0) return null;
 
