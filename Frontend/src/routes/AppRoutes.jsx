@@ -11,6 +11,8 @@ const Faq = lazy(() => import("../pages/website/Faq/Faq"));
 const SocialVideos = lazy(() => import("../pages/website/SocialVideos/SocialVideos"));
 const PrivacyPolicy = lazy(() => import("../pages/website/Privacy/PrivacyPolicy"));
 const TermsConditions = lazy(() => import("../pages/website/Terms/TermsConditions"));
+const Cart = lazy(() => import("../pages/website/Cart/Cart"));
+const Wishlist = lazy(() => import("../pages/website/Wishlist/Wishlist"));
 const Checkout = lazy(() => import("../pages/website/Checkout/Checkout"));
 const OrderTracking = lazy(() => import("../pages/website/Tracking/OrderTracking"));
 const Auth = lazy(() => import("../pages/website/Auth/Auth"));
@@ -29,6 +31,8 @@ const router = createBrowserRouter([
       { path: "Community", element: <SocialVideos /> },
       { path: "privacy", element: <PrivacyPolicy /> },
       { path: "terms", element: <TermsConditions /> },
+      { path: "cart", element: <Cart /> },
+      { path: "wishlist", element: <Wishlist /> },
       { path: "checkout", element: <Checkout /> },
       { path: "track", element: <OrderTracking /> },
       { path: "auth", element: <Auth /> },

@@ -86,8 +86,9 @@ export function AppProvider({ children }) {
   // Add to cart. When motion is allowed, play a single confirmation circle that
   // scales in at screen-centre and flies into the cart icon; the cart updates +
   // tick fire when it lands (handleFlyerDone). Only one animation runs at a time
-  // — rapid clicks still add the item instantly (no stacked circles). The third
-  // arg is kept for call-site compatibility but is unused.
+  // — rapid clicks still add the item instantly (no stacked circles). Navigation
+  // to the Cart page happens only when the user clicks the cart icon, never here.
+  // The third arg is kept for call-site compatibility but is unused.
   const addToCart = useCallback(
     // eslint-disable-next-line no-unused-vars
     (product, qty = 1, source = null) => {
@@ -124,10 +125,10 @@ export function AppProvider({ children }) {
 
   const removeFromCart = useCallback(
     (id) => {
+      // Silent update — the list animates the item out (no toast).
       setCart((prev) => prev.filter((i) => i.id !== id));
-      addToast("Removed from cart", "info");
     },
-    [setCart, addToast]
+    [setCart]
   );
 
   const updateQty = useCallback(
@@ -148,19 +149,16 @@ export function AppProvider({ children }) {
 
   const toggleWishlist = useCallback(
     (product) => {
-      // Decide the action from current state, THEN fire side effects once.
-      // The state updater stays pure so Strict Mode's double-invoke can't
-      // duplicate the toast.
-      const exists = wishlist.some((i) => i.id === product.id);
-      if (exists) {
-        setWishlist((prev) => prev.filter((i) => i.id !== product.id));
-        addToast("Removed from wishlist", "info");
-      } else {
-        setWishlist((prev) => [...prev, product]);
-        addToast(`${product.name} added to wishlist`, "success");
-      }
+      // Toggle silently — the heart icon's filled/outline state is the only
+      // feedback (no toast). The functional updater stays pure, so Strict Mode's
+      // double-invoke can't duplicate the item.
+      setWishlist((prev) =>
+        prev.some((i) => i.id === product.id)
+          ? prev.filter((i) => i.id !== product.id)
+          : [...prev, product]
+      );
     },
-    [wishlist, setWishlist, addToast]
+    [setWishlist]
   );
 
   // ── Coupons ─────────────────────────────────────────────

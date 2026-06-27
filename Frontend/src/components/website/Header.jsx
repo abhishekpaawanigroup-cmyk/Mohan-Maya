@@ -6,7 +6,7 @@ import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { MdMenu } from "react-icons/md";
 import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram } from "react-icons/fa";
-import { FiMapPin, FiPhone, FiMail, FiX, FiMoon, FiSun, FiPlus, FiMinus, FiUser, FiLogOut, FiPackage, FiSettings, FiHeart, FiCheck } from "react-icons/fi";
+import { FiMapPin, FiPhone, FiMail, FiX, FiMoon, FiSun, FiUser, FiLogOut, FiPackage, FiSettings, FiHeart, FiCheck } from "react-icons/fi";
 import { useApp } from "../../context/AppContext";
 import { useScrollThreshold, useClickOutside } from "../../hooks/useHooks";
 
@@ -21,13 +21,10 @@ const navLinks = [
 export default function Header() {
   const [openMenu, setOpenMenu] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [wishlistOpen, setWishlistOpen] = useState(false);
   const [localSearch, setLocalSearch] = useState("");
   const searchRef = useRef(null);
   const navigate = useNavigate();
 
-  const [couponInput, setCouponInput] = useState("");
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useClickOutside(() => setProfileOpen(false));
 
@@ -37,19 +34,10 @@ export default function Header() {
     darkMode,
     toggleDarkMode,
     cartCount,
-    cart,
-    removeFromCart,
-    updateQty,
     wishlist,
-    toggleWishlist,
     cartAnimating,
     cartSuccess,
     cartIconRef,
-    coupon,
-    couponCode,
-    applyCoupon,
-    removeCoupon,
-    totals,
     user,
     logout,
     addToast,
@@ -74,16 +62,6 @@ export default function Header() {
     }
   };
 
-  const goToCheckout = () => {
-    setCartOpen(false);
-    navigate("/checkout");
-  };
-
-  const handleApplyCoupon = (e) => {
-    e.preventDefault();
-    if (applyCoupon(couponInput)) setCouponInput("");
-  };
-
   // Navigate to the dedicated full-page auth screen (login/register tab).
   const goToAuth = (mode) => {
     setProfileOpen(false);
@@ -95,7 +73,7 @@ export default function Header() {
   const accountMenu = [
     { label: "My Profile", icon: FiUser, action: () => addToast("Profile page coming soon", "info") },
     { label: "My Orders", icon: FiPackage, action: () => navigate("/track") },
-    { label: "Wishlist", icon: FiHeart, action: () => setWishlistOpen(true) },
+    { label: "Wishlist", icon: FiHeart, action: () => navigate("/wishlist") },
     { label: "Settings", icon: FiSettings, action: () => addToast("Settings page coming soon", "info") },
   ];
 
@@ -178,9 +156,9 @@ export default function Header() {
               {darkMode ? <FiSun size={22} /> : <FiMoon size={22} />}
             </motion.button>
 
-            {/* Wishlist — solid red heart when items are saved (no count badge) */}
+            {/* Wishlist — solid red heart when items are saved; opens the Wishlist page */}
             <button
-              onClick={() => setWishlistOpen(true)}
+              onClick={() => navigate("/wishlist")}
               className="p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
               aria-label="Wishlist"
             >
@@ -191,10 +169,10 @@ export default function Header() {
               )}
             </button>
 
-            {/* Cart */}
+            {/* Cart — fly-to-cart animation lands here; click opens the Cart page */}
             <button
               ref={cartIconRef}
-              onClick={() => setCartOpen(true)}
+              onClick={() => navigate("/cart")}
               className={`relative p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300 ${cartAnimating ? "animate-cart-bounce" : ""}`}
               aria-label="Cart"
             >
@@ -331,197 +309,6 @@ export default function Header() {
           )}
         </AnimatePresence>
       </motion.header>
-
-      {/* ── Cart Drawer ── */}
-      <AnimatePresence>
-        {cartOpen && (
-          <>
-            <motion.div
-              className="fixed inset-0 bg-black/50 z-[998]"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              onClick={() => setCartOpen(false)}
-            />
-            <motion.div
-              className="fixed top-0 right-0 h-screen w-full max-w-[90vw] sm:max-w-[420px] bg-white dark:bg-[#1a0a0e] z-[999] flex flex-col shadow-2xl"
-              initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            >
-              <div className="flex items-center justify-between p-6 border-b dark:border-white/10">
-                <h2 className="text-xl font-bold dark:text-white">Shopping Cart ({cartCount})</h2>
-                <button onClick={() => setCartOpen(false)} className="p-2.5 hover:text-[#fe4462] transition" aria-label="Close cart">
-                  <FiX size={22} />
-                </button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-6 space-y-4">
-                {cart.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
-                    <LuShoppingBag size={48} className="text-gray-300" />
-                    <p className="text-gray-500 dark:text-gray-400">Your cart is empty</p>
-                    <button onClick={() => { setCartOpen(false); navigate("/shop"); }} className="btn-primary text-sm">
-                      Start Shopping
-                    </button>
-                  </div>
-                ) : (
-                  cart.map((item) => (
-                    <motion.div
-                      key={item.id}
-                      layout
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 20 }}
-                      className="flex gap-4 bg-gray-50 dark:bg-white/5 rounded-2xl p-3"
-                    >
-                      <div className="w-16 h-16 rounded-xl bg-[#f0e0e3] flex items-center justify-center overflow-hidden flex-shrink-0">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-contain" loading="lazy" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm truncate dark:text-white">{item.name}</p>
-                        <p className="text-[#fe4462] text-sm font-bold">₹{item.price * item.qty}</p>
-
-                        {/* Quantity controls */}
-                        <div className="flex items-center gap-2 mt-2">
-                          <div className="inline-flex items-center rounded-lg border border-gray-200 dark:border-white/15 overflow-hidden">
-                            <button
-                              onClick={() => updateQty(item.id, item.qty - 1)}
-                              disabled={item.qty <= 1}
-                              className="w-7 h-7 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-[#fe4462] disabled:opacity-40"
-                              aria-label={`Decrease ${item.name} quantity`}
-                            >
-                              <FiMinus size={13} />
-                            </button>
-                            <span className="w-8 text-center text-sm font-semibold dark:text-white">{item.qty}</span>
-                            <button
-                              onClick={() => updateQty(item.id, item.qty + 1)}
-                              className="w-7 h-7 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-[#fe4462]"
-                              aria-label={`Increase ${item.name} quantity`}
-                            >
-                              <FiPlus size={13} />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => removeFromCart(item.id)}
-                        className="text-gray-400 hover:text-[#fe4462] transition flex-shrink-0 self-start"
-                        aria-label={`Remove ${item.name}`}
-                      >
-                        <FiX size={18} />
-                      </button>
-                    </motion.div>
-                  ))
-                )}
-              </div>
-
-              {cart.length > 0 && (
-                <div className="p-6 border-t dark:border-white/10 space-y-4">
-                  {/* Coupon */}
-                  {coupon ? (
-                    <div className="flex items-center justify-between bg-green-50 dark:bg-green-500/10 rounded-xl px-3 py-2">
-                      <span className="text-sm font-medium text-green-700 dark:text-green-400">
-                        {couponCode} - {coupon.label}
-                      </span>
-                      <button onClick={removeCoupon} className="text-green-700 dark:text-green-400 hover:text-red-500" aria-label="Remove coupon">
-                        <FiX size={16} />
-                      </button>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleApplyCoupon} className="flex gap-2">
-                      <input
-                        value={couponInput}
-                        onChange={(e) => setCouponInput(e.target.value)}
-                        placeholder="Coupon code"
-                        className="flex-1 bg-gray-100 dark:bg-white/10 rounded-lg px-3 py-2 text-sm outline-none dark:text-white uppercase placeholder:normal-case"
-                      />
-                      <button type="submit" className="btn-outline !py-2 !px-4 text-sm">Apply</button>
-                    </form>
-                  )}
-
-                  {/* Totals */}
-                  <div className="space-y-1.5 text-sm">
-                    <div className="flex justify-between text-gray-600 dark:text-gray-300">
-                      <span>Subtotal</span><span>₹{totals.subtotal}</span>
-                    </div>
-                    {totals.discount > 0 && (
-                      <div className="flex justify-between text-green-600">
-                        <span>Discount</span><span>−₹{totals.discount}</span>
-                      </div>
-                    )}
-                    <div className="flex justify-between text-gray-600 dark:text-gray-300">
-                      <span>Shipping</span>
-                      <span>{totals.shipping === 0 ? "Free" : `₹${totals.shipping}`}</span>
-                    </div>
-                    <div className="flex justify-between pt-2 border-t dark:border-white/10 font-bold text-base dark:text-white">
-                      <span>Total</span>
-                      <span className="text-[#fe4462]">₹{totals.total}</span>
-                    </div>
-                  </div>
-
-                  <button onClick={goToCheckout} className="w-full btn-primary justify-center text-base">
-                    Checkout
-                  </button>
-                </div>
-              )}
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* ── Wishlist Drawer ── */}
-      <AnimatePresence>
-        {wishlistOpen && (
-          <>
-            <motion.div
-              className="fixed inset-0 bg-black/50 z-[998]"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              onClick={() => setWishlistOpen(false)}
-            />
-            <motion.div
-              className="fixed top-0 right-0 h-screen w-full max-w-[90vw] sm:max-w-[420px] bg-white dark:bg-[#1a0a0e] z-[999] flex flex-col shadow-2xl"
-              initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            >
-              <div className="flex items-center justify-between p-6 border-b dark:border-white/10">
-                <h2 className="text-xl font-bold dark:text-white">Wishlist</h2>
-                <button onClick={() => setWishlistOpen(false)} className="p-2.5 hover:text-[#fe4462] transition" aria-label="Close wishlist">
-                  <FiX size={22} />
-                </button>
-              </div>
-              <div className="flex-1 overflow-y-auto p-6 space-y-4">
-                {wishlist.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
-                    <FaRegHeart size={48} className="text-gray-300" />
-                    <p className="text-gray-500 dark:text-gray-400">No items in wishlist</p>
-                  </div>
-                ) : (
-                  wishlist.map((item) => (
-                    <motion.div
-                      key={item.id}
-                      layout
-                      className="flex items-center gap-4 bg-gray-50 dark:bg-white/5 rounded-2xl p-3"
-                    >
-                      <div className="w-16 h-16 rounded-xl bg-[#f0e0e3] flex items-center justify-center overflow-hidden flex-shrink-0">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-contain" loading="lazy" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm truncate dark:text-white">{item.name}</p>
-                        <p className="text-[#fe4462] text-sm font-bold">₹{item.price}</p>
-                      </div>
-                      <button
-                        onClick={() => toggleWishlist(item)}
-                        aria-label="Remove from wishlist"
-                        className="flex-shrink-0 grid place-items-center h-9 w-9 rounded-full hover:bg-[#fe4462]/10 transition-colors"
-                      >
-                        <FaHeart className="text-[#fe4462] transition-transform duration-200 hover:scale-110" size={18} />
-                      </button>
-                    </motion.div>
-                  ))
-                )}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
 
       {/* ── Mobile Sidebar ── */}
       <AnimatePresence>
