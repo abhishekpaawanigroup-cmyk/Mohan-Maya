@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useLocalStorage } from "../hooks/useHooks";
 import { COUPONS, computeTotals } from "../data/shop";
+import { products } from "../data/products";
 import CartFx from "../components/common/CartFx";
 
 const AppContext = createContext(null);
@@ -18,7 +19,11 @@ export function AppProvider({ children }) {
   const [cart, setCart] = useLocalStorage("mm-cart", []);
   const [wishlist, setWishlist] = useLocalStorage("mm-wishlist", []);
   const [couponCode, setCouponCode] = useLocalStorage("mm-coupon", null);
-  const [recentlyViewed, setRecentlyViewed] = useLocalStorage("mm-recent", []);
+  // Persist ONLY product ids (not full objects). The ids are the stable source
+  // of truth; full product data is always re-resolved from the catalog below.
+  // This prevents stale/partial objects cached from an older build from
+  // rendering as blank cards, and keeps the payload small.
+  const [recentIds, setRecentIds] = useLocalStorage("mm-recent", []);
   const [orders, setOrders] = useLocalStorage("mm-orders", []);
   const [user, setUser] = useLocalStorage("mm-user", null);
   const [cartAnimating, setCartAnimating] = useState(false);
@@ -187,15 +192,34 @@ export function AppProvider({ children }) {
   const totals = computeTotals(cart, coupon);
 
   // ── Recently viewed ─────────────────────────────────────
+  // Normalises a stored entry to a product id. Handles the legacy format where
+  // whole product objects were persisted (entry.id) as well as the current
+  // id-only format, so existing localStorage data keeps working after upgrade.
+  const entryId = (entry) =>
+    entry && typeof entry === "object" ? entry.id : entry;
+
+  // Resolve persisted ids to complete, current product objects from the catalog.
+  // Unknown ids (e.g. a product later removed) are dropped — that's the
+  // fallback for missing data, so a card is never rendered without its details.
+  const recentlyViewed = useMemo(
+    () =>
+      recentIds
+        .map(entryId)
+        .map((id) => products.find((p) => p.id === id))
+        .filter(Boolean),
+    [recentIds]
+  );
+
   const addRecentlyViewed = useCallback(
     (product) => {
-      if (!product?.id) return;
-      setRecentlyViewed((prev) => {
-        const next = [product, ...prev.filter((p) => p.id !== product.id)];
-        return next.slice(0, MAX_RECENT);
+      const id = product?.id;
+      if (id == null) return;
+      setRecentIds((prev) => {
+        const ids = prev.map(entryId).filter((x) => x != null);
+        return [id, ...ids.filter((x) => x !== id)].slice(0, MAX_RECENT);
       });
     },
-    [setRecentlyViewed]
+    [setRecentIds]
   );
 
   // ── Orders ──────────────────────────────────────────────
