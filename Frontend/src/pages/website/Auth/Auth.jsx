@@ -1,28 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  FiMail,
-  FiLock,
-  FiUser,
-  FiEye,
-  FiEyeOff,
-  FiArrowLeft,
-  FiCheck,
-} from "react-icons/fi";
+import { FiMail, FiLock, FiUser, FiEye, FiEyeOff, FiArrowLeft } from "react-icons/fi";
 import { FaGoogle, FaGithub, FaApple } from "react-icons/fa";
-import { HiSparkles } from "react-icons/hi2";
 import { useApp } from "../../../context/AppContext";
 import { usePageMeta } from "../../../hooks/useHooks";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const benefits = [
-  "Track orders & manage your wishlist",
-  "Faster, secure checkout every time",
-  "Early access to new drops & offers",
-  "Personalised character recommendations",
-];
 
 const socials = [
   { Icon: FaGoogle, label: "Google" },
@@ -72,9 +56,9 @@ export default function Auth() {
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  const validate = () => {
+  const validate = (registering) => {
     const e = {};
-    if (isRegister && !form.name.trim()) e.name = "Name is required";
+    if (registering && !form.name.trim()) e.name = "Name is required";
     if (!form.email.trim()) e.email = "Email is required";
     else if (!EMAIL_RE.test(form.email.trim())) e.email = "Enter a valid email";
     if (!form.password) e.password = "Password is required";
@@ -82,10 +66,13 @@ export default function Auth() {
     return e;
   };
 
-  const handleSubmit = (e) => {
+  // `mode` defaults to the active tab; passing it explicitly lets each panel in
+  // the sliding layout submit unambiguously (both forms are mounted at once).
+  const handleSubmit = (e, mode = tab) => {
     e.preventDefault();
     if (loading) return;
-    const next = validate();
+    const registering = mode === "register";
+    const next = validate(registering);
     if (Object.keys(next).length) {
       setErrors(next);
       return;
@@ -93,7 +80,7 @@ export default function Auth() {
     setLoading(true);
     // Mock async auth - gives a realistic loading state.
     setTimeout(() => {
-      if (isRegister) register({ name: form.name.trim(), email: form.email.trim() });
+      if (registering) register({ name: form.name.trim(), email: form.email.trim() });
       else login({ email: form.email.trim() });
       setLoading(false);
       navigate(redirectTo, { replace: true });
@@ -101,193 +88,108 @@ export default function Auth() {
   };
 
   const fieldCls = (name) =>
-    `w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-11 pr-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition focus:ring-2 focus:ring-[#fe4462]/30 focus:border-[#fe4462] focus-visible:!outline-none ${
-      errors[name] ? "border-red-400 focus:ring-red-400/20" : "border-gray-200 dark:border-white/10"
+    `w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-11 pr-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition-all duration-200 focus:ring-4 focus:ring-[#fe4462]/15 focus:border-[#fe4462] focus:bg-white dark:focus:bg-white/[0.07] focus-visible:!outline-none ${
+      errors[name] ? "border-red-400 focus:ring-red-400/15" : "border-gray-200 dark:border-white/10"
     }`;
 
-  return (
-    <section className="min-h-screen md:min-h-[900px] max-w-7xl m-auto pt-20 grid grid-cols-1 lg:grid-cols-2 bg-[#fbfefb] dark:bg-[#0d0508]">
-      {/* ── Left: brand / value panel (hidden on mobile so the auth form is first) ── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#1b1016] to-[#0d0508] text-white hidden lg:flex items-center">
-        {/* Subtle theme graphics */}
-        <div className="pointer-events-none absolute -top-24 -left-24 w-80 h-80 rounded-full bg-[#fe4462]/25 blur-3xl" />
-        <div className="pointer-events-none absolute bottom-0 right-0 w-72 h-72 rounded-full bg-[#c48212]/20 blur-3xl" />
-        <div className="pointer-events-none absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_1px_1px,#fff_1px,transparent_0)] [background-size:22px_22px]" />
+  /* ── A single auth form (used for both Sign In and Sign Up panels) ── */
+  const Panel = (mode) => {
+    const registering = mode === "register";
+    return (
+      <div className="flex h-full flex-col items-center justify-center px-7 sm:px-10 py-8 text-center">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+          {registering ? "Create Account" : "Sign In"}
+        </h2>
 
-        <div className="relative z-10 w-full max-w-lg mx-auto px-8 sm:px-12 py-12 lg:py-0">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition mb-10">
-            <FiArrowLeft /> Back to home
-          </Link>
-
-          <span className="inline-flex items-center gap-2 ml-3 px-4 py-1.5 rounded-full border border-[#fe4462] bg-[#fe4462]/10 text-[#fe4462] text-xs font-bold uppercase tracking-wider">
-            <HiSparkles /> Mohan Maya
-          </span>
-
-          <h1 className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
-            Where tiny art
-            <br />
-            comes to <span className="text-[#fe4462]">life</span>
-          </h1>
-
-          <p className="mt-4 text-white/70 leading-relaxed max-w-md">
-            Join a community of collectors. Sign in to manage your handcrafted
-            miniatures, orders, and wishlist - all in one premium experience.
-          </p>
-
-          <ul className="mt-8 space-y-3">
-            {benefits.map((b) => (
-              <li key={b} className="flex items-center gap-3 text-sm text-white/85">
-                <span className="w-6 h-6 rounded-full bg-[#fe4462]/20 text-[#fe4462] flex items-center justify-center shrink-0">
-                  <FiCheck size={14} />
-                </span>
-                {b}
-              </li>
-            ))}
-          </ul>
+        {/* Social logins (placeholders for future integration) */}
+        <div className="mt-5 flex items-center gap-3">
+          {socials.map(({ Icon, label }) => (
+            <motion.button
+              key={label}
+              type="button"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.94 }}
+              onClick={() => addToast(`${label} sign-in coming soon`, "info")}
+              aria-label={`Continue with ${label}`}
+              className="grid h-11 w-11 place-items-center rounded-full border border-gray-200 dark:border-white/15 text-gray-500 dark:text-gray-300 transition hover:border-[#fe4462] hover:text-[#fe4462] hover:bg-[#fe4462]/5"
+            >
+              <Icon size={17} />
+            </motion.button>
+          ))}
         </div>
-      </div>
 
-      {/* ── Right: auth card ── */}
-      <div className="flex items-center justify-center px-5 py-12 sm:py-16">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="w-full max-w-md bg-white dark:bg-[#140a0d] rounded-lg shadow-xl ring-1 ring-black/5 dark:ring-white/10 p-7 sm:p-9"
-        >
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            {isRegister ? "Create your account" : "Welcome back"}
-          </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            {isRegister
-              ? "Join Mohan Maya for a tailored experience."
-              : "Log in to continue your collection."}
-          </p>
+        <p className="mt-4 text-xs text-gray-400">
+          {registering ? "or use your email for registration" : "or use your account"}
+        </p>
 
-          {/* Tabs */}
-          <div className="relative grid grid-cols-2 gap-1 p-1 bg-gray-100 dark:bg-white/5 rounded-full mt-6">
-            {["login", "register"].map((t) => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => switchTab(t)}
-                aria-pressed={tab === t}
-                className="relative py-2.5 rounded-full text-sm font-semibold capitalize z-10 transition-colors"
-              >
-                {tab === t && (
-                  <motion.span
-                    layoutId="auth-tab"
-                    className="absolute inset-0 bg-[#fe4462] rounded-full shadow"
-                    transition={{ type: "spring", stiffness: 320, damping: 28 }}
-                  />
-                )}
-                <span className={`relative ${tab === t ? "text-white" : "text-gray-600 dark:text-gray-300"}`}>
-                  {t === "login" ? "Login" : "Register"}
-                </span>
-              </button>
-            ))}
-          </div>
-
-          {/* Social logins (placeholders for future integration) */}
-          <div className="grid grid-cols-3 gap-3 mt-6">
-            {socials.map(({ Icon, label }) => (
-              <button
-                key={label}
-                type="button"
-                onClick={() => addToast(`${label} sign-in coming soon`, "info")}
-                aria-label={`Continue with ${label}`}
-                className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300 hover:border-[#fe4462] hover:text-[#fe4462] transition"
-              >
-                <Icon size={18} />
-              </button>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-3 my-6">
-            <span className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
-            <span className="text-xs text-gray-400">or continue with email</span>
-            <span className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
-          </div>
-
-          {/* Form (animated swap between login/register) */}
-          <form onSubmit={handleSubmit} noValidate className="space-y-4">
-            <AnimatePresence initial={false} mode="popLayout">
-              {isRegister && (
-                <motion.div
-                  key="name"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <label htmlFor="name" className="sr-only">Full name</label>
-                  <div className="relative">
-                    <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                    <input
-                      id="name"
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      placeholder="Full name"
-                      autoComplete="name"
-                      aria-invalid={Boolean(errors.name)}
-                      className={fieldCls("name")}
-                    />
-                  </div>
-                  {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
-                </motion.div>
-              )}
-            </AnimatePresence>
-
+        <form onSubmit={(e) => handleSubmit(e, mode)} noValidate className="mt-4 w-full space-y-3 text-left">
+          {registering && (
             <div>
-              <label htmlFor="email" className="sr-only">Email address</label>
               <div className="relative">
-                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={form.email}
+                  name="name"
+                  value={form.name}
                   onChange={handleChange}
-                  placeholder="Email address"
-                  autoComplete="email"
-                  aria-invalid={Boolean(errors.email)}
-                  className={fieldCls("email")}
+                  placeholder="Name"
+                  autoComplete="name"
+                  aria-label="Full name"
+                  aria-invalid={Boolean(errors.name)}
+                  className={fieldCls("name")}
                 />
               </div>
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+              {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
             </div>
+          )}
 
-            <div>
-              <label htmlFor="password" className="sr-only">Password</label>
-              <div className="relative">
-                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                <input
-                  id="password"
-                  name="password"
-                  type={showPw ? "text" : "password"}
-                  value={form.password}
-                  onChange={handleChange}
-                  placeholder="Password"
-                  autoComplete={isRegister ? "new-password" : "current-password"}
-                  aria-invalid={Boolean(errors.password)}
-                  className={`${fieldCls("password")} !pr-11`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPw((v) => !v)}
-                  aria-label={showPw ? "Hide password" : "Show password"}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-[#fe4462] transition"
-                >
-                  {showPw ? <FiEyeOff size={18} /> : <FiEye size={18} />}
-                </button>
-              </div>
-              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+          <div>
+            <div className="relative">
+              <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Email"
+                autoComplete="email"
+                aria-label="Email address"
+                aria-invalid={Boolean(errors.email)}
+                className={fieldCls("email")}
+              />
             </div>
+            {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+          </div>
 
-            {/* Remember me + forgot password */}
+          <div>
+            <div className="relative">
+              <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                name="password"
+                type={showPw ? "text" : "password"}
+                value={form.password}
+                onChange={handleChange}
+                placeholder="Password"
+                autoComplete={registering ? "new-password" : "current-password"}
+                aria-label="Password"
+                aria-invalid={Boolean(errors.password)}
+                className={`${fieldCls("password")} !pr-11`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPw((v) => !v)}
+                aria-label={showPw ? "Hide password" : "Show password"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 transition hover:text-[#fe4462]"
+              >
+                {showPw ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+              </button>
+            </div>
+            {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
+          </div>
+
+          {/* Remember me + forgot password (login only) */}
+          {!registering && (
             <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 cursor-pointer text-gray-600 dark:text-gray-300 select-none">
+              <label className="flex cursor-pointer select-none items-center gap-2 text-gray-600 dark:text-gray-300">
                 <input
                   type="checkbox"
                   checked={remember}
@@ -296,54 +198,147 @@ export default function Auth() {
                 />
                 Remember me
               </label>
-              {!isRegister && (
-                <button
-                  type="button"
-                  onClick={() => addToast("Password reset link sent (demo)", "info")}
-                  className="font-medium text-[#fe4462] hover:underline"
-                >
-                  Forgot password?
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => addToast("Password reset link sent (demo)", "info")}
+                className="font-medium text-[#fe4462] hover:underline"
+              >
+                Forgot password?
+              </button>
             </div>
+          )}
 
-            <button
+          <div className="pt-2 flex justify-center">
+            <motion.button
               type="submit"
               disabled={loading}
               aria-busy={loading}
-              className="w-full justify-center bg-[#fe4462] border border-[#fe4462] rounded-full text-[#fff] font-medium hover:bg-transparent hover:text-[#fe4462] duration-200 cursor-pointer !py-3 disabled:opacity-70 disabled:cursor-not-allowed"
+              whileHover={{ scale: loading ? 1 : 1.04 }}
+              whileTap={{ scale: loading ? 1 : 0.96 }}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#fe4462] to-[#d93550] px-10 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-[0_12px_28px_-10px_rgba(254,68,98,0.7)] transition-shadow duration-200 hover:shadow-[0_16px_34px_-10px_rgba(254,68,98,0.85)] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading ? (
                 <>
-                  <span className="w-4 h-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-                  {isRegister ? "Creating account…" : "Signing in…"}
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                  {registering ? "Creating…" : "Signing in…"}
                 </>
-              ) : isRegister ? (
-                "Create Account"
+              ) : registering ? (
+                "Sign Up"
               ) : (
-                "Login"
+                "Sign In"
               )}
-            </button>
-          </form>
-
-          <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
-            {isRegister ? "Already have an account?" : "New to Mohan Maya?"}{" "}
-            <button
-              type="button"
-              onClick={() => switchTab(isRegister ? "login" : "register")}
-              className="text-[#fe4462] font-semibold hover:underline"
-            >
-              {isRegister ? "Login" : "Create one"}
-            </button>
-          </p>
-
-          <p className="text-center text-[11px] text-gray-400 mt-4 leading-relaxed">
-            By continuing you agree to our{" "}
-            <Link to="/terms" className="underline hover:text-[#fe4462]">Terms</Link> and{" "}
-            <Link to="/privacy" className="underline hover:text-[#fe4462]">Privacy Policy</Link>.
-          </p>
-        </motion.div>
+            </motion.button>
+          </div>
+        </form>
       </div>
+    );
+  };
+
+  /* Ghost CTA inside the sliding overlay panel. */
+  const overlayBtn =
+    "mt-6 inline-flex items-center justify-center rounded-full border-2 border-white px-10 py-2.5 text-sm font-bold uppercase tracking-wider text-white transition hover:bg-white hover:text-[#fe4462] active:scale-95";
+
+  return (
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#fbfefb] px-4 pt-24 pb-12 dark:from-[#1a0a0e] dark:via-[#0d0508] dark:to-[#160c11]">
+      
+
+      <Link
+        to="/"
+        className="absolute top-24 left-4 z-50 inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-[#fe4462] dark:text-gray-400 sm:left-8"
+      >
+        <FiArrowLeft /> Back to home
+      </Link>
+
+      {/* ── Desktop: sliding split-panel card (md and up) ── */}
+      <div className="relative hidden min-h-[650px] w-full max-w-5xl overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10 md:block">
+        {/* Sign In form */}
+        <div
+          className={`absolute top-0 left-0 h-full w-1/2 transition-all duration-700 ease-in-out ${
+            isRegister ? "z-10 translate-x-full opacity-0 pointer-events-none" : "z-20 opacity-100"
+          }`}
+        >
+          {Panel("login")}
+        </div>
+
+        {/* Sign Up form */}
+        <div
+          className={`absolute top-0 left-0 h-full w-1/2 transition-all duration-700 ease-in-out ${
+            isRegister ? "z-20 translate-x-full opacity-100" : "z-10 opacity-0 pointer-events-none"
+          }`}
+        >
+          {Panel("register")}
+        </div>
+
+        {/* Sliding overlay */}
+        <div
+          className={`absolute top-0 left-1/2 z-50 h-full w-1/2 overflow-hidden transition-transform duration-700 ease-in-out ${
+            isRegister ? "-translate-x-full" : ""
+          }`}
+        >
+          <div
+            className={`relative -left-full h-full w-[200%] bg-gradient-to-br from-[#fe4462] to-[#d93550] text-white transition-transform duration-700 ease-in-out ${
+              isRegister ? "translate-x-1/2" : ""
+            }`}
+          >
+            <div className="pointer-events-none absolute inset-0 opacity-[0.08] bg-[radial-gradient(circle_at_1px_1px,#fff_1px,transparent_0)] [background-size:22px_22px]" />
+            <div className="relative flex h-full">
+              {/* Overlay-left → shown when registering (prompt to sign in) */}
+              <div className="flex h-full w-1/2 flex-col items-center justify-center px-10 text-center">
+                <h2 className="text-3xl font-bold">Welcome Back!</h2>
+                <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/85">
+                  To keep connected with us please login with your personal info
+                </p>
+                <button type="button" onClick={() => switchTab("login")} className={overlayBtn}>
+                  Sign In
+                </button>
+              </div>
+
+              {/* Overlay-right → shown when logging in (prompt to register) */}
+              <div className="flex h-full w-1/2 flex-col items-center justify-center px-10 text-center">
+                <h2 className="text-3xl font-bold">Hello, Friend!</h2>
+                <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/85">
+                  Enter your details and start your journey with us
+                </p>
+                <button type="button" onClick={() => switchTab("register")} className={overlayBtn}>
+                  Sign Up
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Mobile: single card with animated form swap + toggle (below md) ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10 md:hidden"
+      >
+        <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#fe4462] to-[#c48212]" aria-hidden="true" />
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={tab}
+            initial={{ opacity: 0, x: 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -24 }}
+            transition={{ duration: 0.25 }}
+          >
+            {Panel(tab)}
+          </motion.div>
+        </AnimatePresence>
+
+        <p className="px-7 pb-8 -mt-2 text-center text-sm text-gray-500 dark:text-gray-400">
+          {isRegister ? "Already have an account?" : "New to Mohan Maya?"}{" "}
+          <button
+            type="button"
+            onClick={() => switchTab(isRegister ? "login" : "register")}
+            className="font-semibold text-[#fe4462] hover:underline"
+          >
+            {isRegister ? "Sign In" : "Create one"}
+          </button>
+        </p>
+      </motion.div>
     </section>
   );
 }

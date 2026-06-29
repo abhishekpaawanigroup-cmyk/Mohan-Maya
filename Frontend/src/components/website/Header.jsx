@@ -71,10 +71,10 @@ export default function Header() {
 
   // Menu items for a logged-in user. `action` runs on click.
   const accountMenu = [
-    { label: "My Profile", icon: FiUser, action: () => addToast("Profile page coming soon", "info") },
+    { label: "My Profile", icon: FiUser, action: () => navigate("/profile") },
     { label: "My Orders", icon: FiPackage, action: () => navigate("/track") },
     { label: "Wishlist", icon: FiHeart, action: () => navigate("/wishlist") },
-    { label: "Settings", icon: FiSettings, action: () => addToast("Settings page coming soon", "info") },
+    { label: "Settings", icon: FiSettings, action: () => navigate("/profile") },
   ];
 
   const initials = user?.name?.trim()?.[0]?.toUpperCase() || "U";

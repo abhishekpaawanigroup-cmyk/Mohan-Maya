@@ -26,6 +26,7 @@ export function AppProvider({ children }) {
   const [recentIds, setRecentIds] = useLocalStorage("mm-recent", []);
   const [orders, setOrders] = useLocalStorage("mm-orders", []);
   const [user, setUser] = useLocalStorage("mm-user", null);
+  const [addresses, setAddresses] = useLocalStorage("mm-addresses", []);
   const [cartAnimating, setCartAnimating] = useState(false);
   const [cartSuccess, setCartSuccess] = useState(false);
   const [toasts, setToasts] = useState([]);
@@ -273,6 +274,61 @@ export function AppProvider({ children }) {
     addToast("You've been logged out", "info");
   }, [setUser, addToast]);
 
+  // Merge a partial update into the signed-in user (name / email / phone …).
+  const updateProfile = useCallback(
+    (patch) => {
+      setUser((prev) => (prev ? { ...prev, ...patch } : prev));
+      addToast("Profile updated", "success");
+    },
+    [setUser, addToast]
+  );
+
+  // ── Saved addresses (persisted, additive) ───────────────
+  const addAddress = useCallback(
+    (addr) => {
+      setAddresses((prev) => {
+        const id = `addr_${Date.now().toString(36)}${prev.length}`;
+        const makeDefault = prev.length === 0 || addr.isDefault;
+        const next = makeDefault ? prev.map((a) => ({ ...a, isDefault: false })) : prev;
+        return [...next, { ...addr, id, isDefault: Boolean(makeDefault) }];
+      });
+      addToast("Address saved", "success");
+    },
+    [setAddresses, addToast]
+  );
+
+  const updateAddress = useCallback(
+    (id, patch) => {
+      setAddresses((prev) =>
+        prev.map((a) => {
+          if (a.id === id) return { ...a, ...patch };
+          // Only one address can be the default.
+          return patch.isDefault ? { ...a, isDefault: false } : a;
+        })
+      );
+      addToast("Address updated", "success");
+    },
+    [setAddresses, addToast]
+  );
+
+  const removeAddress = useCallback(
+    (id) => {
+      setAddresses((prev) => {
+        const next = prev.filter((a) => a.id !== id);
+        // If we removed the default, promote the first remaining address.
+        if (next.length && !next.some((a) => a.isDefault)) next[0].isDefault = true;
+        return next;
+      });
+      addToast("Address removed", "info");
+    },
+    [setAddresses, addToast]
+  );
+
+  const setDefaultAddress = useCallback(
+    (id) => setAddresses((prev) => prev.map((a) => ({ ...a, isDefault: a.id === id }))),
+    [setAddresses]
+  );
+
   const cartCount = cart.reduce((sum, i) => sum + i.qty, 0);
 
   const value = {
@@ -309,6 +365,13 @@ export function AppProvider({ children }) {
     login,
     register,
     logout,
+    updateProfile,
+    // saved addresses
+    addresses,
+    addAddress,
+    updateAddress,
+    removeAddress,
+    setDefaultAddress,
   };
 
   return (
