@@ -33,7 +33,10 @@ export function AppProvider({ children }) {
   // Router's navigate(), registered by a component inside the RouterProvider
   // (WebsiteLayout) so the provider — which lives outside the router — can
   // redirect (e.g. to login) without a full page reload.
-  const navigatorRef = useRef(null);
+  // Auth modal: shown when a signed-out user triggers a protected action.
+  const [authModal, setAuthModal] = useState({ open: false, mode: "login" });
+  // The action to resume after a successful login/registration.
+  const pendingActionRef = useRef(null);
 
   // Apply the dark class to <html> so Tailwind's dark: variants work app-wide.
   useEffect(() => {
@@ -44,16 +47,39 @@ export function AppProvider({ children }) {
 
   const toggleDarkMode = useCallback(() => setDarkMode((d) => !d), [setDarkMode]);
 
-  // Lets a router-aware component hand us its navigate() function.
-  const registerNavigator = useCallback((fn) => {
-    navigatorRef.current = fn;
+  // ── Auth modal + gated actions ──────────────────────────
+  const openAuthModal = useCallback((mode = "login") => {
+    setAuthModal({ open: true, mode });
   }, []);
 
-  // SPA redirect from outside the router (falls back to a hard nav if the
-  // navigator hasn't registered yet).
-  const redirectTo = useCallback((path) => {
-    if (navigatorRef.current) navigatorRef.current(path);
-    else if (typeof window !== "undefined") window.location.assign(path);
+  const closeAuthModal = useCallback(() => {
+    setAuthModal((a) => ({ ...a, open: false }));
+    pendingActionRef.current = null; // user dismissed — drop the pending action
+  }, []);
+
+  // Run `action` immediately if signed in; otherwise open the auth modal and
+  // resume the action after a successful login/registration. Returns true when
+  // it ran right away.
+  const requireAuth = useCallback(
+    (action, { mode = "login" } = {}) => {
+      if (user) {
+        action?.();
+        return true;
+      }
+      pendingActionRef.current = action || null;
+      setAuthModal({ open: true, mode });
+      return false;
+    },
+    [user]
+  );
+
+  // Called by the modal once auth succeeds: close it, then continue the action
+  // that triggered it (add to cart, go to checkout, open shop, …).
+  const completeAuth = useCallback(() => {
+    const action = pendingActionRef.current;
+    pendingActionRef.current = null;
+    setAuthModal((a) => ({ ...a, open: false }));
+    if (action) action();
   }, []);
 
   // ── Toasts ──────────────────────────────────────────────
@@ -83,28 +109,31 @@ export function AppProvider({ children }) {
     successTimer.current = setTimeout(() => setCartSuccess(false), 650);
   }, []);
 
-  // Add to cart instantly, then show the cart-icon confirmation. The third arg
-  // is accepted for call-site compatibility but unused.
-  // Requires authentication: a signed-out user is redirected straight to the
-  // login page (no toast/popup) and nothing is added to the cart.
+  // Add to cart, then show the cart-icon confirmation. The third arg is accepted
+  // for call-site compatibility but unused. Requires authentication: a signed-out
+  // user gets the auth modal (no navigation) and the item is added automatically
+  // once they sign in. Returns false when the add was deferred to login.
   const addToCart = useCallback(
     // eslint-disable-next-line no-unused-vars
     (product, qty = 1, source = null) => {
+      const commit = () => {
+        setCart((prev) => {
+          const existing = prev.find((i) => i.id === product.id);
+          if (existing) {
+            return prev.map((i) => (i.id === product.id ? { ...i, qty: i.qty + qty } : i));
+          }
+          return [...prev, { ...product, qty }];
+        });
+        triggerCartBounce();
+      };
       if (!user) {
-        redirectTo("/auth?mode=login");
-        return false; // not added — caller can skip any post-add side effects
+        requireAuth(commit);
+        return false; // deferred — caller should skip any post-add side effects
       }
-      setCart((prev) => {
-        const existing = prev.find((i) => i.id === product.id);
-        if (existing) {
-          return prev.map((i) => (i.id === product.id ? { ...i, qty: i.qty + qty } : i));
-        }
-        return [...prev, { ...product, qty }];
-      });
-      triggerCartBounce();
+      commit();
       return true;
     },
-    [user, redirectTo, setCart, triggerCartBounce]
+    [user, requireAuth, setCart, triggerCartBounce]
   );
 
   const removeFromCart = useCallback(
@@ -135,14 +164,21 @@ export function AppProvider({ children }) {
     (product) => {
       // Toggle silently -the heart icon's filled/outline state is the only
       // feedback (no toast). The functional updater stays pure, so Strict Mode's
-      // double-invoke can't duplicate the item.
-      setWishlist((prev) =>
-        prev.some((i) => i.id === product.id)
-          ? prev.filter((i) => i.id !== product.id)
-          : [...prev, product]
-      );
+      // double-invoke can't duplicate the item. Requires auth: a signed-out user
+      // gets the modal and the toggle resumes after they sign in.
+      const doToggle = () =>
+        setWishlist((prev) =>
+          prev.some((i) => i.id === product.id)
+            ? prev.filter((i) => i.id !== product.id)
+            : [...prev, product]
+        );
+      if (!user) {
+        requireAuth(doToggle);
+        return;
+      }
+      doToggle();
     },
-    [setWishlist]
+    [user, requireAuth, setWishlist]
   );
 
   // ── Coupons ─────────────────────────────────────────────
@@ -338,7 +374,6 @@ export function AppProvider({ children }) {
   const value = {
     darkMode,
     toggleDarkMode,
-    registerNavigator,
     cart,
     cartCount,
     addToCart,
@@ -370,6 +405,12 @@ export function AppProvider({ children }) {
     register: signup, // backward-compatible alias
     login,
     logout,
+    // auth modal + gated actions
+    authModal,
+    openAuthModal,
+    closeAuthModal,
+    requireAuth,
+    completeAuth,
     updateProfile,
     changePassword,
     forgotPassword,

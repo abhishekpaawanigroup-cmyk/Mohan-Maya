@@ -6,7 +6,7 @@ import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { MdMenu } from "react-icons/md";
 import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram } from "react-icons/fa";
-import { FiMapPin, FiPhone, FiMail, FiX, FiMoon, FiSun, FiUser, FiLogOut, FiPackage, FiSettings, FiHeart, FiCheck } from "react-icons/fi";
+import { FiMapPin, FiPhone, FiMail, FiX, FiMoon, FiSun, FiUser, FiLogOut, FiPackage, FiSettings, FiHeart, FiCheck, FiCreditCard, FiTag, FiRotateCcw, FiStar, FiBell, FiHelpCircle, FiChevronRight } from "react-icons/fi";
 import { useApp } from "../../context/AppContext";
 import { useScrollThreshold, useClickOutside } from "../../hooks/useHooks";
 
@@ -26,6 +26,7 @@ export default function Header() {
   const navigate = useNavigate();
 
   const [profileOpen, setProfileOpen] = useState(false);
+  const [confirmLogout, setConfirmLogout] = useState(false);
   const profileRef = useClickOutside(() => setProfileOpen(false));
 
   // Boolean-only scroll state → Header no longer re-renders every scroll frame.
@@ -40,7 +41,13 @@ export default function Header() {
     user,
     logout,
     addToast,
+    requireAuth,
+    openAuthModal,
+    orders,
   } = useApp();
+
+  // Protected nav targets open the auth modal (and resume) when signed out.
+  const goProtected = (path) => requireAuth(() => navigate(path));
 
   useEffect(() => {
     if (searchOpen) searchRef.current?.focus();
@@ -61,22 +68,51 @@ export default function Header() {
     }
   };
 
-  // Navigate to the dedicated full-page auth screen (login/register tab).
-  const goToAuth = (mode) => {
+  // Open the premium auth modal (logged-out profile / login / register).
+  const openAuth = (mode) => {
     setProfileOpen(false);
     setOpenMenu(false);
-    navigate(`/auth?mode=${mode}`);
+    openAuthModal(mode);
   };
 
-  // Menu items for a logged-in user. `action` runs on click.
+  // Account dropdown items. `to` navigates; `soon` shows a coming-soon toast
+  // (UI ready, backend pending).
   const accountMenu = [
-    { label: "My Profile", icon: FiUser, action: () => navigate("/profile") },
-    { label: "My Orders", icon: FiPackage, action: () => navigate("/track") },
-    { label: "Wishlist", icon: FiHeart, action: () => navigate("/wishlist") },
-    { label: "Settings", icon: FiSettings, action: () => navigate("/profile") },
+    { label: "My Profile", icon: FiUser, to: "/profile" },
+    { label: "My Orders", icon: FiPackage, to: "/track" },
+    { label: "Wishlist", icon: FiHeart, to: "/wishlist" },
+    { label: "My Cart", icon: LuShoppingBag, to: "/cart" },
+    { label: "Manage Addresses", icon: FiMapPin, to: "/profile" },
+    { label: "Payment Methods", icon: FiCreditCard, soon: true },
+    { label: "Coupons & Offers", icon: FiTag, soon: true },
+    { label: "Returns & Refunds", icon: FiRotateCcw, soon: true },
+    { label: "Reviews & Ratings", icon: FiStar, soon: true },
+    { label: "Notifications", icon: FiBell, soon: true },
+    { label: "Help & Support", icon: FiHelpCircle, to: "/faq" },
+    { label: "Account Settings", icon: FiSettings, to: "/profile" },
   ];
 
+  // Run a menu item, closing whichever surface it was opened from.
+  const onMenuItem = (item, close) => {
+    close?.();
+    if (item.soon) addToast(`${item.label} — coming soon`, "info");
+    else navigate(item.to);
+  };
+
   const initials = user?.name?.trim()?.[0]?.toUpperCase() || "U";
+
+  // ESC closes the profile dropdown / logout confirmation.
+  useEffect(() => {
+    if (!profileOpen && !confirmLogout) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        setProfileOpen(false);
+        setConfirmLogout(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [profileOpen, confirmLogout]);
 
   return (
     <>
@@ -113,6 +149,14 @@ export default function Header() {
                   <NavLink
                     to={path}
                     end={path === "/"}
+                    onClick={(e) => {
+                      // Shop is gated: signed-out users get the auth modal, then
+                      // land on /shop after signing in (no page navigation now).
+                      if (path === "/shop" && !user) {
+                        e.preventDefault();
+                        goProtected("/shop");
+                      }
+                    }}
                     className={({ isActive }) =>
                       `relative font-semibold text-[15px] transition-colors duration-200 group
                        ${isActive ? "text-[#fe4462]" : "text-gray-700 dark:text-gray-300 hover:text-[#fe4462]"}`
@@ -155,9 +199,9 @@ export default function Header() {
               {darkMode ? <FiSun size={22} /> : <FiMoon size={22} />}
             </motion.button>
 
-            {/* Wishlist -solid red heart when items are saved; opens the Wishlist page */}
+            {/* Wishlist -solid red heart when items are saved; opens the Wishlist page (gated) */}
             <button
-              onClick={() => navigate("/wishlist")}
+              onClick={() => goProtected("/wishlist")}
               className="p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
               aria-label="Wishlist"
             >
@@ -206,7 +250,7 @@ export default function Header() {
             {/* Profile (desktop) */}
             <div className="relative hidden lg:block" ref={profileRef}>
               <button
-                onClick={() => (user ? setProfileOpen((v) => !v) : goToAuth("login"))}
+                onClick={() => (user ? setProfileOpen((v) => !v) : openAuth("login"))}
                 className="flex items-center gap-2 p-1 pr-2 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
                 aria-label={user ? "Account menu" : "Sign in"}
                 aria-haspopup={user ? "true" : undefined}
@@ -231,37 +275,72 @@ export default function Header() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.97 }}
                     transition={{ duration: 0.18 }}
-                    className="absolute right-0 mt-3 w-60 max-w-[calc(100vw-1.5rem)] bg-white dark:bg-[#1a0a0e] rounded-2xl shadow-2xl ring-1 ring-black/5 dark:ring-white/10 overflow-hidden z-50"
+                    className="absolute right-0 mt-3 w-72 max-w-[calc(100vw-1.5rem)] bg-white dark:bg-[#1a0a0e] rounded-2xl shadow-2xl ring-1 ring-black/5 dark:ring-white/10 overflow-hidden z-50"
                     role="menu"
+                    aria-label="Account menu"
                   >
-                    <div className="flex items-center gap-3 p-4 border-b dark:border-white/10">
-                      <span className="w-10 h-10 rounded-full bg-[#fe4462] text-white flex items-center justify-center font-bold">
-                        {initials}
-                      </span>
-                      <div className="min-w-0">
-                        <p className="font-semibold text-sm truncate dark:text-white">{user.name}</p>
-                        <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                    {/* Header: avatar, name, email + order/cart counts */}
+                    <div className="bg-gradient-to-br from-[#fe4462] to-[#d93550] p-4 text-white">
+                      <div className="flex items-center gap-3">
+                        <span className="w-11 h-11 rounded-full bg-white/20 ring-2 ring-white/40 flex items-center justify-center font-bold">
+                          {initials}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="font-semibold truncate">{user.name}</p>
+                          <p className="text-xs text-white/80 truncate">{user.email}</p>
+                        </div>
+                      </div>
+                      <div className="mt-3 grid grid-cols-2 gap-2">
+                        <button
+                          onClick={() => { setProfileOpen(false); navigate("/track"); }}
+                          className="rounded-xl bg-white/15 px-3 py-2 text-left transition hover:bg-white/25"
+                        >
+                          <span className="block text-lg font-bold leading-none">{orders.length}</span>
+                          <span className="text-[11px] text-white/80">Orders</span>
+                        </button>
+                        <button
+                          onClick={() => { setProfileOpen(false); navigate("/cart"); }}
+                          className="rounded-xl bg-white/15 px-3 py-2 text-left transition hover:bg-white/25"
+                        >
+                          <span className="block text-lg font-bold leading-none">{cartCount}</span>
+                          <span className="text-[11px] text-white/80">In Cart</span>
+                        </button>
                       </div>
                     </div>
-                    <div className="py-2">
-                      {accountMenu.map(({ label, icon: Icon, action }) => (
-                        <button
-                          key={label}
-                          role="menuitem"
-                          onClick={() => { setProfileOpen(false); action(); }}
-                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-[#fe4462]/10 hover:text-[#fe4462] transition"
-                        >
-                          <Icon size={16} /> {label}
-                        </button>
-                      ))}
-                      <button
-                        role="menuitem"
-                        onClick={() => { setProfileOpen(false); logout(); }}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-500/10 transition border-t dark:border-white/10 mt-1"
-                      >
-                        <FiLogOut size={16} /> Logout
-                      </button>
+
+                    {/* Scrollable menu */}
+                    <div className="max-h-[min(60vh,360px)] overflow-y-auto py-1.5">
+                      {accountMenu.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <button
+                            key={item.label}
+                            role="menuitem"
+                            onClick={() => onMenuItem(item, () => setProfileOpen(false))}
+                            className="group w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-[#fe4462]/10 hover:text-[#fe4462] transition"
+                          >
+                            <Icon size={16} className="shrink-0 text-gray-400 group-hover:text-[#fe4462] transition-colors" />
+                            <span className="flex-1 text-left">{item.label}</span>
+                            {item.soon ? (
+                              <span className="rounded-full bg-gray-100 dark:bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-400">
+                                Soon
+                              </span>
+                            ) : (
+                              <FiChevronRight size={15} className="text-gray-300 group-hover:text-[#fe4462] transition-colors" />
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
+
+                    {/* Logout (opens confirmation) */}
+                    <button
+                      role="menuitem"
+                      onClick={() => { setProfileOpen(false); setConfirmLogout(true); }}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-500/10 transition border-t dark:border-white/10"
+                    >
+                      <FiLogOut size={16} /> Logout
+                    </button>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -355,7 +434,13 @@ export default function Header() {
                       key={path}
                       to={path}
                       end={path === "/"}
-                      onClick={() => setOpenMenu(false)}
+                      onClick={(e) => {
+                        setOpenMenu(false);
+                        if (path === "/shop" && !user) {
+                          e.preventDefault();
+                          goProtected("/shop");
+                        }
+                      }}
                       className={({ isActive }) =>
                         `flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${
                           isActive
@@ -383,17 +468,23 @@ export default function Header() {
                         </div>
                       </div>
                       <div className="space-y-1">
-                        {accountMenu.map(({ label, icon: Icon, action }) => (
-                          <button
-                            key={label}
-                            onClick={() => { setOpenMenu(false); action(); }}
-                            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-gray-300 hover:bg-white/10 transition"
-                          >
-                            <Icon size={18} /> {label}
-                          </button>
-                        ))}
+                        {accountMenu.map((item) => {
+                          const Icon = item.icon;
+                          return (
+                            <button
+                              key={item.label}
+                              onClick={() => onMenuItem(item, () => setOpenMenu(false))}
+                              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-gray-300 hover:bg-white/10 transition"
+                            >
+                              <Icon size={18} /> <span className="flex-1 text-left">{item.label}</span>
+                              {item.soon && (
+                                <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-400">Soon</span>
+                              )}
+                            </button>
+                          );
+                        })}
                         <button
-                          onClick={() => { setOpenMenu(false); logout(); }}
+                          onClick={() => { setOpenMenu(false); setConfirmLogout(true); }}
                           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-red-400 hover:bg-red-500/10 transition"
                         >
                           <FiLogOut size={18} /> Logout
@@ -402,8 +493,8 @@ export default function Header() {
                     </>
                   ) : (
                     <div className="space-y-3">
-                      <button onClick={() => goToAuth("login")} className="btn-primary w-full justify-center">Login</button>
-                      <button onClick={() => goToAuth("register")} className="w-full py-3 rounded-xl border border-gray-700 text-gray-200 hover:border-[#fe4462] hover:text-[#fe4462] transition font-medium">
+                      <button onClick={() => openAuth("login")} className="btn-primary w-full justify-center">Login</button>
+                      <button onClick={() => openAuth("register")} className="w-full py-3 rounded-xl border border-gray-700 text-gray-200 hover:border-[#fe4462] hover:text-[#fe4462] transition font-medium">
                         Register
                       </button>
                     </div>
@@ -455,6 +546,57 @@ export default function Header() {
               </div>
             </motion.aside>
           </>
+        )}
+      </AnimatePresence>
+
+      {/* ── Logout confirmation ── */}
+      <AnimatePresence>
+        {confirmLogout && (
+          <motion.div
+            className="fixed inset-0 z-[1001] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setConfirmLogout(false)}
+            role="presentation"
+          >
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, y: 20, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 12, scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 280, damping: 26 }}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="logout-title"
+              className="w-full max-w-sm rounded-3xl bg-white dark:bg-[#140a0d] p-6 shadow-2xl ring-1 ring-black/5 dark:ring-white/10"
+            >
+              <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-red-500/10 text-red-500">
+                <FiLogOut size={26} />
+              </div>
+              <h3 id="logout-title" className="mt-4 text-center text-lg font-bold text-gray-900 dark:text-white">
+                Sign out of your account?
+              </h3>
+              <p className="mt-1 text-center text-sm text-gray-500 dark:text-gray-400">
+                You'll need to sign in again to access your orders, wishlist, and cart.
+              </p>
+              <div className="mt-6 flex gap-3">
+                <button
+                  onClick={() => setConfirmLogout(false)}
+                  className="flex-1 rounded-full border border-gray-200 dark:border-white/15 px-5 py-2.5 font-semibold text-gray-600 dark:text-gray-300 transition hover:border-[#fe4462] hover:text-[#fe4462]"
+                >
+                  Cancel
+                </button>
+                <button
+                  autoFocus
+                  onClick={() => { setConfirmLogout(false); logout(); navigate("/"); }}
+                  className="flex-1 rounded-full bg-red-500 px-5 py-2.5 font-semibold text-white transition hover:bg-red-600 active:scale-95"
+                >
+                  Logout
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

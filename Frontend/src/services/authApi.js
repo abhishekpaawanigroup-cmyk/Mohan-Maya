@@ -169,12 +169,13 @@ function simulateEmail(kind, link) {
 }
 
 /* ── public API ────────────────────────────────────────── */
-export async function signup({ name, email, password }) {
+export async function signup({ name, email, phone = "", password }) {
   await delay();
   const errors = {};
   if (!name?.trim()) errors.name = "Name is required";
   if (!email?.trim()) errors.email = "Email is required";
   else if (!EMAIL_RE.test(normEmail(email))) errors.email = "Enter a valid email";
+  if (phone && !/^[+\d][\d\s-]{6,}$/.test(phone.trim())) errors.phone = "Enter a valid mobile number";
   if (!password) errors.password = "Password is required";
   else if (password.length < 6) errors.password = "Use at least 6 characters";
   if (Object.keys(errors).length) {
@@ -195,7 +196,7 @@ export async function signup({ name, email, password }) {
     id: randomToken(8),
     name: name.trim(),
     email: normEmail(email),
-    phone: "",
+    phone: phone.trim(),
     salt,
     hash,
     verified: !REQUIRE_VERIFICATION,

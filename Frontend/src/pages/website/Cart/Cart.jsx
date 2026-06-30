@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiPlus,
@@ -7,6 +8,8 @@ import {
   FiShoppingBag,
   FiArrowLeft,
   FiArrowRight,
+  FiChevronLeft,
+  FiChevronRight,
   FiX,
   FiLock,
   FiTruck,
@@ -40,7 +43,25 @@ export default function Cart() {
     couponCode,
     applyCoupon,
     removeCoupon,
+    requireAuth,
   } = useApp();
+  const navigate = useNavigate();
+
+  // Checkout is a protected action: signed-out users get the auth modal, then
+  // continue to checkout once they sign in (no navigation away from the cart).
+  const goToCheckout = () => requireAuth(() => navigate("/checkout"));
+
+  // ── Pagination (view-only) ───────────────────────────────
+  // Paginates only how cart items are *displayed* — the cart state, totals, GST
+  // and checkout all keep operating on the full `cart`.
+  const PER_PAGE = 4;
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(cart.length / PER_PAGE));
+  // If items are removed and the current page no longer exists, step back to
+  // the last valid page.
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
 
   // ── Empty state ──────────────────────────────────────────
   if (!cart.length) {
@@ -81,6 +102,11 @@ export default function Cart() {
   const remainingForFreeShip = Math.max(0, FREE_SHIPPING_THRESHOLD - totals.subtotal);
   const freeShipPct = Math.min(100, (totals.subtotal / FREE_SHIPPING_THRESHOLD) * 100);
 
+  // Items shown on the current page (clamp the page in case it's mid-correction).
+  const safePage = Math.min(page, totalPages);
+  const start = (safePage - 1) * PER_PAGE;
+  const pageItems = cart.slice(start, start + PER_PAGE);
+
   return (
     <>
       {/* ── Hero (matches the Contact page hero) ── */}
@@ -110,7 +136,7 @@ export default function Cart() {
 
               <motion.ul layout className="space-y-4">
                 <AnimatePresence mode="popLayout" initial={false}>
-                  {cart.map((item) => (
+                  {pageItems.map((item) => (
                     <motion.li
                       key={item.id}
                       layout
@@ -194,6 +220,50 @@ export default function Cart() {
                 </AnimatePresence>
               </motion.ul>
 
+              {/* Pagination — only when the cart exceeds one page */}
+              {totalPages > 1 && (
+                <nav
+                  className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-2.5"
+                  aria-label="Cart pages"
+                >
+                  <button
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={safePage === 1}
+                    aria-label="Previous page"
+                    className="grid h-10 w-10 place-items-center rounded-full border border-gray-200 text-gray-600 transition hover:border-[#fe4462] hover:text-[#fe4462] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-200 disabled:hover:text-gray-600 dark:border-white/15 dark:text-gray-300 dark:disabled:hover:border-white/15 dark:disabled:hover:text-gray-300"
+                  >
+                    <FiChevronLeft size={18} />
+                  </button>
+
+                  <div className="flex flex-wrap items-center justify-center gap-1.5">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                      <button
+                        key={n}
+                        onClick={() => setPage(n)}
+                        aria-current={safePage === n ? "page" : undefined}
+                        aria-label={`Page ${n}`}
+                        className={`h-10 min-w-[2.5rem] rounded-full px-3 text-sm font-semibold transition ${
+                          safePage === n
+                            ? "bg-[#fe4462] text-white shadow-[0_8px_20px_-8px_rgba(254,68,98,0.7)]"
+                            : "border border-gray-200 text-gray-600 hover:border-[#fe4462] hover:text-[#fe4462] dark:border-white/15 dark:text-gray-300"
+                        }`}
+                      >
+                        {n}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={safePage === totalPages}
+                    aria-label="Next page"
+                    className="grid h-10 w-10 place-items-center rounded-full border border-gray-200 text-gray-600 transition hover:border-[#fe4462] hover:text-[#fe4462] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-200 disabled:hover:text-gray-600 dark:border-white/15 dark:text-gray-300 dark:disabled:hover:border-white/15 dark:disabled:hover:text-gray-300"
+                  >
+                    <FiChevronRight size={18} />
+                  </button>
+                </nav>
+              )}
+
               {/* Continue shopping (under the list) */}
               <Link
                 to="/shop"
@@ -267,12 +337,12 @@ export default function Cart() {
                 </div>
 
                 {/* Actions */}
-                <Link
-                  to="/checkout"
+                <button
+                  onClick={goToCheckout}
                   className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#fe4462] px-6 py-3.5 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:bg-[#d93550] hover:shadow-[0_0_28px_rgba(254,68,98,0.45)] active:scale-95"
                 >
                   <FiLock size={16} /> Proceed to Checkout
-                </Link>
+                </button>
                 <Link
                   to="/shop"
                   className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 px-6 py-3 font-semibold text-gray-700 transition-colors duration-300 hover:border-[#fe4462] hover:text-[#fe4462] dark:border-white/20 dark:text-white"
