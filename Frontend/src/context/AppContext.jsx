@@ -11,7 +11,10 @@ const MAX_RECENT = 8;
 
 export function AppProvider({ children }) {
   const [darkMode, setDarkMode] = useLocalStorage("mm-dark-mode", false);
-  const [cart, setCart] = useLocalStorage("mm-cart", []);
+  // Carts are stored per account (keyed by email) so logging out clears the
+  // active cart and logging back in restores that user's items — one user's
+  // cart is never shown to another or to a signed-out visitor.
+  const [userCarts, setUserCarts] = useLocalStorage("mm-cart-users", {});
   const [wishlist, setWishlist] = useLocalStorage("mm-wishlist", []);
   const [couponCode, setCouponCode] = useLocalStorage("mm-coupon", null);
   // Persist ONLY product ids (not full objects). The ids are the stable source
@@ -23,6 +26,9 @@ export function AppProvider({ children }) {
   // Auth session is owned by the authApi service (localStorage/sessionStorage);
   // we mirror the current public user here, rehydrating it on mount.
   const [user, setUser] = useState(() => authApi.getSessionUser());
+  // Mirror of `user` so cart mutations target the right account synchronously
+  // (e.g. a deferred add-to-cart resumed in the same tick right after login).
+  const userRef = useRef(user);
   const [addresses, setAddresses] = useLocalStorage("mm-addresses", []);
   const [toasts, setToasts] = useState([]);
   // Cart-icon confirmation: brief pop + green checkmark tick when an item is added.
@@ -37,6 +43,9 @@ export function AppProvider({ children }) {
   const [authModal, setAuthModal] = useState({ open: false, mode: "login" });
   // The action to resume after a successful login/registration.
   const pendingActionRef = useRef(null);
+
+  // Keep the user ref in sync for any post-render reads.
+  useEffect(() => { userRef.current = user; }, [user]);
 
   // Apply the dark class to <html> so Tailwind's dark: variants work app-wide.
   useEffect(() => {
@@ -97,6 +106,23 @@ export function AppProvider({ children }) {
   );
 
   // ── Cart ────────────────────────────────────────────────
+  // Active cart = the signed-in user's cart (empty when signed out).
+  const cart = user ? userCarts[user.email] || [] : [];
+
+  // Mutate the active user's cart. No-op when signed out (cart actions are
+  // gated behind login, so nothing is ever written to a "guest" bucket).
+  const setCart = useCallback(
+    (updater) => {
+      const u = userRef.current;
+      if (!u) return;
+      setUserCarts((prev) => {
+        const next = typeof updater === "function" ? updater(prev[u.email] || []) : updater;
+        return { ...prev, [u.email]: next };
+      });
+    },
+    [setUserCarts]
+  );
+
   // Pop the cart icon and flash the green checkmark tick — the only add-to-cart
   // confirmation (no toast).
   const triggerCartBounce = useCallback(() => {
@@ -262,6 +288,7 @@ export function AppProvider({ children }) {
   const signup = useCallback(
     async (data) => {
       const res = await authApi.signup(data);
+      userRef.current = res.user; // so a resumed add-to-cart targets this account
       setUser(res.user);
       addToast(`Welcome to Mohan-Maya, ${res.user.name}!`, "success");
       return res;
@@ -272,6 +299,7 @@ export function AppProvider({ children }) {
   const login = useCallback(
     async (data) => {
       const res = await authApi.login(data);
+      userRef.current = res.user; // load + target this user's cart immediately
       setUser(res.user);
       addToast(`Welcome back, ${res.user.name}!`, "success");
       return res;
@@ -281,6 +309,9 @@ export function AppProvider({ children }) {
 
   const logout = useCallback(() => {
     authApi.logout();
+    // Drop access to the active cart immediately (UI clears, badge → 0). The
+    // user's items stay namespaced under their email for their next login.
+    userRef.current = null;
     setUser(null);
     addToast("You've been logged out", "info");
   }, [addToast]);
