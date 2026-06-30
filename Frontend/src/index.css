@@ -19,7 +19,7 @@ html {
   scrollbar-width: thin;
   scrollbar-color: rgba(120, 120, 120, 0.4) transparent;
   /* Always reserve the scrollbar gutter so locking body scroll (modals, mobile
-     menu) never changes the page width — no horizontal shift/flicker on open
+     menu) never changes the page width - no horizontal shift/flicker on open
      or close. Stabilises normal flow and fixed elements (header, toasts) alike. */
   scrollbar-gutter: stable;
 }
@@ -51,7 +51,7 @@ body {
   }
 }
 
-/* Custom scrollbar — slim, subtle, brand on hover (WebKit/Blink) */
+/* Custom scrollbar - slim, subtle, brand on hover (WebKit/Blink) */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

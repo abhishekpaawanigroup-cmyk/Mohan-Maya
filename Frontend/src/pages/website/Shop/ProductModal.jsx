@@ -107,7 +107,7 @@ export default function ProductModal({ product = {}, onClose }) {
 
   const handleAddToCart = () => addToCart(product, qty);
   const handleBuyNow = () => {
-    // If signed out, addToCart redirects to login and returns false — bail so we
+    // If signed out, addToCart redirects to login and returns false - bail so we
     // don't show a misleading toast or close the modal.
     if (!addToCart(product, qty)) return;
     addToast("Proceeding to checkout…", "info");

@@ -13,7 +13,7 @@ const ProductModal = lazy(() => import("../../pages/website/Shop/ProductModal"))
  * history is empty. `excludeId` hides the product currently being viewed.
  *
  * The `recentlyViewed` list comes from the context already resolved to complete,
- * current product objects (the catalog is the source of truth — see AppContext),
+ * current product objects (the catalog is the source of truth - see AppContext),
  * so every card always has its image, title and price in any environment.
  */
 export default function RecentlyViewed({

@@ -12,7 +12,7 @@ const MAX_RECENT = 8;
 export function AppProvider({ children }) {
   const [darkMode, setDarkMode] = useLocalStorage("mm-dark-mode", false);
   // Carts are stored per account (keyed by email) so logging out clears the
-  // active cart and logging back in restores that user's items — one user's
+  // active cart and logging back in restores that user's items - one user's
   // cart is never shown to another or to a signed-out visitor.
   const [userCarts, setUserCarts] = useLocalStorage("mm-cart-users", {});
   const [wishlist, setWishlist] = useLocalStorage("mm-wishlist", []);
@@ -37,7 +37,7 @@ export function AppProvider({ children }) {
   const animTimer = useRef(null);
   const successTimer = useRef(null);
   // Router's navigate(), registered by a component inside the RouterProvider
-  // (WebsiteLayout) so the provider — which lives outside the router — can
+  // (WebsiteLayout) so the provider - which lives outside the router - can
   // redirect (e.g. to login) without a full page reload.
   // Auth modal: shown when a signed-out user triggers a protected action.
   const [authModal, setAuthModal] = useState({ open: false, mode: "login" });
@@ -63,7 +63,7 @@ export function AppProvider({ children }) {
 
   const closeAuthModal = useCallback(() => {
     setAuthModal((a) => ({ ...a, open: false }));
-    pendingActionRef.current = null; // user dismissed — drop the pending action
+    pendingActionRef.current = null; // user dismissed - drop the pending action
   }, []);
 
   // Run `action` immediately if signed in; otherwise open the auth modal and
@@ -123,7 +123,7 @@ export function AppProvider({ children }) {
     [setUserCarts]
   );
 
-  // Pop the cart icon and flash the green checkmark tick — the only add-to-cart
+  // Pop the cart icon and flash the green checkmark tick - the only add-to-cart
   // confirmation (no toast).
   const triggerCartBounce = useCallback(() => {
     setCartAnimating(true);
@@ -154,7 +154,7 @@ export function AppProvider({ children }) {
       };
       if (!user) {
         requireAuth(commit);
-        return false; // deferred — caller should skip any post-add side effects
+        return false; // deferred - caller should skip any post-add side effects
       }
       commit();
       return true;
@@ -188,7 +188,7 @@ export function AppProvider({ children }) {
 
   const toggleWishlist = useCallback(
     (product) => {
-      // Wishlist is open to everyone — no authentication required. Toggle
+      // Wishlist is open to everyone - no authentication required. Toggle
       // silently; the heart icon's filled/outline state is the only feedback.
       // The functional updater stays pure, so Strict Mode's double-invoke can't
       // duplicate the item.
@@ -234,7 +234,7 @@ export function AppProvider({ children }) {
     entry && typeof entry === "object" ? entry.id : entry;
 
   // Resolve persisted ids to complete, current product objects from the catalog.
-  // Unknown ids (e.g. a product later removed) are dropped — that's the
+  // Unknown ids (e.g. a product later removed) are dropped - that's the
   // fallback for missing data, so a card is never rendered without its details.
   const recentlyViewed = useMemo(
     () =>
@@ -282,7 +282,7 @@ export function AppProvider({ children }) {
     [orders]
   );
 
-  // ── Auth (client-side engine in services/authApi — see its caveats) ──
+  // ── Auth (client-side engine in services/authApi - see its caveats) ──
   // Thin wrappers: update the mirrored `user` + toast on success, and re-throw
   // typed AuthErrors so each screen can show inline field / edge-case messages.
   const signup = useCallback(
@@ -334,7 +334,7 @@ export function AppProvider({ children }) {
     [addToast]
   );
 
-  // Stateless flows (no session change) — pass straight through to the engine.
+  // Stateless flows (no session change) - pass straight through to the engine.
   const forgotPassword = useCallback((data) => authApi.forgotPassword(data), []);
   const resetPassword = useCallback((data) => authApi.resetPassword(data), []);
   const resendVerification = useCallback((data) => authApi.resendVerification(data), []);

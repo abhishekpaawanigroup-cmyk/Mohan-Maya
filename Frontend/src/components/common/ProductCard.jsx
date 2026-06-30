@@ -47,7 +47,7 @@ export default function ProductCard({ product, onQuickView }) {
       transition={{ type: "spring", stiffness: 300, damping: 22 }}
       className="group bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col"
     >
-      {/* Image — clicking the image area opens the same Quick View modal as the eye icon */}
+      {/* Image - clicking the image area opens the same Quick View modal as the eye icon */}
       <div
         className={`relative overflow-hidden pt-4 pb-2 bg-[#e5e5e5] dark:bg-white/5 ${onQuickView ? "cursor-pointer" : ""}`}
         onClick={onQuickView ? () => onQuickView(product) : undefined}
@@ -100,7 +100,7 @@ export default function ProductCard({ product, onQuickView }) {
           {product.name}
         </h3>
 
-        {/* Rating — dynamic stars in their original row below the title */}
+        {/* Rating - dynamic stars in their original row below the title */}
         <div className="mt-1.5 flex items-center gap-1.5">
           <StarRating value={rating} />
           <span className="text-xs font-medium text-gray-500 dark:text-gray-400">

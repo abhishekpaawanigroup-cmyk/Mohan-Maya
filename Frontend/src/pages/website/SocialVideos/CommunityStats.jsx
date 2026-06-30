@@ -105,7 +105,7 @@ function StatCard({ Icon, value, label, hint, format, accent, accent2, glow, rin
           {loading ? (
             <span className="inline-block h-8 w-16 rounded-md skeleton align-middle" />
           ) : failed ? (
-            <span className="text-gray-400">—</span>
+            <span className="text-gray-400">-</span>
           ) : (
             <span
               style={{

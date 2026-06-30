@@ -75,7 +75,7 @@ export default function SocialHighlights({ platforms, channel, status }) {
                       ) : (
                         <>
                           <span className="text-2xl font-extrabold tracking-tight tabular-nums" style={{ color }}>
-                            {metric ?? "—"}
+                            {metric ?? "-"}
                           </span>
                           <span className="text-sm font-medium text-gray-500 dark:text-gray-400">subscribers</span>
                         </>

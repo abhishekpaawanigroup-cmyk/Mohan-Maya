@@ -47,7 +47,7 @@ const write = (store, key, value) => {
   try {
     store.setItem(key, JSON.stringify(value));
   } catch {
-    /* quota / private mode — ignore */
+    /* quota / private mode - ignore */
   }
 };
 

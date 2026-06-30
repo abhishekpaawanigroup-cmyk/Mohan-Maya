@@ -95,7 +95,7 @@ export default function Header() {
   // Run a menu item, closing whichever surface it was opened from.
   const onMenuItem = (item, close) => {
     close?.();
-    if (item.soon) addToast(`${item.label} — coming soon`, "info");
+    if (item.soon) addToast(`${item.label} - coming soon`, "info");
     else navigate(item.to);
   };
 
@@ -441,7 +441,7 @@ export default function Header() {
                   ))}
                 </nav>
 
-                {/* Quick actions — Wishlist, Cart, Theme toggle (relocated from the header) */}
+                {/* Quick actions - Wishlist, Cart, Theme toggle (relocated from the header) */}
                 <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800 space-y-1">
                   <button
                     onClick={() => { setOpenMenu(false); navigate("/wishlist"); }}

@@ -5,7 +5,7 @@ import { FiPlay, FiExternalLink, FiClock } from "react-icons/fi";
 import { formatVideoDate } from "../../../utils/format";
 
 /**
- * Hero treatment for the channel's most recent upload. Large split layout —
+ * Hero treatment for the channel's most recent upload. Large split layout -
  * a prominent thumbnail beside the title / meta / watch CTA -with a pulsing
  * "Latest Video" badge so it clearly stands out from the grid below.
  */

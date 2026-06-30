@@ -5,7 +5,7 @@
  */
 export function formatCompact(value) {
   const n = Number(value);
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "-";
   if (n < 1000) return String(Math.round(n));
 
   const units = [

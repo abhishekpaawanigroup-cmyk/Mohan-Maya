@@ -24,7 +24,7 @@ export default function ForgotPassword() {
     setLoading(true);
     try {
       const { resetLink } = await forgotPassword({ email });
-      setDemoLink(resetLink); // demo only — a real backend would email this
+      setDemoLink(resetLink); // demo only - a real backend would email this
       setSent(true);
       addToast("If an account exists, a reset link has been sent.", "success");
     } catch (err) {
@@ -57,7 +57,7 @@ export default function ForgotPassword() {
 
         {demoLink && (
           <div className="mt-5 rounded-xl border border-dashed border-[#fe4462]/40 bg-[#fe4462]/5 p-4 text-left">
-            <p className="text-xs font-bold uppercase tracking-wide text-[#fe4462]">Demo mode — no real email is sent</p>
+            <p className="text-xs font-bold uppercase tracking-wide text-[#fe4462]">Demo mode - no real email is sent</p>
             <p className="mt-1 break-all text-xs text-gray-500 dark:text-gray-400">{demoLink}</p>
             <button
               onClick={() => navigate(demoLink.replace(window.location.origin, ""))}

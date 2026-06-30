@@ -52,7 +52,7 @@ export default function Cart() {
   const goToCheckout = () => requireAuth(() => navigate("/checkout"));
 
   // ── Pagination (view-only) ───────────────────────────────
-  // Paginates only how cart items are *displayed* — the cart state, totals, GST
+  // Paginates only how cart items are *displayed* - the cart state, totals, GST
   // and checkout all keep operating on the full `cart`.
   const PER_PAGE = 4;
   const [page, setPage] = useState(1);
@@ -220,7 +220,7 @@ export default function Cart() {
                 </AnimatePresence>
               </motion.ul>
 
-              {/* Pagination — only when the cart exceeds one page */}
+              {/* Pagination - only when the cart exceeds one page */}
               {totalPages > 1 && (
                 <nav
                   className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-2.5"

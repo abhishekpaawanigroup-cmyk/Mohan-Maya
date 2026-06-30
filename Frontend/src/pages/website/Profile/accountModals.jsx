@@ -22,7 +22,7 @@ const inputCls = (invalid) =>
 
 /* ── Reusable modal shell (backdrop + animated card, scroll-safe on mobile) ── */
 export function ModalShell({ title, subtitle, onClose, children }) {
-  // Close on Escape — keeps keyboard users in control.
+  // Close on Escape - keeps keyboard users in control.
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);

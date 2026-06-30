@@ -120,7 +120,7 @@ export default function Profile() {
   } = useApp();
   const navigate = useNavigate();
 
-  // [modal, editingAddress] — only one modal is mounted at a time.
+  // [modal, editingAddress] - only one modal is mounted at a time.
   const [modal, setModal] = useState(null);
   const [editingAddress, setEditingAddress] = useState(null);
 

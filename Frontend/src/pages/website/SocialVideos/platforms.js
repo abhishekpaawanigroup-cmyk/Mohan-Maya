@@ -8,7 +8,7 @@ const LINKS = {
 };
 
 /**
- * SINGLE source of truth for the Community page. Everything platform-specific —
+ * SINGLE source of truth for the Community page. Everything platform-specific -
  * data, icons, links and the visual theme -is driven from here, so adding a
  * new platform is just another entry in this array.
  *
