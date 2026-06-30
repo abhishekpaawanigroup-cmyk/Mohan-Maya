@@ -135,7 +135,7 @@ export default function Header() {
             <div className="w-14 h-14 rounded-full overflow-hidden ring-2 ring-[#fe4462]/30 group-hover:ring-[#fe4462] transition-all duration-300">
               <img src="/header/logo.png" alt="Mohan Maya logo" className="w-full h-full object-cover" loading="lazy" />
             </div>
-            <div className="hidden sm:block">
+            <div className="block">
               <span className="block text-2xl font-black text-gradient leading-none">M&amp;M</span>
               <p className="text-[10px] tracking-widest text-gray-500 dark:text-gray-400 uppercase">Mohan Maya</p>
             </div>
@@ -181,20 +181,20 @@ export default function Header() {
               <IoSearch size={22} />
             </button>
 
-            {/* Dark mode */}
+            {/* Dark mode -desktop only; on mobile/tablet it lives in the side menu */}
             <motion.button
               onClick={toggleDarkMode}
-              className="p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
+              className="max-lg:hidden p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
               whileTap={{ rotate: 180, scale: 0.8 }}
               aria-label="Toggle dark mode"
             >
               {darkMode ? <FiSun size={22} /> : <FiMoon size={22} />}
             </motion.button>
 
-            {/* Wishlist -solid red heart when items are saved; open to everyone */}
+            {/* Wishlist -desktop only; on mobile/tablet it lives in the side menu */}
             <button
               onClick={() => navigate("/wishlist")}
-              className="p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
+              className="max-lg:hidden p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
               aria-label="Wishlist"
             >
               {wishlist.length > 0 ? (
@@ -208,7 +208,7 @@ export default function Header() {
                 continues to the cart after a successful login/registration. */}
             <button
               onClick={() => goProtected("/cart")}
-              className={`relative p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300 ${cartAnimating ? "animate-cart-bounce" : ""}`}
+              className={`max-lg:hidden relative p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300 ${cartAnimating ? "animate-cart-bounce" : ""}`}
               aria-label="Cart"
             >
               <LuShoppingBag size={22} />
@@ -390,18 +390,18 @@ export default function Header() {
               onClick={() => setOpenMenu(false)}
             />
             <motion.aside
-              className="fixed top-0 right-0 h-screen w-[88vw] max-w-[340px] sm:w-[380px] sm:max-w-[380px] bg-[#0d0508] text-white z-[999] overflow-y-auto lg:hidden"
+              className="fixed top-0 right-0 h-screen w-[88vw] max-w-[340px] sm:w-[380px] sm:max-w-[380px] bg-white text-gray-900 dark:bg-[#0d0508] dark:text-white z-[999] overflow-y-auto lg:hidden transition-colors duration-300"
               initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <div className="flex items-center justify-between p-6 border-b border-gray-800">
+              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center gap-3">
                   <img src="/header/logo.png" alt="logo" className="w-12 h-12 rounded-full" />
                   <span className="text-2xl font-black text-gradient">M&M</span>
                 </div>
                 <button
                   onClick={() => setOpenMenu(false)}
-                  className="w-10 h-10 rounded-full bg-[#fe4462] flex items-center justify-center hover:bg-[#d93550] transition"
+                  className="w-10 h-10 rounded-full bg-[#fe4462] text-white flex items-center justify-center hover:bg-[#d93550] transition"
                   aria-label="Close menu"
                 >
                   <FiX size={18} />
@@ -410,13 +410,13 @@ export default function Header() {
 
               <div className="p-6">
                 <form onSubmit={(e) => { e.preventDefault(); navigate(`/shop?search=${localSearch}`); setOpenMenu(false); }}
-                  className="flex items-center gap-2 border-b border-gray-700 pb-4 mb-6"
+                  className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-700 pb-4 mb-6"
                 >
                   <input
                     value={localSearch}
                     onChange={(e) => setLocalSearch(e.target.value)}
                     placeholder="Search products…"
-                    className="bg-transparent flex-1 text-sm placeholder-gray-500 outline-none focus:outline-none focus-visible:!outline-none"
+                    className="bg-transparent flex-1 text-sm placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:outline-none focus-visible:!outline-none"
                   />
                   <button type="submit" aria-label="Submit search"><IoSearch size={20} className="text-gray-400 hover:text-[#fe4462] transition" /></button>
                 </form>
@@ -432,7 +432,7 @@ export default function Header() {
                         `flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${
                           isActive
                             ? "bg-[#fe4462] text-white"
-                            : "text-gray-300 hover:bg-white/10"
+                            : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10"
                         }`
                       }
                     >
@@ -441,8 +441,43 @@ export default function Header() {
                   ))}
                 </nav>
 
+                {/* Quick actions — Wishlist, Cart, Theme toggle (relocated from the header) */}
+                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800 space-y-1">
+                  <button
+                    onClick={() => { setOpenMenu(false); navigate("/wishlist"); }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10 transition"
+                  >
+                    {wishlist.length > 0 ? <FaHeart size={18} className="text-[#fe4462]" /> : <FaRegHeart size={18} />}
+                    <span className="flex-1 text-left">Wishlist</span>
+                    {wishlist.length > 0 && (
+                      <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#fe4462] px-1.5 text-[10px] font-bold text-white">
+                        {wishlist.length}
+                      </span>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => { setOpenMenu(false); goProtected("/cart"); }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10 transition"
+                  >
+                    <LuShoppingBag size={18} />
+                    <span className="flex-1 text-left">Cart</span>
+                    {cartCount > 0 && (
+                      <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#fe4462] px-1.5 text-[10px] font-bold text-white">
+                        {cartCount}
+                      </span>
+                    )}
+                  </button>
+                  <button
+                    onClick={toggleDarkMode}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10 transition"
+                  >
+                    {darkMode ? <FiSun size={18} /> : <FiMoon size={18} />}
+                    <span className="flex-1 text-left">{darkMode ? "Light Mode" : "Dark Mode"}</span>
+                  </button>
+                </div>
+
                 {/* Account section (mobile) */}
-                <div className="mt-6 pt-6 border-t border-gray-800">
+                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
                   {user ? (
                     <>
                       <div className="flex items-center gap-3 mb-4">
@@ -450,29 +485,32 @@ export default function Header() {
                           {initials}
                         </span>
                         <div className="min-w-0">
-                          <p className="font-semibold truncate text-white">{user.name}</p>
-                          <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                          <p className="font-semibold truncate text-gray-900 dark:text-white">{user.name}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
                         </div>
                       </div>
                       <div className="space-y-1">
-                        {accountMenu.map((item) => {
-                          const Icon = item.icon;
-                          return (
-                            <button
-                              key={item.label}
-                              onClick={() => onMenuItem(item, () => setOpenMenu(false))}
-                              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-gray-300 hover:bg-white/10 transition"
-                            >
-                              <Icon size={18} /> <span className="flex-1 text-left">{item.label}</span>
-                              {item.soon && (
-                                <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-400">Soon</span>
-                              )}
-                            </button>
-                          );
-                        })}
+                        {/* Wishlist & Cart live in the quick-actions section above, so they're excluded here to avoid duplicates. */}
+                        {accountMenu
+                          .filter((item) => item.to !== "/wishlist" && item.to !== "/cart")
+                          .map((item) => {
+                            const Icon = item.icon;
+                            return (
+                              <button
+                                key={item.label}
+                                onClick={() => onMenuItem(item, () => setOpenMenu(false))}
+                                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10 transition"
+                              >
+                                <Icon size={18} /> <span className="flex-1 text-left">{item.label}</span>
+                                {item.soon && (
+                                  <span className="rounded-full bg-gray-100 dark:bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-400">Soon</span>
+                                )}
+                              </button>
+                            );
+                          })}
                         <button
                           onClick={() => { setOpenMenu(false); setConfirmLogout(true); }}
-                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-red-400 hover:bg-red-500/10 transition"
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-red-500 hover:bg-red-500/10 dark:text-red-400 transition"
                         >
                           <FiLogOut size={18} /> Logout
                         </button>
@@ -481,23 +519,23 @@ export default function Header() {
                   ) : (
                     <div className="space-y-3">
                       <button onClick={() => openAuth("login")} className="btn-primary w-full justify-center">Login</button>
-                      <button onClick={() => openAuth("register")} className="w-full py-3 rounded-xl border border-gray-700 text-gray-200 hover:border-[#fe4462] hover:text-[#fe4462] transition font-medium">
+                      <button onClick={() => openAuth("register")} className="w-full py-3 rounded-xl border border-gray-300 text-gray-700 dark:border-gray-700 dark:text-gray-200 hover:border-[#fe4462] hover:text-[#fe4462] transition font-medium">
                         Register
                       </button>
                     </div>
                   )}
                 </div>
 
-                <div className="mt-8 pt-8 border-t border-gray-800">
-                  <h3 className="text-lg font-bold mb-4 text-white">Contact</h3>
+                <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
+                  <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Contact</h3>
                   <div className="space-y-4">
                     {[
                       { icon: FiMapPin, text: "Ganga Enclave, Roorkee, Uttarakhand, India" },
                       { icon: FiPhone, text: "+91 99567 48903" },
                       { icon: FiMail, text: "support@mohanmaya.in" },
                     ].map(({ icon: Icon, text }, i) => (
-                      <div key={i} className="flex items-center gap-3 text-gray-400">
-                        <div className="w-9 h-9 rounded-full border border-gray-700 flex items-center justify-center hover:bg-[#fe4462] hover:border-[#fe4462] hover:text-white transition cursor-pointer">
+                      <div key={i} className="flex items-center gap-3 text-gray-500 dark:text-gray-400">
+                        <div className="w-9 h-9 rounded-full border border-gray-300 dark:border-gray-700 flex items-center justify-center hover:bg-[#fe4462] hover:border-[#fe4462] hover:text-white transition cursor-pointer">
                           <Icon size={15} />
                         </div>
                         <span className="text-sm">{text}</span>
@@ -516,20 +554,12 @@ export default function Header() {
                     <button
                       key={i}
                       aria-label={label}
-                      className="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-[#fe4462] hover:border-[#fe4462] transition text-gray-400 hover:text-white"
+                      className="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-700 flex items-center justify-center hover:bg-[#fe4462] hover:border-[#fe4462] transition text-gray-500 dark:text-gray-400 hover:text-white"
                     >
                       <Icon size={14} />
                     </button>
                   ))}
                 </div>
-
-                <button
-                  onClick={toggleDarkMode}
-                  className="mt-6 flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-700 text-gray-300 hover:border-[#fe4462] hover:text-[#fe4462] transition w-full"
-                >
-                  {darkMode ? <FiSun size={18} /> : <FiMoon size={18} />}
-                  <span className="text-sm font-medium">{darkMode ? "Light Mode" : "Dark Mode"}</span>
-                </button>
               </div>
             </motion.aside>
           </>

@@ -47,8 +47,13 @@ export default function ProductCard({ product, onQuickView }) {
       transition={{ type: "spring", stiffness: 300, damping: 22 }}
       className="group bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col"
     >
-      {/* Image */}
-      <div className="relative overflow-hidden pt-4 pb-2 bg-[#e5e5e5] dark:bg-white/5">
+      {/* Image — clicking the image area opens the same Quick View modal as the eye icon */}
+      <div
+        className={`relative overflow-hidden pt-4 pb-2 bg-[#e5e5e5] dark:bg-white/5 ${onQuickView ? "cursor-pointer" : ""}`}
+        onClick={onQuickView ? () => onQuickView(product) : undefined}
+        role={onQuickView ? "button" : undefined}
+        aria-label={onQuickView ? `Quick view ${product.name}` : undefined}
+      >
         {!imgLoaded && <div className="absolute inset-5 skeleton rounded-full" />}
         <img
           ref={imgRef}
@@ -70,7 +75,7 @@ export default function ProductCard({ product, onQuickView }) {
 
         <div className="absolute top-3 right-3 flex flex-col gap-2">
           <button
-            onClick={() => toggleWishlist(product)}
+            onClick={(e) => { e.stopPropagation(); toggleWishlist(product); }}
             aria-pressed={wished}
             className="grid h-9 w-9 place-items-center rounded-full bg-black/25 backdrop-blur-sm shadow-md transition-all duration-300 hover:bg-black/40 hover:scale-110 active:scale-95"
             aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
@@ -79,7 +84,7 @@ export default function ProductCard({ product, onQuickView }) {
           </button>
           {onQuickView && (
             <button
-              onClick={() => onQuickView(product)}
+              onClick={(e) => { e.stopPropagation(); onQuickView(product); }}
               className="bg-white dark:bg-[#1a0a0e] p-2.5 rounded-full shadow-md hover:scale-110 transition opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-visible:opacity-100"
               aria-label="Quick view"
             >

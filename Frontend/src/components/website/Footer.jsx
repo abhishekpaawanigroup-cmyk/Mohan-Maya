@@ -59,7 +59,7 @@ export default function Footer() {
              <div className="w-14 h-14 rounded-full overflow-hidden ring-2 ring-[#fe4462]/30 group-hover:ring-[#fe4462] transition-all duration-300">
               <img src="/header/logo.png" alt="Mohan Maya logo" className="w-full h-full object-cover" loading="lazy" />
             </div>
-            <div className="hidden sm:block">
+            <div className="block">
               <span className="block text-2xl font-black text-gradient leading-none">M&amp;M</span>
               <p className="text-[10px] tracking-widest text-gray-500 dark:text-gray-400 uppercase">Mohan Maya</p>
             </div>
