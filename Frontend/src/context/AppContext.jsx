@@ -15,14 +15,16 @@ export function AppProvider({ children }) {
   // active cart and logging back in restores that user's items - one user's
   // cart is never shown to another or to a signed-out visitor.
   const [userCarts, setUserCarts] = useLocalStorage("mm-cart-users", {});
-  const [wishlist, setWishlist] = useLocalStorage("mm-wishlist", []);
+  // Wishlist & orders are also kept per account (keyed by email) so no user
+  // ever sees another user's data after logout/login.
+  const [userWishlists, setUserWishlists] = useLocalStorage("mm-wishlist-users", {});
   const [couponCode, setCouponCode] = useLocalStorage("mm-coupon", null);
   // Persist ONLY product ids (not full objects). The ids are the stable source
   // of truth; full product data is always re-resolved from the catalog below.
   // This prevents stale/partial objects cached from an older build from
   // rendering as blank cards, and keeps the payload small.
   const [recentIds, setRecentIds] = useLocalStorage("mm-recent", []);
-  const [orders, setOrders] = useLocalStorage("mm-orders", []);
+  const [userOrders, setUserOrders] = useLocalStorage("mm-orders-users", {});
   // Auth session is owned by the authApi service (localStorage/sessionStorage);
   // we mirror the current public user here, rehydrating it on mount.
   const [user, setUser] = useState(() => authApi.getSessionUser());
@@ -184,6 +186,20 @@ export function AppProvider({ children }) {
   }, [setCart, setCouponCode]);
 
   // ── Wishlist ────────────────────────────────────────────
+  // Active wishlist = the signed-in user's wishlist (empty when signed out).
+  const wishlist = user ? userWishlists[user.email] || [] : [];
+  const setWishlist = useCallback(
+    (updater) => {
+      const u = userRef.current;
+      if (!u) return;
+      setUserWishlists((prev) => {
+        const next = typeof updater === "function" ? updater(prev[u.email] || []) : updater;
+        return { ...prev, [u.email]: next };
+      });
+    },
+    [setUserWishlists]
+  );
+
   const isWishlisted = useCallback((id) => wishlist.some((i) => i.id === id), [wishlist]);
 
   const toggleWishlist = useCallback(
@@ -258,6 +274,21 @@ export function AppProvider({ children }) {
   );
 
   // ── Orders ──────────────────────────────────────────────
+  // Active orders = the signed-in user's orders (empty when signed out), so a
+  // previous user's orders can never appear for the next login.
+  const orders = user ? userOrders[user.email] || [] : [];
+  const setOrders = useCallback(
+    (updater) => {
+      const u = userRef.current;
+      if (!u) return;
+      setUserOrders((prev) => {
+        const next = typeof updater === "function" ? updater(prev[u.email] || []) : updater;
+        return { ...prev, [u.email]: next };
+      });
+    },
+    [setUserOrders]
+  );
+
   const placeOrder = useCallback(
     (customer) => {
       const id = `MM${Date.now().toString(36).toUpperCase().slice(-7)}`;
@@ -309,12 +340,15 @@ export function AppProvider({ children }) {
 
   const logout = useCallback(() => {
     authApi.logout();
-    // Drop access to the active cart immediately (UI clears, badge → 0). The
-    // user's items stay namespaced under their email for their next login.
+    // Drop access to all user-specific data immediately: cart, wishlist and
+    // orders are per-account (so they clear from view the moment `user` is null
+    // and only that user's own data returns on re-login). The coupon is a shared
+    // key, so reset it explicitly to avoid it carrying into the next session.
     userRef.current = null;
+    setCouponCode(null);
     setUser(null);
     addToast("You've been logged out", "info");
-  }, [addToast]);
+  }, [addToast, setCouponCode]);
 
   const updateProfile = useCallback(
     async (patch) => {

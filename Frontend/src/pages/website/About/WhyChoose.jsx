@@ -20,7 +20,7 @@ const WhyChooseUs = () => {
 
         <div className="text-center mb-16">
 
-          <span className="bg-transparent text-[#fe4462] border border-[#fe4462] px-4 py-1 rounded-full text-sm font-semibold">
+          <span className="bg-transparent text-[#fe4462] border border-[#fe4462] px-4 py-1 rounded-full text-sm font-bold">
             WHY CHOOSE US
           </span>
 
