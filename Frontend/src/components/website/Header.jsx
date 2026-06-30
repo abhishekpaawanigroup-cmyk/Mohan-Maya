@@ -149,14 +149,6 @@ export default function Header() {
                   <NavLink
                     to={path}
                     end={path === "/"}
-                    onClick={(e) => {
-                      // Shop is gated: signed-out users get the auth modal, then
-                      // land on /shop after signing in (no page navigation now).
-                      if (path === "/shop" && !user) {
-                        e.preventDefault();
-                        goProtected("/shop");
-                      }
-                    }}
                     className={({ isActive }) =>
                       `relative font-semibold text-[15px] transition-colors duration-200 group
                        ${isActive ? "text-[#fe4462]" : "text-gray-700 dark:text-gray-300 hover:text-[#fe4462]"}`
@@ -434,13 +426,7 @@ export default function Header() {
                       key={path}
                       to={path}
                       end={path === "/"}
-                      onClick={(e) => {
-                        setOpenMenu(false);
-                        if (path === "/shop" && !user) {
-                          e.preventDefault();
-                          goProtected("/shop");
-                        }
-                      }}
+                      onClick={() => setOpenMenu(false)}
                       className={({ isActive }) =>
                         `flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${
                           isActive
