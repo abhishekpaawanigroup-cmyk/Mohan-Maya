@@ -4,6 +4,7 @@ import { Keyboard } from "swiper/modules";
 import { FiEye, FiShoppingBag, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import ActionButton from "../../../components/common/ActionButton";
 import HeartIcon from "../../../components/common/HeartIcon";
+import ExpectedDelivery from "../../../components/common/ExpectedDelivery";
 import ProductPreviewModal from "./Productmodal";
 import SectionHeading from "../../../components/common/SectionHeading";
 import { newArrivals } from "../../../data/products";
@@ -93,6 +94,7 @@ const Showcase = () => {
                       </>
                     )}
                   </div>
+                  <ExpectedDelivery compact className="mt-2 justify-center" />
                 </div>
               </div>
             </SwiperSlide>

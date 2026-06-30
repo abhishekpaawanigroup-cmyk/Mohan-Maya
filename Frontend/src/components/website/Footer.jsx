@@ -3,6 +3,7 @@ import {
   FaFacebookF,
   FaInstagram,
   FaPhoneAlt,
+  FaMapMarkerAlt,
 } from "react-icons/fa";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdEmail } from "react-icons/md";
@@ -89,11 +90,16 @@ export default function Footer() {
           {/* Contact */}
           <div>
             <h3 className="text-2xl font-semibold mb-8">Contact</h3>
-            <p className="text-gray-400 leading-6 mb-6">
-              Ganga Enclave, Canal Rd,
-              <br/>
-               Ganesh Pur, Roorkee, Uttarakhand 247667
-            </p>
+            <div className="flex gap-4 mb-6 items-start">
+              <div className="w-10 h-10 rounded-full bg-[#fe4462] flex items-center justify-center shrink-0">
+                <FaMapMarkerAlt />
+              </div>
+              <p className="text-gray-400 leading-6">
+                Roorkee,
+                <br/>
+                 Uttarakhand 247667
+              </p>
+            </div>
             <div className="flex gap-4 mb-6 items-center">
               <div className="w-10 h-10 rounded-full bg-[#fe4462] flex items-center justify-center shrink-0">
                 <MdEmail />

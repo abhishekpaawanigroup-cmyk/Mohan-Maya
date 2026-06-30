@@ -1,5 +1,5 @@
-import { Suspense } from "react";
-import { useOutlet, useLocation } from "react-router-dom";
+import { Suspense, useEffect } from "react";
+import { useOutlet, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../components/website/Header";
 import Footer from "../components/website/Footer";
@@ -7,6 +7,7 @@ import ScrollProgress from "../components/common/ScrollProgress";
 import BackToTop from "../components/common/BackToTop";
 import ScrollToTop from "../components/common/ScrollToTop";
 import ToastContainer from "../components/common/Toast";
+import { useApp } from "../context/AppContext";
 
 function PageLoader() {
   return (
@@ -19,6 +20,14 @@ function PageLoader() {
 const WebsiteLayout = () => {
   const outlet = useOutlet();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { registerNavigator } = useApp();
+
+  // Hand the router's navigate() to the context so non-router code (e.g. the
+  // add-to-cart auth guard) can perform SPA redirects.
+  useEffect(() => {
+    registerNavigator(navigate);
+  }, [registerNavigator, navigate]);
 
   return (
     <div className="bg-[#fbfefb] dark:bg-[#0d0508] min-h-screen transition-colors duration-300">

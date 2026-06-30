@@ -8,7 +8,7 @@ import { usePageMeta } from "../../../hooks/useHooks";
 const initialForm = { name: "", email: "", phone: "", subject: "", message: "" };
 
 const details = [
-  { icon: FiMapPin, label: "Address", value: "Ganga Enclave, Roorkee,\nUttarakhand, India" },
+  { icon: FiMapPin, label: "Address", value: "Roorkee, Uttarakhand, India" },
   { icon: FiMail, label: "Email", value: "support@mohanmaya.in" },
   { icon: FiPhone, label: "Phone", value: "+91 99567 48903" },
 ];
@@ -103,7 +103,7 @@ export default function Contact() {
 
                   <div className="mt-8 space-y-6">
                     {details.map(({ icon: Icon, label, value }) => (
-                      <div key={label} className="flex items-start gap-4">
+                      <div key={label} className="flex items-start gap-4 mb-8">
                         <div className="w-12 h-12 rounded-full bg-[#fe4462] text-white flex items-center justify-center shrink-0 shadow-md shadow-[#fe4462]/30">
                           <Icon size={20} />
                         </div>

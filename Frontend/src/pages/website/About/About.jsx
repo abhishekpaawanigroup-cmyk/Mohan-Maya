@@ -1,5 +1,6 @@
 import HeroSection from './Hero'
 import OurStory from './OurStory'
+import WhatMakesDifferent from './WhatMakesDifferent'
 import MissionVision from './MissionVission'
 import CraftingProcess from './Crafting'
 import WhyChooseUs from './WhyChoose'
@@ -15,6 +16,7 @@ const About = () => {
     <>
     <HeroSection />
     <OurStory />
+    <WhatMakesDifferent />
     <MissionVision />
     <CraftingProcess />
     <WhyChooseUs />

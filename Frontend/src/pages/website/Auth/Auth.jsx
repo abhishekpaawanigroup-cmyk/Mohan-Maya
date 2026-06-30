@@ -20,7 +20,7 @@ export default function Auth() {
     "Log in or create your Mohan Maya account to track orders, save your wishlist, and check out faster."
   );
 
-  const { login, register, user, addToast } = useApp();
+  const { login, signup, user, addToast } = useApp();
   const navigate = useNavigate();
   const location = useLocation();
   const [params, setParams] = useSearchParams();
@@ -68,7 +68,7 @@ export default function Auth() {
 
   // `mode` defaults to the active tab; passing it explicitly lets each panel in
   // the sliding layout submit unambiguously (both forms are mounted at once).
-  const handleSubmit = (e, mode = tab) => {
+  const handleSubmit = async (e, mode = tab) => {
     e.preventDefault();
     if (loading) return;
     const registering = mode === "register";
@@ -78,13 +78,21 @@ export default function Auth() {
       return;
     }
     setLoading(true);
-    // Mock async auth - gives a realistic loading state.
-    setTimeout(() => {
-      if (registering) register({ name: form.name.trim(), email: form.email.trim() });
-      else login({ email: form.email.trim() });
-      setLoading(false);
+    try {
+      if (registering) {
+        await signup({ name: form.name.trim(), email: form.email.trim(), password: form.password });
+      } else {
+        await login({ email: form.email.trim(), password: form.password, remember });
+      }
       navigate(redirectTo, { replace: true });
-    }, 900);
+    } catch (err) {
+      // Typed AuthErrors carry field-level messages; everything else (incl.
+      // simulated network failures) falls back to a single error toast.
+      if (err?.fields) setErrors((prev) => ({ ...prev, ...err.fields }));
+      addToast(err?.message || "Something went wrong. Please try again.", "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fieldCls = (name) =>
@@ -200,7 +208,7 @@ export default function Auth() {
               </label>
               <button
                 type="button"
-                onClick={() => addToast("Password reset link sent (demo)", "info")}
+                onClick={() => navigate("/forgot-password")}
                 className="font-medium text-[#fe4462] hover:underline"
               >
                 Forgot password?

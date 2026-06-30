@@ -258,11 +258,12 @@ export default function Cart() {
                     label="Shipping"
                     value={totals.shipping === 0 ? "Free" : `₹${totals.shipping}`}
                   />
+                  <Row label="GST (18%)" value={`₹${totals.gst}`} />
                   <div className="flex items-center justify-between border-t border-gray-200/70 pt-3 dark:border-white/10">
                     <span className="text-base font-bold text-gray-900 dark:text-white">Grand Total</span>
                     <span className="text-xl font-bold text-[#fe4462]">₹{totals.total}</span>
                   </div>
-                  <p className="text-[11px] text-gray-400">Inclusive of all applicable taxes.</p>
+                  <p className="text-[11px] text-gray-400">GST (18%) included in the total above.</p>
                 </div>
 
                 {/* Actions */}

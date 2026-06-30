@@ -90,27 +90,37 @@ const ghostBtn =
 
 /* ── Edit profile ── */
 export function EditProfileModal({ onClose }) {
-  const { user, updateProfile } = useApp();
+  const { user, updateProfile, addToast } = useApp();
   const [form, setForm] = useState({
     name: user?.name || "",
     email: user?.email || "",
     phone: user?.phone || "",
   });
   const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
+    if (saving) return;
     const errs = {};
     if (!form.name.trim()) errs.name = "Name is required";
     if (!form.email.trim()) errs.email = "Email is required";
     else if (!EMAIL_RE.test(form.email.trim())) errs.email = "Enter a valid email";
     if (Object.keys(errs).length) return setErrors(errs);
-    updateProfile({
-      name: form.name.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim(),
-    });
-    onClose();
+    setSaving(true);
+    try {
+      await updateProfile({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+      });
+      onClose();
+    } catch (err) {
+      if (err?.fields) setErrors((prev) => ({ ...prev, ...err.fields }));
+      else addToast(err?.message || "Couldn't update profile.", "error");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const set = (k) => (e) => {
@@ -126,30 +136,40 @@ export function EditProfileModal({ onClose }) {
         <Field icon={FiPhone} value={form.phone} onChange={set("phone")} placeholder="Phone (optional)" autoComplete="tel" />
         <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
           <button type="button" onClick={onClose} className={ghostBtn}>Cancel</button>
-          <button type="submit" className={primaryBtn}>Save Changes</button>
+          <button type="submit" disabled={saving} className={primaryBtn}>{saving ? "Saving…" : "Save Changes"}</button>
         </div>
       </form>
     </ModalShell>
   );
 }
 
-/* ── Change password (mock — validates then confirms, matching the demo auth) ── */
+/* ── Change password (verifies current password via the auth engine) ── */
 export function ChangePasswordModal({ onClose }) {
-  const { addToast } = useApp();
+  const { changePassword, addToast } = useApp();
   const [form, setForm] = useState({ current: "", next: "", confirm: "" });
   const [errors, setErrors] = useState({});
   const [show, setShow] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
+    if (saving) return;
     const errs = {};
     if (!form.current) errs.current = "Enter your current password";
     if (!form.next) errs.next = "Enter a new password";
     else if (form.next.length < 6) errs.next = "Use at least 6 characters";
     if (form.confirm !== form.next) errs.confirm = "Passwords don't match";
     if (Object.keys(errs).length) return setErrors(errs);
-    addToast("Password changed successfully", "success");
-    onClose();
+    setSaving(true);
+    try {
+      await changePassword({ current: form.current, next: form.next });
+      onClose();
+    } catch (err) {
+      if (err?.fields) setErrors((prev) => ({ ...prev, ...err.fields }));
+      else addToast(err?.message || "Couldn't change password.", "error");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const set = (k) => (e) => {
@@ -175,7 +195,7 @@ export function ChangePasswordModal({ onClose }) {
         <Field icon={FiLock} type={show ? "text" : "password"} value={form.confirm} onChange={set("confirm")} placeholder="Confirm new password" autoComplete="new-password" error={errors.confirm} />
         <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
           <button type="button" onClick={onClose} className={ghostBtn}>Cancel</button>
-          <button type="submit" className={primaryBtn}>Update Password</button>
+          <button type="submit" disabled={saving} className={primaryBtn}>{saving ? "Updating…" : "Update Password"}</button>
         </div>
       </form>
     </ModalShell>

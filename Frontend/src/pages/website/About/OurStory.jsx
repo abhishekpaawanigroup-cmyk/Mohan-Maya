@@ -13,7 +13,7 @@ export default function OurStory() {
 
           {/* Left - content */}
           <ScrollReveal direction="up">
-            <span className="inline-block text-[#fe4462] border border-[#fe4462] px-4 py-1 rounded-full text-sm font-semibold uppercase tracking-wide">
+            <span className="inline-block text-[#fe4462] border border-[#fe4462] px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wide">
               Our Story
             </span>
 
@@ -24,21 +24,17 @@ export default function OurStory() {
 
             <div className="mt-5 space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed">
               <p>
-                Mohan Maya began as a small passion project in Vrindavan - a quiet
-                dream to capture devotion, emotion, and storytelling inside the palm
-                of your hand. What started on a single workbench soon grew into a
-                studio of artists who live and breathe miniature craftsmanship.
+                Some stories are told through words, Some are remembered through paintings.
               </p>
               <p>
-                Every piece is sculpted, painted, and finished entirely by hand.
-                We obsess over the tiniest details - the fold of a robe, the glint in
-                an eye - because we believe true artistry lives in the things most
-                people never notice.
+                At <b>Mohan Maya</b>, we tell stories through handcrafted miniatures.
+
               </p>
               <p>
-                Today, collectors around the world bring our handcrafted characters
-                into their homes - each one a timeless reminder that the smallest
-                creations can hold the biggest stories.
+                Every piece we create is inspired by the timeless beauty of Krishna's world, the warmth of Indian traditions, and the emotions that connect generations. We believe that even the smallest creation can carry the biggest memories.
+              </p>
+              <p>
+                Our miniatures are more than decorative art - they are moments of devotion, love, childhood wonder, and craftsmanship brought to life.
               </p>
             </div>
 

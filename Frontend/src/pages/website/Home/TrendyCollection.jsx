@@ -4,6 +4,7 @@ import { Keyboard } from "swiper/modules";
 import { FiEye, FiShoppingBag, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import ActionButton from "../../../components/common/ActionButton";
 import HeartIcon from "../../../components/common/HeartIcon";
+import ExpectedDelivery from "../../../components/common/ExpectedDelivery";
 import ProductPreviewModal from "./Productmodal";
 import { trendyData, trendyTabs } from "../../../data/products";
 import { useApp } from "../../../context/AppContext";
@@ -128,6 +129,7 @@ const TrendyCollection = () => {
                       </>
                     )}
                   </div>
+                  <ExpectedDelivery compact className="mt-2 justify-center" />
                 </div>
               </div>
             </SwiperSlide>

@@ -27,10 +27,10 @@ export default function Wishlist() {
 
   const { wishlist, toggleWishlist, addToCart } = useApp();
 
-  // Add to cart (keeps the fly-to-cart animation), then drop from the wishlist.
+  // Add to cart, then drop from the wishlist — but only if it was actually
+  // added (a signed-out user is redirected to login and nothing is moved).
   const moveToCart = (item, e) => {
-    addToCart(item, 1, e);
-    toggleWishlist(item);
+    if (addToCart(item, 1, e)) toggleWishlist(item);
   };
   const moveAllToCart = () => {
     [...wishlist].forEach((item) => {

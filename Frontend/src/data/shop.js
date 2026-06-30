@@ -2,6 +2,7 @@
 
 export const FREE_SHIPPING_THRESHOLD = 999;
 export const SHIPPING_FEE = 49;
+export const GST_RATE = 0.18; // 18% GST applied to the taxable goods value
 
 // Sample coupon codes (shown to users for testing).
 export const COUPONS = {
@@ -33,12 +34,20 @@ export function computeTotals(cart, coupon) {
 
   const baseShipping = subtotal === 0 || subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
   const shipping = freeShipping ? 0 : baseShipping;
-  const total = Math.max(0, subtotal - discount) + shipping;
+
+  // Round each line to whole rupees and derive the total from those rounded
+  // values, so the displayed lines always sum exactly to the total (no drift).
+  const roundedSubtotal = Math.round(subtotal);
+  const roundedDiscount = Math.round(discount);
+  const taxable = Math.max(0, roundedSubtotal - roundedDiscount);
+  const gst = Math.round(taxable * GST_RATE);
+  const total = taxable + gst + shipping;
 
   return {
-    subtotal: Math.round(subtotal),
-    discount: Math.round(discount),
+    subtotal: roundedSubtotal,
+    discount: roundedDiscount,
+    gst,
     shipping,
-    total: Math.round(total),
+    total,
   };
 }

@@ -13,19 +13,18 @@ const Hero = () => {
 
         <div className="absolute top-1/2 left-1/2 z-20 w-full px-4 text-center text-white -translate-x-1/2 -translate-y-1/2">
           <h1 className="font-bold text-3xl sm:text-4xl md:text-6xl">
-            Where Tiny Art Comes <br/> <span className="text-[#fe4462]">to Life</span>
+            Every Miniature Holds <br/> <span className="text-[#fe4462]">A Story</span>
           </h1>
 
           <p className="text-lg leading-relaxed max-w-[650px] mx-auto mt-4">
-            Explore a unique collection of miniature crafts that capture
-            extraordinary detail and timeless craftsmanship.
+            Handcrafted miniatures inspired by Krishna's divine world, created to bring beauty, faith, and timeless memories into your home. 
           </p>
 
           <Link
             to="/shop"
-            className="mt-6 inline-block px-6 py-3 bg-[#ef4462] border border-[#ef4462] rounded-[30px] hover:bg-transparent hover:border-white transition-all duration-300 cursor-pointer"
+            className="mt-6 inline-block px-6 py-3 bg-[#ef4462] border border-[#ef4462] rounded-[30px] hover:bg-transparent hover:border-white transition-all duration-300 cursor-pointer font-semibold"
           >
-            Explore Now
+            Discover the Collection 
           </Link>
         </div>
       </div>

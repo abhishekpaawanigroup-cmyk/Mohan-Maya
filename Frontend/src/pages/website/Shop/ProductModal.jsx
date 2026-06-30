@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Product3DCanvas from "../../../components/product/Product3DCanvas";
 import HeartIcon from "../../../components/common/HeartIcon";
+import ExpectedDelivery from "../../../components/common/ExpectedDelivery";
 import {
   Plus,
   Minus,
@@ -106,7 +107,9 @@ export default function ProductModal({ product = {}, onClose }) {
 
   const handleAddToCart = () => addToCart(product, qty);
   const handleBuyNow = () => {
-    addToCart(product, qty);
+    // If signed out, addToCart redirects to login and returns false — bail so we
+    // don't show a misleading toast or close the modal.
+    if (!addToCart(product, qty)) return;
     addToast("Proceeding to checkout…", "info");
     onClose();
   };
@@ -419,6 +422,9 @@ export default function ProductModal({ product = {}, onClose }) {
               <Zap size={18} /> Buy Now
             </motion.button>
           </div>
+
+          {/* expected delivery */}
+          <ExpectedDelivery className="mt-6" />
 
           {/* key features */}
           <div className="grid grid-cols-2 gap-3 mt-8">

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import { useModalA11y } from "../../hooks/useHooks";
+import ExpectedDelivery from "../common/ExpectedDelivery";
 import Product3DViewerModal from "./Product3DViewerModal";
 
 // Lazy 3D - Home page stays light until a shopper opens the 3D view.
@@ -365,6 +366,9 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
               <span className="sm:hidden lg:inline">{wished ? "Saved" : "Wishlist"}</span>
             </motion.button>
           </div>
+
+          {/* expected delivery */}
+          <ExpectedDelivery className="mt-6" />
         </div>
       </motion.div>
 

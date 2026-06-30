@@ -37,7 +37,6 @@ export default function Header() {
     wishlist,
     cartAnimating,
     cartSuccess,
-    cartIconRef,
     user,
     logout,
     addToast,
@@ -169,9 +168,8 @@ export default function Header() {
               )}
             </button>
 
-            {/* Cart -fly-to-cart animation lands here; click opens the Cart page */}
+            {/* Cart -click opens the Cart page */}
             <button
-              ref={cartIconRef}
               onClick={() => navigate("/cart")}
               className={`relative p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300 ${cartAnimating ? "animate-cart-bounce" : ""}`}
               aria-label="Cart"

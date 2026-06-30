@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { FiEye, FiShoppingBag, FiStar } from "react-icons/fi";
 import HeartIcon from "./HeartIcon";
+import ExpectedDelivery from "./ExpectedDelivery";
 import { useApp } from "../../context/AppContext";
 
 /**
@@ -91,6 +92,8 @@ export default function ProductCard({ product, onQuickView }) {
             <span className="text-gray-400 line-through text-sm">₹{product.oldPrice}</span>
           )}
         </div>
+
+        <ExpectedDelivery compact className="mt-3" />
 
         <button
           onClick={(e) => addToCart(product, 1, e)}

@@ -21,7 +21,7 @@ const HeroSection = () => {
       >
         <source src="/hero/hero-all.mp4" type="video/mp4" />
       </video>
-
+/he/
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/55"></div>
 
@@ -38,7 +38,7 @@ const HeroSection = () => {
             <Breadcrumb items={[{ label: "Home", to: "/" }, { label: "About" }]} light className="mb-4 flex justify-center md:justify-start" />
 
             <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4">
-              Every Miniature Has <br/> <span className="text-[#fe4462]">A Story</span>
+              Every Creation Begins With <br/> <span className="text-[#fe4462]">A Story</span>
             </h1>
 
             <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-xl mx-auto md:mx-0">

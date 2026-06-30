@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import WebsiteLayout from "../layouts/WebsiteLayout";
+import ProtectedRoute from "../components/common/ProtectedRoute";
 
 // Lazy-load pages so each route ships its own chunk (faster first paint).
 const Home = lazy(() => import("../pages/website/Home/Home"));
@@ -16,6 +17,9 @@ const Wishlist = lazy(() => import("../pages/website/Wishlist/Wishlist"));
 const Checkout = lazy(() => import("../pages/website/Checkout/Checkout"));
 const OrderTracking = lazy(() => import("../pages/website/Tracking/OrderTracking"));
 const Auth = lazy(() => import("../pages/website/Auth/Auth"));
+const ForgotPassword = lazy(() => import("../pages/website/Auth/ForgotPassword"));
+const ResetPassword = lazy(() => import("../pages/website/Auth/ResetPassword"));
+const VerifyEmail = lazy(() => import("../pages/website/Auth/VerifyEmail"));
 const Profile = lazy(() => import("../pages/website/Profile/Profile"));
 const NotFound = lazy(() => import("../pages/website/NotFound"));
 
@@ -37,7 +41,10 @@ const router = createBrowserRouter([
       { path: "checkout", element: <Checkout /> },
       { path: "track", element: <OrderTracking /> },
       { path: "auth", element: <Auth /> },
-      { path: "profile", element: <Profile /> },
+      { path: "forgot-password", element: <ForgotPassword /> },
+      { path: "reset-password", element: <ResetPassword /> },
+      { path: "verify-email", element: <VerifyEmail /> },
+      { path: "profile", element: <ProtectedRoute><Profile /></ProtectedRoute> },
       { path: "*", element: <NotFound /> },
     ],
   },

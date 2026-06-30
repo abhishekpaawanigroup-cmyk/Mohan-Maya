@@ -2,17 +2,12 @@ import { createContext, useContext, useState, useEffect, useCallback, useMemo, u
 import { useLocalStorage } from "../hooks/useHooks";
 import { COUPONS, computeTotals } from "../data/shop";
 import { products } from "../data/products";
-import CartFx from "../components/common/CartFx";
+import * as authApi from "../services/authApi";
 
 const AppContext = createContext(null);
 
 let toastId = 0;
-let flyId = 0;
 const MAX_RECENT = 8;
-
-const prefersReducedMotion = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
 export function AppProvider({ children }) {
   const [darkMode, setDarkMode] = useLocalStorage("mm-dark-mode", false);
@@ -25,18 +20,20 @@ export function AppProvider({ children }) {
   // rendering as blank cards, and keeps the payload small.
   const [recentIds, setRecentIds] = useLocalStorage("mm-recent", []);
   const [orders, setOrders] = useLocalStorage("mm-orders", []);
-  const [user, setUser] = useLocalStorage("mm-user", null);
+  // Auth session is owned by the authApi service (localStorage/sessionStorage);
+  // we mirror the current public user here, rehydrating it on mount.
+  const [user, setUser] = useState(() => authApi.getSessionUser());
   const [addresses, setAddresses] = useLocalStorage("mm-addresses", []);
+  const [toasts, setToasts] = useState([]);
+  // Cart-icon confirmation: brief pop + green checkmark tick when an item is added.
   const [cartAnimating, setCartAnimating] = useState(false);
   const [cartSuccess, setCartSuccess] = useState(false);
-  const [toasts, setToasts] = useState([]);
-  const [flyers, setFlyers] = useState([]);
   const animTimer = useRef(null);
   const successTimer = useRef(null);
-  // Attached to the header cart button so fly-to-cart knows where to land.
-  const cartIconRef = useRef(null);
-  // Guards against stacking confirmation circles on rapid clicks (one at a time).
-  const flyingRef = useRef(false);
+  // Router's navigate(), registered by a component inside the RouterProvider
+  // (WebsiteLayout) so the provider — which lives outside the router — can
+  // redirect (e.g. to login) without a full page reload.
+  const navigatorRef = useRef(null);
 
   // Apply the dark class to <html> so Tailwind's dark: variants work app-wide.
   useEffect(() => {
@@ -46,6 +43,18 @@ export function AppProvider({ children }) {
   }, [darkMode]);
 
   const toggleDarkMode = useCallback(() => setDarkMode((d) => !d), [setDarkMode]);
+
+  // Lets a router-aware component hand us its navigate() function.
+  const registerNavigator = useCallback((fn) => {
+    navigatorRef.current = fn;
+  }, []);
+
+  // SPA redirect from outside the router (falls back to a hard nav if the
+  // navigator hasn't registered yet).
+  const redirectTo = useCallback((path) => {
+    if (navigatorRef.current) navigatorRef.current(path);
+    else if (typeof window !== "undefined") window.location.assign(path);
+  }, []);
 
   // ── Toasts ──────────────────────────────────────────────
   const removeToast = useCallback((id) => {
@@ -62,8 +71,8 @@ export function AppProvider({ children }) {
   );
 
   // ── Cart ────────────────────────────────────────────────
-  // Pop the cart icon and flash the success tick. Used both when the mini
-  // indicator lands and as the fallback when motion is reduced/unavailable.
+  // Pop the cart icon and flash the green checkmark tick — the only add-to-cart
+  // confirmation (no toast).
   const triggerCartBounce = useCallback(() => {
     setCartAnimating(true);
     clearTimeout(animTimer.current);
@@ -74,10 +83,17 @@ export function AppProvider({ children }) {
     successTimer.current = setTimeout(() => setCartSuccess(false), 650);
   }, []);
 
-  // Commits the actual cart state update. No toast -the circular fly-to-cart
-  // animation + the cart-icon tick/count are the only add-to-cart feedback.
-  const commitAddToCart = useCallback(
-    (product, qty = 1) => {
+  // Add to cart instantly, then show the cart-icon confirmation. The third arg
+  // is accepted for call-site compatibility but unused.
+  // Requires authentication: a signed-out user is redirected straight to the
+  // login page (no toast/popup) and nothing is added to the cart.
+  const addToCart = useCallback(
+    // eslint-disable-next-line no-unused-vars
+    (product, qty = 1, source = null) => {
+      if (!user) {
+        redirectTo("/auth?mode=login");
+        return false; // not added — caller can skip any post-add side effects
+      }
       setCart((prev) => {
         const existing = prev.find((i) => i.id === product.id);
         if (existing) {
@@ -85,48 +101,10 @@ export function AppProvider({ children }) {
         }
         return [...prev, { ...product, qty }];
       });
-    },
-    [setCart]
-  );
-
-  // Add to cart. When motion is allowed, play a single confirmation circle that
-  // scales in at screen-centre and flies into the cart icon; the cart updates +
-  // tick fire when it lands (handleFlyerDone). Only one animation runs at a time
-  // -rapid clicks still add the item instantly (no stacked circles). Navigation
-  // to the Cart page happens only when the user clicks the cart icon, never here.
-  // The third arg is kept for call-site compatibility but is unused.
-  const addToCart = useCallback(
-    // eslint-disable-next-line no-unused-vars
-    (product, qty = 1, source = null) => {
-      const cartEl = cartIconRef.current;
-
-      if (cartEl && !flyingRef.current && !prefersReducedMotion()) {
-        const to = cartEl.getBoundingClientRect();
-        if (to.width) {
-          flyingRef.current = true;
-          flyId += 1;
-          setFlyers([{ id: flyId, to, product, qty }]);
-          return; // commit happens in handleFlyerDone when it lands
-        }
-      }
-
-      // Reduced motion, no cart icon, or an animation already in flight: commit
-      // immediately so the item is never lost and the count stays live.
-      commitAddToCart(product, qty);
       triggerCartBounce();
+      return true;
     },
-    [commitAddToCart, triggerCartBounce]
-  );
-
-  // Called when the circle reaches the cart: commit + bounce + tick + clean up.
-  const handleFlyerDone = useCallback(
-    (flyer) => {
-      commitAddToCart(flyer.product, flyer.qty);
-      triggerCartBounce();
-      setFlyers([]);
-      flyingRef.current = false;
-    },
-    [commitAddToCart, triggerCartBounce]
+    [user, redirectTo, setCart, triggerCartBounce]
   );
 
   const removeFromCart = useCallback(
@@ -248,39 +226,65 @@ export function AppProvider({ children }) {
     [orders]
   );
 
-  // ── Auth (lightweight mock - persisted to localStorage) ──
-  const login = useCallback(
-    ({ name, email }) => {
-      const u = { name: name || email.split("@")[0], email };
-      setUser(u);
-      addToast(`Welcome back, ${u.name}!`, "success");
-      return u;
+  // ── Auth (client-side engine in services/authApi — see its caveats) ──
+  // Thin wrappers: update the mirrored `user` + toast on success, and re-throw
+  // typed AuthErrors so each screen can show inline field / edge-case messages.
+  const signup = useCallback(
+    async (data) => {
+      const res = await authApi.signup(data);
+      setUser(res.user);
+      addToast(`Welcome to Mohan-Maya, ${res.user.name}!`, "success");
+      return res;
     },
-    [setUser, addToast]
+    [addToast]
   );
 
-  const register = useCallback(
-    ({ name, email }) => {
-      const u = { name, email };
-      setUser(u);
-      addToast(`Welcome to Mohan-Maya, ${u.name}!`, "success");
-      return u;
+  const login = useCallback(
+    async (data) => {
+      const res = await authApi.login(data);
+      setUser(res.user);
+      addToast(`Welcome back, ${res.user.name}!`, "success");
+      return res;
     },
-    [setUser, addToast]
+    [addToast]
   );
 
   const logout = useCallback(() => {
+    authApi.logout();
     setUser(null);
     addToast("You've been logged out", "info");
-  }, [setUser, addToast]);
+  }, [addToast]);
 
-  // Merge a partial update into the signed-in user (name / email / phone …).
   const updateProfile = useCallback(
-    (patch) => {
-      setUser((prev) => (prev ? { ...prev, ...patch } : prev));
+    async (patch) => {
+      const { user: updated } = await authApi.updateProfile(patch);
+      setUser(updated);
       addToast("Profile updated", "success");
+      return updated;
     },
-    [setUser, addToast]
+    [addToast]
+  );
+
+  const changePassword = useCallback(
+    async (data) => {
+      await authApi.changePassword(data);
+      addToast("Password changed successfully", "success");
+    },
+    [addToast]
+  );
+
+  // Stateless flows (no session change) — pass straight through to the engine.
+  const forgotPassword = useCallback((data) => authApi.forgotPassword(data), []);
+  const resetPassword = useCallback((data) => authApi.resetPassword(data), []);
+  const resendVerification = useCallback((data) => authApi.resendVerification(data), []);
+  const verifyEmail = useCallback(
+    async (data) => {
+      const res = await authApi.verifyEmail(data);
+      // Reflect the verified flag if it's the signed-in user.
+      setUser((prev) => (prev && prev.email === res.user.email ? { ...prev, verified: true } : prev));
+      return res;
+    },
+    []
   );
 
   // ── Saved addresses (persisted, additive) ───────────────
@@ -334,6 +338,7 @@ export function AppProvider({ children }) {
   const value = {
     darkMode,
     toggleDarkMode,
+    registerNavigator,
     cart,
     cartCount,
     addToCart,
@@ -342,7 +347,6 @@ export function AppProvider({ children }) {
     clearCart,
     cartAnimating,
     cartSuccess,
-    cartIconRef,
     wishlist,
     isWishlisted,
     toggleWishlist,
@@ -362,10 +366,16 @@ export function AppProvider({ children }) {
     getOrder,
     // auth
     user,
+    signup,
+    register: signup, // backward-compatible alias
     login,
-    register,
     logout,
     updateProfile,
+    changePassword,
+    forgotPassword,
+    resetPassword,
+    verifyEmail,
+    resendVerification,
     // saved addresses
     addresses,
     addAddress,
@@ -377,7 +387,6 @@ export function AppProvider({ children }) {
   return (
     <AppContext.Provider value={value}>
       {children}
-      <CartFx flyers={flyers} onDone={handleFlyerDone} />
     </AppContext.Provider>
   );
 }

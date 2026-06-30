@@ -224,6 +224,7 @@ export default function Checkout() {
                 <div className="flex justify-between text-gray-600 dark:text-gray-300"><span>Subtotal</span><span>₹{totals.subtotal}</span></div>
                 {totals.discount > 0 && <div className="flex justify-between text-green-600"><span>Discount</span><span>−₹{totals.discount}</span></div>}
                 <div className="flex justify-between text-gray-600 dark:text-gray-300"><span>Shipping</span><span>{totals.shipping === 0 ? "Free" : `₹${totals.shipping}`}</span></div>
+                <div className="flex justify-between text-gray-600 dark:text-gray-300"><span>GST (18%)</span><span>₹{totals.gst}</span></div>
                 <div className="flex justify-between pt-2 border-t dark:border-white/10 font-bold text-base dark:text-white"><span>Total</span><span className="text-[#fe4462]">₹{totals.total}</span></div>
               </div>
 
