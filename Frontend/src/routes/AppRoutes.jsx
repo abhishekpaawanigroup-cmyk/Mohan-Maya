@@ -36,7 +36,7 @@ const router = createBrowserRouter([
       { path: "Community", element: <SocialVideos /> },
       { path: "privacy", element: <PrivacyPolicy /> },
       { path: "terms", element: <TermsConditions /> },
-      { path: "cart", element: <Cart /> },
+      { path: "cart", element: <ProtectedRoute><Cart /></ProtectedRoute> },
       { path: "wishlist", element: <Wishlist /> },
       { path: "checkout", element: <Checkout /> },
       { path: "track", element: <OrderTracking /> },

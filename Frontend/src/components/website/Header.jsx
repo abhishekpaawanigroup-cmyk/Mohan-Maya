@@ -191,9 +191,9 @@ export default function Header() {
               {darkMode ? <FiSun size={22} /> : <FiMoon size={22} />}
             </motion.button>
 
-            {/* Wishlist -solid red heart when items are saved; opens the Wishlist page (gated) */}
+            {/* Wishlist -solid red heart when items are saved; open to everyone */}
             <button
-              onClick={() => goProtected("/wishlist")}
+              onClick={() => navigate("/wishlist")}
               className="p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
               aria-label="Wishlist"
             >
@@ -204,9 +204,10 @@ export default function Header() {
               )}
             </button>
 
-            {/* Cart -click opens the Cart page */}
+            {/* Cart -requires login: opens the auth modal when signed out, then
+                continues to the cart after a successful login/registration. */}
             <button
-              onClick={() => navigate("/cart")}
+              onClick={() => goProtected("/cart")}
               className={`relative p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300 ${cartAnimating ? "animate-cart-bounce" : ""}`}
               aria-label="Cart"
             >

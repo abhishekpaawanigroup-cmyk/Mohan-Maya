@@ -18,6 +18,10 @@ html {
   /* Slim scrollbar (Firefox) */
   scrollbar-width: thin;
   scrollbar-color: rgba(120, 120, 120, 0.4) transparent;
+  /* Always reserve the scrollbar gutter so locking body scroll (modals, mobile
+     menu) never changes the page width — no horizontal shift/flicker on open
+     or close. Stabilises normal flow and fixed elements (header, toasts) alike. */
+  scrollbar-gutter: stable;
 }
 
 /* Accessible keyboard focus ring on all interactive elements. Uses

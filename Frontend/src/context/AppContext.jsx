@@ -162,23 +162,17 @@ export function AppProvider({ children }) {
 
   const toggleWishlist = useCallback(
     (product) => {
-      // Toggle silently -the heart icon's filled/outline state is the only
-      // feedback (no toast). The functional updater stays pure, so Strict Mode's
-      // double-invoke can't duplicate the item. Requires auth: a signed-out user
-      // gets the modal and the toggle resumes after they sign in.
-      const doToggle = () =>
-        setWishlist((prev) =>
-          prev.some((i) => i.id === product.id)
-            ? prev.filter((i) => i.id !== product.id)
-            : [...prev, product]
-        );
-      if (!user) {
-        requireAuth(doToggle);
-        return;
-      }
-      doToggle();
+      // Wishlist is open to everyone — no authentication required. Toggle
+      // silently; the heart icon's filled/outline state is the only feedback.
+      // The functional updater stays pure, so Strict Mode's double-invoke can't
+      // duplicate the item.
+      setWishlist((prev) =>
+        prev.some((i) => i.id === product.id)
+          ? prev.filter((i) => i.id !== product.id)
+          : [...prev, product]
+      );
     },
-    [user, requireAuth, setWishlist]
+    [setWishlist]
   );
 
   // ── Coupons ─────────────────────────────────────────────
