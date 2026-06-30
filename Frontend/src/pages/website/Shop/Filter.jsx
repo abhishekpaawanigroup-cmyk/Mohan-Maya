@@ -25,7 +25,7 @@ const ProductFilters = ({
   onReset,
 }) => {
   return (
-    <aside className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-5 lg:p-6 shadow-sm">
+    <aside className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-5 lg:p-6 shadow-sm lg:mt-12">
       <h2 className="text-2xl font-bold mb-6 dark:text-white">Filters</h2>
 
       {/* Category */}

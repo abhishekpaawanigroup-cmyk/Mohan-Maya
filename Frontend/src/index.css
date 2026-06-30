@@ -15,6 +15,9 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* Slim scrollbar (Firefox) */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 120, 120, 0.4) transparent;
 }
 
 /* Accessible keyboard focus ring on all interactive elements. Uses
@@ -44,19 +47,20 @@ body {
   }
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar — slim, subtle, brand on hover (WebKit/Blink) */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--brand);
+  background: rgba(120, 120, 120, 0.4);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--brand-dark);
+  background: var(--brand);
 }
 
 /* ─────────────────────────────────────────────

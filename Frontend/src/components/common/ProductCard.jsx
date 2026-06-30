@@ -1,9 +1,23 @@
 import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { FiEye, FiShoppingBag, FiStar } from "react-icons/fi";
+import { FiEye, FiShoppingBag } from "react-icons/fi";
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import HeartIcon from "./HeartIcon";
 import ExpectedDelivery from "./ExpectedDelivery";
 import { useApp } from "../../context/AppContext";
+
+/** Renders 5 stars (full / half / empty) from a numeric rating. */
+function StarRating({ value = 0, size = 13 }) {
+  return (
+    <span className="flex items-center gap-0.5 text-[#ff7f50]" aria-label={`Rated ${value} out of 5`}>
+      {Array.from({ length: 5 }, (_, i) => {
+        if (value >= i + 1) return <FaStar key={i} size={size} />;
+        if (value >= i + 0.5) return <FaStarHalfAlt key={i} size={size} />;
+        return <FaRegStar key={i} size={size} />;
+      })}
+    </span>
+  );
+}
 
 /**
  * Reusable product card used by the Shop grid. Connected to the global
@@ -24,6 +38,7 @@ export default function ProductCard({ product, onQuickView }) {
     product.oldPrice && product.oldPrice > product.price
       ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
       : 0;
+  const rating = Number(product.rating) || 0;
 
   return (
     <motion.div
@@ -33,8 +48,8 @@ export default function ProductCard({ product, onQuickView }) {
       className="group bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col"
     >
       {/* Image */}
-      <div className="relative overflow-hidden pt-6 pb-2 bg-[#e5e5e5] dark:bg-white/5">
-        {!imgLoaded && <div className="absolute inset-6 skeleton rounded-full" />}
+      <div className="relative overflow-hidden pt-4 pb-2 bg-[#e5e5e5] dark:bg-white/5">
+        {!imgLoaded && <div className="absolute inset-5 skeleton rounded-full" />}
         <img
           ref={imgRef}
           src={product.image}
@@ -42,7 +57,7 @@ export default function ProductCard({ product, onQuickView }) {
           loading="lazy"
           decoding="async"
           onLoad={() => setImgLoaded(true)}
-          className={`h-44 w-44 sm:h-[200px] sm:w-[200px] max-w-full mx-auto rounded-full object-contain transition-all duration-500 group-hover:scale-105 ${
+          className={`h-36 w-36 sm:h-44 sm:w-44 max-w-full mx-auto rounded-full object-contain transition-all duration-500 group-hover:scale-105 ${
             imgLoaded ? "opacity-100" : "opacity-0"
           }`}
         />
@@ -75,15 +90,17 @@ export default function ProductCard({ product, onQuickView }) {
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col flex-1">
-        <p className="text-xs uppercase tracking-wide text-gray-400">{product.category}</p>
-        <h3 className="text-base font-semibold text-gray-800 dark:text-white mt-1">
+      <div className="px-4 py-3.5 flex flex-col flex-1">
+        <h3 className="text-[15px] font-semibold leading-snug text-gray-800 dark:text-white line-clamp-1">
           {product.name}
         </h3>
 
-        <div className="flex items-center gap-1 mt-2 text-[#ff7f50]">
-          <FiStar size={14} className="fill-current" />
-          <span className="text-sm text-gray-600 dark:text-gray-300">{product.rating}</span>
+        {/* Rating — dynamic stars in their original row below the title */}
+        <div className="mt-1.5 flex items-center gap-1.5">
+          <StarRating value={rating} />
+          <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+            {rating.toFixed(1)}
+          </span>
         </div>
 
         <div className="flex items-center gap-2 mt-2">
@@ -93,11 +110,11 @@ export default function ProductCard({ product, onQuickView }) {
           )}
         </div>
 
-        <ExpectedDelivery compact className="mt-3" />
+        <ExpectedDelivery compact className="mt-2" />
 
         <button
           onClick={(e) => addToCart(product, 1, e)}
-          className="mt-4 w-full flex items-center justify-center gap-2 bg-[#fe4462] hover:bg-[#d93550] text-white py-2.5 rounded-xl font-medium transition-colors"
+          className="mt-3.5 w-full flex items-center justify-center gap-2 bg-[#fe4462] hover:bg-[#d93550] text-white py-2.5 rounded-xl font-medium transition-colors"
         >
           <FiShoppingBag size={18} />
           Add to Cart

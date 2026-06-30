@@ -1,7 +1,6 @@
 import { FiStar, FiShoppingBag } from "react-icons/fi";
 import ScrollReveal from "../../../components/common/ScrollReveal";
 import SectionHeading from "../../../components/common/SectionHeading";
-import ExpectedDelivery from "../../../components/common/ExpectedDelivery";
 import { bestSellers } from "../../../data/products";
 import { useApp } from "../../../context/AppContext";
 
@@ -42,8 +41,6 @@ const BestSellers = () => {
                       <FiStar key={i} className={i < Math.round(item.rating) ? "fill-current" : ""} />
                     ))}
                   </div>
-
-                  <ExpectedDelivery compact className="mb-4" />
 
                   <button
                     onClick={() => addToCart(item)}

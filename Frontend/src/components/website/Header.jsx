@@ -275,35 +275,35 @@ export default function Header() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.97 }}
                     transition={{ duration: 0.18 }}
-                    className="absolute right-0 mt-3 w-72 max-w-[calc(100vw-1.5rem)] bg-white dark:bg-[#1a0a0e] rounded-2xl shadow-2xl ring-1 ring-black/5 dark:ring-white/10 overflow-hidden z-50"
+                    className="absolute right-0 mt-3 w-72 max-w-[calc(100vw-1.5rem)] bg-white dark:bg-[#1a0a0e] rounded-lg shadow-xl ring-1 ring-gray-200/70 dark:ring-white/10 overflow-hidden z-50"
                     role="menu"
                     aria-label="Account menu"
                   >
-                    {/* Header: avatar, name, email + order/cart counts */}
-                    <div className="bg-gradient-to-br from-[#fe4462] to-[#d93550] p-4 text-white">
+                    {/* Header: avatar, name, email + order/cart counts (light theme) */}
+                    <div className="p-4 border-b border-gray-100 dark:border-white/10 bg-gray-50/60 dark:bg-white/5">
                       <div className="flex items-center gap-3">
-                        <span className="w-11 h-11 rounded-full bg-white/20 ring-2 ring-white/40 flex items-center justify-center font-bold">
+                        <span className="w-11 h-11 rounded-full bg-[#fe4462] text-white ring-2 ring-[#fe4462]/20 flex items-center justify-center font-bold">
                           {initials}
                         </span>
                         <div className="min-w-0">
-                          <p className="font-semibold truncate">{user.name}</p>
-                          <p className="text-xs text-white/80 truncate">{user.email}</p>
+                          <p className="font-semibold truncate text-gray-900 dark:text-white">{user.name}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
                         </div>
                       </div>
                       <div className="mt-3 grid grid-cols-2 gap-2">
                         <button
                           onClick={() => { setProfileOpen(false); navigate("/track"); }}
-                          className="rounded-xl bg-white/15 px-3 py-2 text-left transition hover:bg-white/25"
+                          className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 py-2 text-left transition hover:border-[#fe4462]"
                         >
-                          <span className="block text-lg font-bold leading-none">{orders.length}</span>
-                          <span className="text-[11px] text-white/80">Orders</span>
+                          <span className="block text-lg font-bold leading-none text-[#fe4462]">{orders.length}</span>
+                          <span className="text-[11px] text-gray-500 dark:text-gray-400">Orders</span>
                         </button>
                         <button
                           onClick={() => { setProfileOpen(false); navigate("/cart"); }}
-                          className="rounded-xl bg-white/15 px-3 py-2 text-left transition hover:bg-white/25"
+                          className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 py-2 text-left transition hover:border-[#fe4462]"
                         >
-                          <span className="block text-lg font-bold leading-none">{cartCount}</span>
-                          <span className="text-[11px] text-white/80">In Cart</span>
+                          <span className="block text-lg font-bold leading-none text-[#fe4462]">{cartCount}</span>
+                          <span className="text-[11px] text-gray-500 dark:text-gray-400">In Cart</span>
                         </button>
                       </div>
                     </div>

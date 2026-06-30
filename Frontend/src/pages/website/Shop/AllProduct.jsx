@@ -10,7 +10,7 @@ import { ProductGridSkeleton } from "../../../components/common/Skeleton";
 import { products, categories, characters } from "../../../data/products";
 import { useDebounce } from "../../../hooks/useHooks";
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 9;
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -219,7 +219,7 @@ const Products = () => {
                         // Release the height lock once the new grid has settled.
                         if (definition?.opacity === 1) setLockedHeight(null);
                       }}
-                      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"
+                      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-8"
                     >
                       {paginated.map((product) => (
                         <ProductCard
