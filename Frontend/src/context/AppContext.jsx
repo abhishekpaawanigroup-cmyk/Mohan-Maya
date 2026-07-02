@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useLocalStorage } from "../hooks/useHooks";
 import { COUPONS, computeTotals } from "../data/shop";
+import { deriveStatus } from "../utils/orders";
 import { products } from "../data/products";
 import * as authApi from "../services/authApi";
 
@@ -313,6 +314,59 @@ export function AppProvider({ children }) {
     [orders]
   );
 
+  // Cancel one of the signed-in user's orders. Records the reason + timestamp
+  // and flips its status to "Cancelled" (a terminal state - see utils/orders).
+  const cancelOrder = useCallback(
+    (id, { reason, note } = {}) => {
+      let ok = false;
+      setOrders((prev) =>
+        prev.map((o) => {
+          if (o.id !== id || o.cancellation) return o;
+          ok = true;
+          return {
+            ...o,
+            // Remember the stage the order had reached so the cancelled
+            // timeline shows real progress before the cancellation node.
+            reachedStatus: deriveStatus(o),
+            status: "Cancelled",
+            cancellation: { reason, note: note || "", cancelledAt: Date.now() },
+          };
+        })
+      );
+      if (ok) addToast("Your order has been cancelled successfully.", "success");
+      return ok;
+    },
+    [setOrders, addToast]
+  );
+
+  // ── Admin: cross-account order access ───────────────────
+  // Flatten every account's orders into one list tagged with its owner email,
+  // newest first. Read-only view for the admin All Orders page.
+  const allOrders = useMemo(
+    () =>
+      Object.entries(userOrders)
+        .flatMap(([ownerEmail, list]) => (list || []).map((o) => ({ ...o, ownerEmail })))
+        .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)),
+    [userOrders]
+  );
+
+  // Admin mutation: set an explicit status on any account's order. A no-op if
+  // the target order is already cancelled (terminal).
+  const adminSetOrderStatus = useCallback(
+    (ownerEmail, orderId, status) => {
+      setUserOrders((prev) => {
+        const list = prev[ownerEmail] || [];
+        return {
+          ...prev,
+          [ownerEmail]: list.map((o) =>
+            o.id === orderId && !o.cancellation ? { ...o, status } : o
+          ),
+        };
+      });
+    },
+    [setUserOrders]
+  );
+
   // ── Auth (client-side engine in services/authApi - see its caveats) ──
   // Thin wrappers: update the mirrored `user` + toast on success, and re-throw
   // typed AuthErrors so each screen can show inline field / edge-case messages.
@@ -458,6 +512,10 @@ export function AppProvider({ children }) {
     orders,
     placeOrder,
     getOrder,
+    cancelOrder,
+    // admin orders
+    allOrders,
+    adminSetOrderStatus,
     // auth
     user,
     signup,

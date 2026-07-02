@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import WebsiteLayout from "../layouts/WebsiteLayout";
 import ProtectedRoute from "../components/common/ProtectedRoute";
+import AdminRoute from "../components/common/AdminRoute";
 
 // Lazy-load pages so each route ships its own chunk (faster first paint).
 const Home = lazy(() => import("../pages/website/Home/Home"));
@@ -16,6 +17,8 @@ const Cart = lazy(() => import("../pages/website/Cart/Cart"));
 const Wishlist = lazy(() => import("../pages/website/Wishlist/Wishlist"));
 const Checkout = lazy(() => import("../pages/website/Checkout/Checkout"));
 const OrderTracking = lazy(() => import("../pages/website/Tracking/OrderTracking"));
+const MyOrders = lazy(() => import("../pages/website/Orders/MyOrders"));
+const AllOrders = lazy(() => import("../pages/admin/AllOrders"));
 const Auth = lazy(() => import("../pages/website/Auth/Auth"));
 const ForgotPassword = lazy(() => import("../pages/website/Auth/ForgotPassword"));
 const ResetPassword = lazy(() => import("../pages/website/Auth/ResetPassword"));
@@ -40,6 +43,8 @@ const router = createBrowserRouter([
       { path: "wishlist", element: <Wishlist /> },
       { path: "checkout", element: <Checkout /> },
       { path: "track", element: <OrderTracking /> },
+      { path: "orders", element: <ProtectedRoute><MyOrders /></ProtectedRoute> },
+      { path: "admin/orders", element: <AdminRoute><AllOrders /></AdminRoute> },
       { path: "auth", element: <Auth /> },
       { path: "forgot-password", element: <ForgotPassword /> },
       { path: "reset-password", element: <ResetPassword /> },

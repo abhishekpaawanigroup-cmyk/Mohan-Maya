@@ -209,7 +209,7 @@ export default function Profile() {
         <div className="max-w-6xl mx-auto px-5 sm:px-6 space-y-6">
           {/* Quick stats */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatTile icon={FiPackage} value={orders.length} label="Orders" to="/track" />
+            <StatTile icon={FiPackage} value={orders.length} label="Orders" to="/orders" />
             <StatTile icon={FiHeart} value={wishlist.length} label="Wishlist" to="/wishlist" accent="#fe4462" />
             <StatTile icon={FiShoppingBag} value={cartCount} label="In Cart" to="/cart" accent="#c48212" />
             <StatTile icon={FiCreditCard} value={`₹${totalSpent}`} label="Total Spent" accent="#c48212" />
@@ -381,7 +381,7 @@ export default function Profile() {
                   icon={FiPackage}
                   action={
                     orders.length > 0 && (
-                      <Link to="/track" className="text-xs font-semibold text-[#fe4462] hover:underline">View all</Link>
+                      <Link to="/orders" className="text-xs font-semibold text-[#fe4462] hover:underline">View all</Link>
                     )
                   }
                 >

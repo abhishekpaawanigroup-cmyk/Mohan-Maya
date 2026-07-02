@@ -79,7 +79,7 @@ export default function Header() {
   // (UI ready, backend pending).
   const accountMenu = [
     { label: "My Profile", icon: FiUser, to: "/profile" },
-    { label: "My Orders", icon: FiPackage, to: "/track" },
+    { label: "My Orders", icon: FiPackage, to: "/orders" },
     { label: "Wishlist", icon: FiHeart, to: "/wishlist" },
     { label: "My Cart", icon: LuShoppingBag, to: "/cart" },
     { label: "Manage Addresses", icon: FiMapPin, to: "/profile" },
@@ -285,7 +285,7 @@ export default function Header() {
                       </div>
                       <div className="mt-3 grid grid-cols-2 gap-2">
                         <button
-                          onClick={() => { setProfileOpen(false); navigate("/track"); }}
+                          onClick={() => { setProfileOpen(false); navigate("/orders"); }}
                           className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 py-2 text-left transition hover:border-[#fe4462]"
                         >
                           <span className="block text-lg font-bold leading-none text-[#fe4462]">{orders.length}</span>

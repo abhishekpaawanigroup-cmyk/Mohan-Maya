@@ -34,9 +34,9 @@ const BestSellers = () => {
                   <h3 className="text-[20px] font-bold text-[#111] dark:text-white mb-2 group-hover:text-[#c48212] transition-colors duration-300">
                     {item.name}
                   </h3>
-                  <p className="text-[#ff7f50] text-lg font-medium mb-3">INR {item.price.toFixed(2)}</p>
+                  <p className="text-[#ff7f50] text-lg font-medium mb-2">INR {item.price.toFixed(2)}</p>
 
-                  <div className="flex gap-1 text-[#ff7f50] mb-4" aria-label={`${item.rating} star rating`}>
+                  <div className="flex gap-1 text-[#ff7f50] mb-3" aria-label={`${item.rating} star rating`}>
                     {Array.from({ length: 5 }).map((_, i) => (
                       <FiStar key={i} className={i < Math.round(item.rating) ? "fill-current" : ""} />
                     ))}
