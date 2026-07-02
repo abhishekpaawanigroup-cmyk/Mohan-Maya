@@ -109,8 +109,10 @@ export function AppProvider({ children }) {
   );
 
   // ── Cart ────────────────────────────────────────────────
-  // Active cart = the signed-in user's cart (empty when signed out).
-  const cart = user ? userCarts[user.email] || [] : [];
+  // Active cart = the signed-in user's cart (empty when signed out). Memoised
+  // so its reference stays stable across renders (avoids churning the callbacks
+  // that depend on it).
+  const cart = useMemo(() => (user ? userCarts[user.email] || [] : []), [user, userCarts]);
 
   // Mutate the active user's cart. No-op when signed out (cart actions are
   // gated behind login, so nothing is ever written to a "guest" bucket).
@@ -188,7 +190,7 @@ export function AppProvider({ children }) {
 
   // ── Wishlist ────────────────────────────────────────────
   // Active wishlist = the signed-in user's wishlist (empty when signed out).
-  const wishlist = user ? userWishlists[user.email] || [] : [];
+  const wishlist = useMemo(() => (user ? userWishlists[user.email] || [] : []), [user, userWishlists]);
   const setWishlist = useCallback(
     (updater) => {
       const u = userRef.current;
@@ -277,7 +279,7 @@ export function AppProvider({ children }) {
   // ── Orders ──────────────────────────────────────────────
   // Active orders = the signed-in user's orders (empty when signed out), so a
   // previous user's orders can never appear for the next login.
-  const orders = user ? userOrders[user.email] || [] : [];
+  const orders = useMemo(() => (user ? userOrders[user.email] || [] : []), [user, userOrders]);
   const setOrders = useCallback(
     (updater) => {
       const u = userRef.current;

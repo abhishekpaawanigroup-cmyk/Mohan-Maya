@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -57,11 +57,9 @@ export default function Cart() {
   const PER_PAGE = 4;
   const [page, setPage] = useState(1);
   const totalPages = Math.max(1, Math.ceil(cart.length / PER_PAGE));
-  // If items are removed and the current page no longer exists, step back to
-  // the last valid page.
-  useEffect(() => {
-    if (page > totalPages) setPage(totalPages);
-  }, [page, totalPages]);
+  // `safePage` (below) clamps the active page at render time, so removing items
+  // that shrink the list can never strand us on a now-empty page - no effect
+  // needed to correct the stored page.
 
   // ── Empty state ──────────────────────────────────────────
   if (!cart.length) {
@@ -227,7 +225,7 @@ export default function Cart() {
                   aria-label="Cart pages"
                 >
                   <button
-                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    onClick={() => setPage(Math.max(1, safePage - 1))}
                     disabled={safePage === 1}
                     aria-label="Previous page"
                     className="grid h-10 w-10 place-items-center rounded-full border border-gray-200 text-gray-600 transition hover:border-[#fe4462] hover:text-[#fe4462] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-200 disabled:hover:text-gray-600 dark:border-white/15 dark:text-gray-300 dark:disabled:hover:border-white/15 dark:disabled:hover:text-gray-300"
@@ -254,7 +252,7 @@ export default function Cart() {
                   </div>
 
                   <button
-                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    onClick={() => setPage(Math.min(totalPages, safePage + 1))}
                     disabled={safePage === totalPages}
                     aria-label="Next page"
                     className="grid h-10 w-10 place-items-center rounded-full border border-gray-200 text-gray-600 transition hover:border-[#fe4462] hover:text-[#fe4462] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-200 disabled:hover:text-gray-600 dark:border-white/15 dark:text-gray-300 dark:disabled:hover:border-white/15 dark:disabled:hover:text-gray-300"

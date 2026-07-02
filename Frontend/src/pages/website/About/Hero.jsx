@@ -21,7 +21,7 @@ const HeroSection = () => {
       >
         <source src="/hero/hero-all.mp4" type="video/mp4" />
       </video>
-/he/
+
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/55"></div>
 

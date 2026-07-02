@@ -163,7 +163,6 @@ function clearThrottle(email) {
 /* ── simulated email ───────────────────────────────────── */
 function simulateEmail(kind, link) {
   // In a real app this would hit an email provider. Here we surface the link.
-  // eslint-disable-next-line no-console
   console.info(`[Mohan Maya · simulated ${kind} email] ${link}`);
   return link;
 }

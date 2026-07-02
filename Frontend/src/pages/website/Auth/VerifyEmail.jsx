@@ -14,19 +14,16 @@ export default function VerifyEmail() {
   const [params] = useSearchParams();
   const token = params.get("token") || "";
 
-  const [status, setStatus] = useState("verifying"); // verifying | success | error
-  const [message, setMessage] = useState("");
+  // A missing token is known at render time, so seed it as the initial state
+  // rather than setting it synchronously inside the effect.
+  const [status, setStatus] = useState(token ? "verifying" : "error"); // verifying | success | error
+  const [message, setMessage] = useState(token ? "" : "This verification link is missing its token.");
   const ran = useRef(false);
 
   useEffect(() => {
-    if (ran.current) return; // guard StrictMode double-invoke
+    if (ran.current || !token) return; // guard StrictMode double-invoke; no token → handled above
     ran.current = true;
 
-    if (!token) {
-      setStatus("error");
-      setMessage("This verification link is missing its token.");
-      return;
-    }
     verifyEmail({ token })
       .then(() => setStatus("success"))
       .catch((err) => {
