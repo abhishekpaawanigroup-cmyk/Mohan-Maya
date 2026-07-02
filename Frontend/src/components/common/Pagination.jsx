@@ -26,10 +26,15 @@ export default function Pagination({
     <div
       className={`flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between ${className}`}
     >
-      <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-600 dark:text-gray-300">
         <span>
           Showing <strong className="text-gray-900 dark:text-white">{start}–{end}</strong> of{" "}
           <strong className="text-gray-900 dark:text-white">{total}</strong> {label}
+        </span>
+        <span className="text-gray-400" aria-hidden="true">·</span>
+        <span>
+          Page <strong className="text-gray-900 dark:text-white">{page}</strong> of{" "}
+          <strong className="text-gray-900 dark:text-white">{totalPages}</strong>
         </span>
         {onPerPageChange && (
           <label className="hidden items-center gap-2 sm:flex">

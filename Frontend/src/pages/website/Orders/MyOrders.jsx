@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  FiSearch, FiInbox, FiClock, FiPackage, FiTruck, FiCalendar, FiCreditCard, FiSlash, FiEye,
+  FiSearch, FiInbox, FiMapPin, FiTruck, FiSlash, FiEye,
 } from "react-icons/fi";
 import ScrollReveal from "../../../components/common/ScrollReveal";
 import Pagination from "../../../components/common/Pagination";
@@ -19,7 +19,7 @@ import {
 
 // Status filter tabs shown across the top.
 const FILTERS = ["All", "Pending", "Confirmed", "Packed", "Shipped", "Out for Delivery", "Delivered", "Cancelled"];
-const PER_PAGE = 6;
+const PER_PAGE = 4;
 
 export default function MyOrders() {
   usePageMeta("My Orders - Mohan Maya", "View, track and manage your Mohan Maya orders.");
@@ -27,6 +27,7 @@ export default function MyOrders() {
   const { orders, cancelOrder } = useApp();
 
   const [loading, setLoading] = useState(true);
+  const [filtering, setFiltering] = useState(false);
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -39,9 +40,22 @@ export default function MyOrders() {
     return () => clearTimeout(t);
   }, []);
 
-  // Changing a filter or the search resets to the first page (so results are
-  // never hidden on a now-out-of-range page).
-  const changeFilter = (f) => { setFilter(f); setPage(1); };
+  // Show a short skeleton pass whenever the active filter switches, so the
+  // change is clearly perceptible even when data resolves instantly.
+  useEffect(() => {
+    if (!filtering) return;
+    const t = setTimeout(() => setFiltering(false), 380);
+    return () => clearTimeout(t);
+  }, [filtering]);
+
+  // Changing a filter resets to page 1 and triggers the transition skeleton.
+  // Search also resets the page (kept instant — no skeleton flash on typing).
+  const changeFilter = (f) => {
+    if (f === filter) return;
+    setFilter(f);
+    setPage(1);
+    setFiltering(true);
+  };
   const changeSearch = (v) => { setSearch(v); setPage(1); };
 
   const filtered = useMemo(() => {
@@ -76,6 +90,12 @@ export default function MyOrders() {
     setCancelTarget(null);
     setDetailsOrder(null);
   };
+
+  // Empty-state copy tailored to the active filter (e.g. "No Pending orders found").
+  const emptyForFilter =
+    filter === "All"
+      ? { title: "No matching orders", hint: "Try a different search term to find what you're looking for." }
+      : { title: `No ${filter} orders found`, hint: `You don't have any ${filter.toLowerCase()} orders right now.` };
 
   return (
     <section className="min-h-screen bg-[#fbfefb] pb-20 pt-28 dark:bg-[#0d0508]">
@@ -115,15 +135,23 @@ export default function MyOrders() {
               <button
                 key={f}
                 onClick={() => changeFilter(f)}
-                className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
+                aria-pressed={active}
+                className={`relative inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors duration-200 ${
                   active
-                    ? "bg-[#fe4462] text-white shadow-sm"
-                    : "border border-gray-200 bg-white text-gray-600 hover:border-[#fe4462] hover:text-[#fe4462] dark:border-white/10 dark:bg-white/5 dark:text-gray-300"
+                    ? "border-transparent text-white"
+                    : "border-gray-200 bg-white text-gray-600 hover:border-[#fe4462] hover:text-[#fe4462] dark:border-white/10 dark:bg-white/5 dark:text-gray-300"
                 }`}
               >
-                {f}
+                {active && (
+                  <motion.span
+                    layoutId="orderFilterPill"
+                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                    className="absolute inset-0 rounded-full bg-[#fe4462] shadow-sm"
+                  />
+                )}
+                <span className="relative z-10">{f}</span>
                 <span
-                  className={`rounded-full px-1.5 text-[11px] ${
+                  className={`relative z-10 rounded-full px-1.5 text-[11px] transition-colors ${
                     active ? "bg-white/25" : "bg-gray-100 text-gray-500 dark:bg-white/10 dark:text-gray-400"
                   }`}
                 >
@@ -136,47 +164,72 @@ export default function MyOrders() {
 
         {/* Body */}
         {loading ? (
-          <OrderCardSkeletonGrid count={4} />
+          <OrderCardSkeletonGrid count={PER_PAGE} />
         ) : orders.length === 0 ? (
           <EmptyState
-            title="No orders yet"
-            hint="You haven't placed any orders yet. Once you do, they'll appear here with full tracking."
+            title="You haven't placed any orders yet."
+            hint="When you place an order, it will appear here with full tracking and details."
             cta
           />
-        ) : total === 0 ? (
-          <EmptyState
-            title="No matching orders"
-            hint="Try a different filter or search term to find what you're looking for."
-          />
         ) : (
-          <>
-            <motion.div layout className="grid gap-5 md:grid-cols-2">
-              <AnimatePresence mode="popLayout">
-                {pageItems.map((o) => (
-                  <OrderCard
-                    key={o.id}
-                    order={o}
-                    onDetails={() => setDetailsOrder(o)}
-                    onTrack={() => trackOrder(o.id)}
-                    onCancel={() => setCancelTarget(o)}
-                  />
-                ))}
-              </AnimatePresence>
-            </motion.div>
+          <AnimatePresence mode="wait" initial={false}>
+            {filtering ? (
+              // Transition skeleton — makes a filter switch clearly perceptible.
+              <motion.div
+                key="filtering"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <OrderCardSkeletonGrid count={Math.min(PER_PAGE, total || PER_PAGE)} />
+              </motion.div>
+            ) : total === 0 ? (
+              <motion.div
+                key={`empty-${filter}`}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+              >
+                <EmptyState title={emptyForFilter.title} hint={emptyForFilter.hint} />
+              </motion.div>
+            ) : (
+              <motion.div
+                key={`list-${filter}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+              >
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+                  <AnimatePresence mode="popLayout">
+                    {pageItems.map((o) => (
+                      <OrderCard
+                        key={o.id}
+                        order={o}
+                        onDetails={() => setDetailsOrder(o)}
+                        onTrack={() => trackOrder(o.id)}
+                        onCancel={() => setCancelTarget(o)}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </div>
 
-            {total > PER_PAGE && (
-              <div className="mt-8">
-                <Pagination
-                  page={page}
-                  perPage={PER_PAGE}
-                  total={total}
-                  onPageChange={setPage}
-                  perPageOptions={[6]}
-                  label="orders"
-                />
-              </div>
+                {total > PER_PAGE && (
+                  <div className="mt-8">
+                    <Pagination
+                      page={page}
+                      perPage={PER_PAGE}
+                      total={total}
+                      onPageChange={setPage}
+                      label="Orders"
+                    />
+                  </div>
+                )}
+              </motion.div>
             )}
-          </>
+          </AnimatePresence>
         )}
       </div>
 
@@ -212,8 +265,16 @@ function OrderCard({ order, onDetails, onTrack, onCancel }) {
   const count = itemCount(order);
   const { minDate, maxDate, rangeLabel } = deliveryEstimate(order);
   const canCancel = isCancellable(order);
-  const preview = order.items?.slice(0, 3) || [];
-  const extra = (order.items?.length || 0) - preview.length;
+  const items = order.items || [];
+  const first = items[0];
+  const extra = Math.max(0, items.length - 1);
+  const c = order.customer || {};
+  const address = [c.city, c.state, c.pincode].filter(Boolean).join(", ");
+  const deliveryValue = cancelled
+    ? "—"
+    : minDate.getTime() === maxDate.getTime()
+      ? fmtDate(maxDate)
+      : rangeLabel;
 
   return (
     <motion.div
@@ -222,92 +283,108 @@ function OrderCard({ order, onDetails, onTrack, onCancel }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.97 }}
       transition={{ duration: 0.25 }}
-      whileHover={{ y: -3 }}
-      className="flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-shadow duration-300 hover:shadow-lg dark:border-white/10 dark:bg-white/5"
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10 dark:bg-white/5"
     >
       {/* Header */}
-      <div className="flex flex-wrap items-start justify-between gap-2 border-b border-gray-100 pb-3 dark:border-white/10">
+      <div className="flex items-center justify-between gap-3 border-b border-gray-100 bg-gray-50/60 px-4 py-3 dark:border-white/10 dark:bg-white/[0.03] sm:px-5">
         <div className="min-w-0">
-          <p className="text-[11px] uppercase tracking-wide text-gray-400">Order</p>
-          <p className="truncate font-bold text-gray-900 dark:text-white">#{order.id}</p>
-          <p className="mt-0.5 inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-            <FiClock size={12} /> {fmtDate(order.createdAt)}
-          </p>
+          <p className="text-[10px] uppercase tracking-wide text-gray-400">Order ID</p>
+          <p className="truncate text-sm font-bold text-gray-900 dark:text-white">#{order.id}</p>
         </div>
-        <OrderStatusBadge status={status} />
+        <OrderStatusBadge status={status} size="sm" />
       </div>
 
-      {/* Meta chips */}
-      <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
-        <Chip icon={FiPackage} label={`${count} item${count === 1 ? "" : "s"}`} />
-        <Chip icon={FiCreditCard} label={paymentLabel(order)} value={pay.label} tone={PAYMENT_TONE[pay.tone]} />
-        <Chip
-          icon={FiCalendar}
-          label={cancelled ? "Delivery" : "Est. delivery"}
-          value={cancelled ? "—" : minDate.getTime() === maxDate.getTime() ? fmtDate(maxDate) : rangeLabel}
-        />
-        <Chip icon={FiTruck} label="Total" value={inr(order.totals?.total)} tone="text-[#fe4462] font-bold" />
-      </div>
-
-      {/* Items */}
-      <div className="mt-3 flex-1 space-y-2.5">
-        {preview.map((item) => (
-          <div key={item.id} className="flex items-center gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#fbfefb] dark:bg-white/10">
-              <img src={item.image} alt={item.name} className="h-full w-full object-contain" loading="lazy" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-gray-900 dark:text-white">{item.name}</p>
-              <p className="text-xs text-gray-500">Qty {item.qty} · {inr(item.price)}</p>
-            </div>
-            <span className="shrink-0 text-sm font-semibold text-[#fe4462]">{inr(item.price * item.qty)}</span>
+      {/* Body — everything on the left, single unified column */}
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        {/* Product */}
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="relative flex h-[76px] w-[76px] shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#fbfefb] dark:bg-white/10">
+            <img
+              src={first?.image}
+              alt={first?.name}
+              className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+            />
+            {extra > 0 && (
+              <span className="absolute bottom-1 right-1 rounded-md bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                +{extra}
+              </span>
+            )}
           </div>
-        ))}
-        {extra > 0 && (
-          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
-            +{extra} more item{extra === 1 ? "" : "s"}
+          <div className="min-w-0 flex-1">
+            <p className="line-clamp-2 text-sm font-semibold text-gray-900 dark:text-white sm:text-[15px]">
+              {first?.name}
+            </p>
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              {count} item{count === 1 ? "" : "s"}
+              {extra > 0 ? ` · ${items.length} products` : ""}
+            </p>
+          </div>
+        </div>
+
+        {/* Key facts */}
+        <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3">
+          <SummaryCell label="Order Date" value={fmtDate(order.createdAt)} />
+          <SummaryCell label={cancelled ? "Delivery" : "Est. Delivery"} value={deliveryValue} />
+          <SummaryCell label="Payment Method" value={paymentLabel(order)} />
+          <SummaryCell label="Payment Status" value={pay.label} tone={PAYMENT_TONE[pay.tone]} />
+        </dl>
+
+        {/* Address summary */}
+        {address && (
+          <p className="mt-3 inline-flex items-start gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+            <FiMapPin size={13} className="mt-0.5 shrink-0" />
+            <span className="line-clamp-1">
+              Deliver to {c.fullName ? `${c.fullName}, ` : ""}{address}
+            </span>
           </p>
         )}
-      </div>
 
-      {/* Actions */}
-      <div className="mt-4 flex flex-wrap gap-2 border-t border-gray-100 pt-4 dark:border-white/10">
-        <button
-          onClick={onDetails}
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-[#fe4462] hover:text-[#fe4462] dark:border-white/15 dark:text-gray-200"
-        >
-          <FiEye size={15} /> View Details
-        </button>
-        {!cancelled && (
+        {/* Total */}
+        <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-3 dark:border-white/10">
+          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+            Total ({count} qty)
+          </span>
+          <span className="text-lg font-bold text-[#fe4462]">{inr(order.totals?.total)}</span>
+        </div>
+
+        {/* Actions — pinned to the bottom so they align across cards */}
+        <div className="mt-auto flex flex-wrap gap-2 pt-4">
           <button
-            onClick={onTrack}
-            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-[#fe4462] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#d93550] active:scale-[0.98]"
+            onClick={onDetails}
+            className="inline-flex min-w-[6rem] flex-1 items-center justify-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-[#fe4462] hover:text-[#fe4462] dark:border-white/15 dark:bg-transparent dark:text-gray-200"
           >
-            <FiTruck size={15} /> Track
+            <FiEye size={15} /> View Details
           </button>
-        )}
-        {canCancel && (
-          <button
-            onClick={onCancel}
-            aria-label="Cancel order"
-            className="inline-flex items-center justify-center gap-1.5 rounded-full border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-500 transition hover:bg-red-500 hover:text-white dark:border-red-500/40"
-          >
-            <FiSlash size={15} />
-          </button>
-        )}
+          {!cancelled && (
+            <button
+              onClick={onTrack}
+              className="inline-flex min-w-[6rem] flex-1 items-center justify-center gap-1.5 rounded-full bg-[#fe4462] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#d93550] active:scale-[0.98]"
+            >
+              <FiTruck size={15} /> Track
+            </button>
+          )}
+          {canCancel && (
+            <button
+              onClick={onCancel}
+              aria-label="Cancel order"
+              className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full border border-red-200 bg-white px-4 py-2.5 text-sm font-semibold text-red-500 transition hover:bg-red-500 hover:text-white dark:border-red-500/40 dark:bg-transparent"
+            >
+              <FiSlash size={15} />
+            </button>
+          )}
+        </div>
       </div>
     </motion.div>
   );
 }
 
-function Chip({ icon: Icon, label, value, tone }) {
+// Labelled value cell used in the card's key-facts grid.
+function SummaryCell({ label, value, tone }) {
   return (
-    <div className="flex items-center gap-2 rounded-xl bg-gray-50 px-2.5 py-2 dark:bg-white/[0.04]">
-      <Icon size={14} className="shrink-0 text-gray-400" />
-      <div className="min-w-0">
-        <p className="truncate text-[10px] uppercase tracking-wide text-gray-400">{label}</p>
-        {value && <p className={`truncate text-xs font-medium text-gray-700 dark:text-gray-200 ${tone || ""}`}>{value}</p>}
-      </div>
+    <div className="min-w-0">
+      <dt className="truncate text-[11px] uppercase tracking-wide text-gray-400">{label}</dt>
+      <dd className={`mt-0.5 truncate text-sm font-semibold text-gray-800 dark:text-gray-100 ${tone || ""}`}>{value}</dd>
     </div>
   );
 }
@@ -315,11 +392,13 @@ function Chip({ icon: Icon, label, value, tone }) {
 function EmptyState({ title, hint, cta }) {
   return (
     <ScrollReveal>
-      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 px-5 py-16 text-center dark:border-white/10">
-        <FiInbox size={48} className="mb-4 text-gray-300" />
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white">{title}</h3>
+      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 px-5 py-16 text-center dark:border-white/10 sm:py-20">
+        <span className="mb-5 grid h-20 w-20 place-items-center rounded-full bg-[#fe4462]/10 text-[#fe4462]">
+          <FiInbox size={40} />
+        </span>
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white sm:text-xl">{title}</h3>
         <p className="mt-2 max-w-sm text-gray-500 dark:text-gray-400">{hint}</p>
-        {cta && <Link to="/shop" className="btn-primary mt-6">Start Shopping</Link>}
+        {cta && <Link to="/shop" className="btn-primary mt-6">Continue Shopping</Link>}
       </div>
     </ScrollReveal>
   );
