@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FiX, FiAlertTriangle } from "react-icons/fi";
 import { CANCEL_REASONS } from "../../utils/orders";
+import ModalPortal from "../common/ModalPortal";
 
 /**
  * Confirmation modal for cancelling an order. A reason is mandatory; picking
@@ -35,6 +36,7 @@ export default function CancelOrderModal({ order, onClose, onConfirm }) {
   };
 
   return (
+    <ModalPortal>
     <motion.div
       className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4"
       initial={{ opacity: 0 }}
@@ -52,7 +54,7 @@ export default function CancelOrderModal({ order, onClose, onConfirm }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="cancel-order-title"
-        className="relative max-h-[92dvh] w-full max-w-md overflow-y-auto rounded-xl bg-white p-6 shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10 sm:p-7"
+        className="relative max-h-full w-full max-w-md overflow-y-auto rounded-xl bg-white p-6 shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10 sm:p-7"
       >
         <button
           onClick={() => !submitting && onClose()}
@@ -147,5 +149,6 @@ export default function CancelOrderModal({ order, onClose, onConfirm }) {
         </div>
       </motion.div>
     </motion.div>
+    </ModalPortal>
   );
 }

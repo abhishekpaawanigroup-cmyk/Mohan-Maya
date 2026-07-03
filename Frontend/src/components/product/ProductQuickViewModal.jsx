@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, Suspense, lazy } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ModalPortal from "../common/ModalPortal";
 import {
   X,
   Star,
@@ -73,6 +74,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
   };
 
   return (
+    <ModalPortal>
     <motion.div
       className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4"
       initial={{ opacity: 0 }}
@@ -91,7 +93,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.97 }}
         transition={{ type: "spring", stiffness: 280, damping: 28 }}
-        className="relative w-full max-w-5xl max-h-[92dvh] overflow-y-auto lg:overflow-hidden rounded-3xl bg-white/95 dark:bg-[#140a0d]/95 backdrop-blur-2xl shadow-2xl ring-1 ring-black/5 dark:ring-white/10 outline-none grid grid-cols-1 lg:grid-cols-2"
+        className="relative w-full max-w-5xl max-h-full overflow-y-auto lg:overflow-hidden rounded-3xl bg-white/95 dark:bg-[#140a0d]/95 backdrop-blur-2xl shadow-2xl ring-1 ring-black/5 dark:ring-white/10 outline-none flex flex-col lg:flex-row"
       >
         <button
           onClick={onClose}
@@ -102,7 +104,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
         </button>
 
         {/* ── LEFT: media ─────────────────────────── */}
-        <div className="relative bg-gradient-to-br from-[#fbfefb] to-[#f1f3f5] dark:from-[#1f1015] dark:to-[#140a0d] p-5 sm:p-7 flex flex-col lg:sticky lg:top-0">
+        <div className="relative bg-gradient-to-br from-[#fbfefb] to-[#f1f3f5] dark:from-[#1f1015] dark:to-[#140a0d] p-5 sm:p-7 flex flex-col lg:w-1/2 lg:shrink-0">
           {/* Toggle: View Images / View in 3D */}
           <div
             className="inline-flex self-start gap-1 p-1 rounded-full bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm mb-4"
@@ -251,7 +253,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
         </div>
 
         {/* ── RIGHT: details ──────────────────────── */}
-        <div className="lg:max-h-[92dvh] lg:overflow-y-auto p-6 sm:p-8 lg:p-10">
+        <div className="lg:w-1/2 lg:min-h-0 lg:overflow-y-auto p-6 sm:p-8 lg:p-10">
           {product.category && (
             <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#fe4462] bg-[#fe4462]/10 px-3 py-1 rounded-full">
               {product.category}
@@ -383,5 +385,6 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
         )}
       </AnimatePresence>
     </motion.div>
+    </ModalPortal>
   );
 }

@@ -586,7 +586,7 @@ export default function Header() {
               role="dialog"
               aria-modal="true"
               aria-labelledby="logout-title"
-              className="w-full max-w-sm rounded-3xl bg-white dark:bg-[#140a0d] p-6 shadow-2xl ring-1 ring-black/5 dark:ring-white/10"
+              className="max-h-full w-full max-w-sm overflow-y-auto rounded-3xl bg-white dark:bg-[#140a0d] p-6 shadow-2xl ring-1 ring-black/5 dark:ring-white/10"
             >
               <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-red-500/10 text-red-500">
                 <FiLogOut size={26} />

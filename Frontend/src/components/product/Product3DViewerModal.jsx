@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, Suspense, lazy } from "react";
 import { motion } from "framer-motion";
+import ModalPortal from "../common/ModalPortal";
 import {
   Plus,
   Minus,
@@ -82,6 +83,7 @@ export default function Product3DViewerModal({ product = {}, modelPath, onClose 
     "w-10 h-10 rounded-full flex items-center justify-center text-white/90 hover:bg-[#fe4462] hover:text-white transition";
 
   return (
+    <ModalPortal>
     <motion.div
       className="fixed inset-0 z-[1000] bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5"
       initial={{ opacity: 0 }}
@@ -104,7 +106,7 @@ export default function Product3DViewerModal({ product = {}, modelPath, onClose 
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
         transition={{ type: "spring", stiffness: 280, damping: 28 }}
-        className="relative w-full max-w-5xl h-[80dvh] rounded-3xl overflow-hidden ring-1 ring-white/15 outline-none bg-gradient-to-br from-[#1b1016] to-[#0d0508] shadow-2xl"
+        className="relative w-full max-w-5xl h-[80dvh] max-h-full rounded-3xl overflow-hidden ring-1 ring-white/15 outline-none bg-gradient-to-br from-[#1b1016] to-[#0d0508] shadow-2xl"
       >
         {/* Header */}
         <div className="absolute top-0 inset-x-0 z-20 flex items-center justify-between p-4 sm:p-5 bg-gradient-to-b from-black/60 to-transparent">
@@ -167,5 +169,6 @@ export default function Product3DViewerModal({ product = {}, modelPath, onClose 
         </div>
       </motion.div>
     </motion.div>
+    </ModalPortal>
   );
 }

@@ -14,6 +14,7 @@ import {
 } from "react-icons/fi";
 import { useApp } from "../../context/AppContext";
 import { useModalA11y } from "../../hooks/useHooks";
+import ModalPortal from "../common/ModalPortal";
 
 /* ── Seed data (mock; replace with API later) ── */
 const SEED_REVIEWS = [
@@ -521,6 +522,7 @@ function Lightbox({ images, index, setIndex, onClose }) {
   }, [go]);
 
   return (
+    <ModalPortal>
     <motion.div
       className="fixed inset-0 z-[1000] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
       initial={{ opacity: 0 }}
@@ -531,7 +533,7 @@ function Lightbox({ images, index, setIndex, onClose }) {
       aria-modal="true"
       aria-label="Customer photo viewer"
     >
-      <div ref={dialogRef} tabIndex={-1} className="relative outline-none" onClick={(e) => e.stopPropagation()}>
+      <div ref={dialogRef} tabIndex={-1} className="relative flex max-h-full max-w-full flex-col items-center outline-none" onClick={(e) => e.stopPropagation()}>
         <motion.img
           key={index}
           src={images[index]}
@@ -540,7 +542,7 @@ function Lightbox({ images, index, setIndex, onClose }) {
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.2 }}
-          className={`max-h-[82dvh] max-w-[90vw] rounded-xl object-contain select-none transition-transform duration-300 ${
+          className={`min-h-0 max-h-full max-w-full rounded-xl object-contain select-none transition-transform duration-300 ${
             zoom ? "scale-150 cursor-zoom-out" : "cursor-zoom-in"
           }`}
         />
@@ -574,6 +576,7 @@ function Lightbox({ images, index, setIndex, onClose }) {
         </>
       )}
     </motion.div>
+    </ModalPortal>
   );
 }
 

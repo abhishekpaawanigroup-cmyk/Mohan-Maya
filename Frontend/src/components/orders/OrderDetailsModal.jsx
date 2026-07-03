@@ -6,6 +6,7 @@ import {
 } from "react-icons/fi";
 import OrderStatusBadge from "./OrderStatusBadge";
 import OrderTimeline from "./OrderTimeline";
+import ModalPortal from "../common/ModalPortal";
 import {
   deriveStatus, paymentLabel, paymentStatus, PAYMENT_TONE, isCancellable,
   deliveryEstimate, downloadInvoice, fmtDate, fmtDateTime, inr,
@@ -38,6 +39,7 @@ export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, a
   const instructions = c.deliveryInstructions || order.deliveryInstructions;
 
   return (
+    <ModalPortal>
     <motion.div
       className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4"
       initial={{ opacity: 0 }}
@@ -55,7 +57,7 @@ export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, a
         role="dialog"
         aria-modal="true"
         aria-labelledby="order-details-title"
-        className="relative max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10"
+        className="relative max-h-full w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10"
       >
         <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#fe4462] to-[#c48212]" aria-hidden="true" />
 
@@ -185,6 +187,7 @@ export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, a
         </div>
       </motion.div>
     </motion.div>
+    </ModalPortal>
   );
 }
 

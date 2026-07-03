@@ -6,6 +6,7 @@ import ProductFilters from "./Filter";
 import ProductModal from "./ProductModal";
 import ProductCard from "../../../components/common/ProductCard";
 import AnimatedSearchInput from "../../../components/common/AnimatedSearchInput";
+import ModalPortal from "../../../components/common/ModalPortal";
 import { ProductGridSkeleton } from "../../../components/common/Skeleton";
 import { products, categories, characters } from "../../../data/products";
 import { useDebounce } from "../../../hooks/useHooks";
@@ -277,7 +278,7 @@ const Products = () => {
       {/* Mobile filters drawer */}
       <AnimatePresence>
         {mobileFiltersOpen && (
-          <>
+          <ModalPortal>
             <motion.div
               className="fixed inset-0 bg-black/50 z-[998] lg:hidden"
               initial={{ opacity: 0 }}
@@ -300,7 +301,7 @@ const Products = () => {
               </div>
               <ProductFilters {...filtersProps} />
             </motion.div>
-          </>
+          </ModalPortal>
         )}
       </AnimatePresence>
 
