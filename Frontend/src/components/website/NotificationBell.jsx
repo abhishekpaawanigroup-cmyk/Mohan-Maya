@@ -19,7 +19,7 @@ const NOTIFICATIONS = [
  * localStorage keyed by notification id, so opening the panel clears the "new"
  * count and read items never resurface as new after a refresh.
  */
-export default function NotificationBell({ buttonClass = "" }) {
+export default function NotificationBell({ buttonClass = "", iconSize = 18 }) {
   const { t } = useI18n();
   const [readIds, setReadIds] = useLocalStorage("mm-notif-read", []);
   const [open, setOpen] = useState(false);
@@ -58,13 +58,13 @@ export default function NotificationBell({ buttonClass = "" }) {
         aria-label={`${t("notif.title")}${unreadIds.length ? `, ${unreadIds.length} ${t("notif.new").toLowerCase()}` : ""}`}
         className={buttonClass}
       >
-        <FiBell size={16} />
+        <FiBell size={iconSize} />
         {unreadIds.length > 0 && (
           <motion.span
             key={unreadIds.length}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#fe4462] px-1 text-[9px] font-bold text-white"
+            className="absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-[#fe4462] px-1 text-[9px] font-bold text-white"
           >
             {unreadIds.length}
           </motion.span>

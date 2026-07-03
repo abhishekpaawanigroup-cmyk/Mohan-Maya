@@ -53,7 +53,7 @@ export default function SocialVideos() {
         subtitle="Explore the latest videos, tutorials, showcases and updates from Mohan Maya - fresh handcrafted content every week."
         breadcrumb={[{ label: "Home", to: "/" }, { label: "Community" }]}
         video="/social/bg.mp4"
-        image="/social/bg.png"
+        image="/About/Hero/about-bg.png"
       >
         {/* Platform switcher -picks the active feed (with a clear active state) */}
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4">

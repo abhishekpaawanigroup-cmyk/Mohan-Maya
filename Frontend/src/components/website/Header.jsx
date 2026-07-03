@@ -197,8 +197,11 @@ export default function Header() {
               )}
             </button>
 
-            {/* Notifications */}
-            <NotificationBell buttonClass="relative grid h-10 w-10 place-items-center rounded-full text-gray-700 outline-none transition hover:bg-[#fe4462]/10 dark:text-gray-200" />
+            {/* Notifications — sized to match the Wishlist icon exactly */}
+            <NotificationBell
+              iconSize={20}
+              buttonClass="relative inline-flex rounded-full p-2.5 text-gray-700 outline-none transition hover:bg-[#fe4462]/10 dark:text-gray-200"
+            />
 
             {/* Cart */}
             <button
@@ -474,7 +477,7 @@ export default function Header() {
                     <div className="rounded-2xl bg-gray-50 p-4 dark:bg-white/5">
                       <div className="grid grid-cols-2 gap-3">
                         <button onClick={() => openAuth("login")} className="btn-primary justify-center">{t("account.login")}</button>
-                        <button onClick={() => openAuth("register")} className="rounded-xl border border-gray-300 py-3 font-semibold text-gray-700 transition hover:border-[#fe4462] hover:text-[#fe4462] dark:border-white/15 dark:text-gray-200">{t("account.register")}</button>
+                        <button onClick={() => openAuth("register")} className="btn-outline justify-center">{t("account.register")}</button>
                       </div>
                     </div>
                   )}

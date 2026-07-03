@@ -61,9 +61,18 @@ export default function HeaderSearch({ onNavigate, autoFocus = false, className 
     onNavigate?.();
   };
 
+  // Selecting a suggestion fills the input with the product name (does not
+  // navigate) and keeps focus, so the user can refine or press Enter to search.
+  const selectSuggestion = (name) => {
+    setQuery(name);
+    setOpen(false);
+    setActive(-1);
+    inputRef.current?.focus();
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
-    if (active >= 0 && suggestions[active]) go(suggestions[active].name);
+    if (active >= 0 && suggestions[active]) selectSuggestion(suggestions[active].name);
     else go(query);
   };
 
@@ -192,19 +201,13 @@ export default function HeaderSearch({ onNavigate, autoFocus = false, className 
                 role="option"
                 aria-selected={i === active}
                 onMouseEnter={() => setActive(i)}
-                onMouseDown={(e) => { e.preventDefault(); go(s.name); }}
-                className={`flex cursor-pointer items-center gap-3 px-3 py-2 transition ${
-                  i === active ? "bg-[#fe4462]/10" : "hover:bg-gray-50 dark:hover:bg-white/5"
+                onMouseDown={(e) => { e.preventDefault(); selectSuggestion(s.name); }}
+                className={`flex cursor-pointer items-center gap-2.5 px-4 py-2.5 text-sm transition-colors ${
+                  i === active ? "bg-[#fe4462]/10 text-[#fe4462]" : "text-gray-700 dark:text-gray-200"
                 }`}
               >
-                <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-[#fbfefb] dark:bg-white/10">
-                  <img src={s.image} alt="" className="h-full w-full object-contain" loading="lazy" />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium text-gray-800 dark:text-white">{s.name}</span>
-                  <span className="block truncate text-xs text-gray-400">{s.category}</span>
-                </span>
-                <span className="shrink-0 text-sm font-semibold text-[#fe4462]">₹{s.price}</span>
+                <IoSearch size={14} className="shrink-0 text-gray-400" aria-hidden="true" />
+                <span className="truncate">{s.name}</span>
               </li>
             ))}
           </motion.ul>

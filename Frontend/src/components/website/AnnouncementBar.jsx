@@ -67,7 +67,7 @@ export default function AnnouncementBar() {
 
   return (
     <div className="border-b border-white/10 bg-[#1b1819] text-gray-200 transition-colors dark:bg-[#0d0508]">
-      <div className="mx-auto flex h-11 w-full max-w-[1600px] items-center justify-between gap-3 px-3 text-[11px] sm:px-4 lg:px-8 xl:text-xs">
+      <div className="mx-auto flex h-10 w-full max-w-[1600px] items-center justify-between gap-3 px-3 text-[11px] sm:px-4 lg:px-8 xl:text-xs">
         {/* Rotating announcement */}
         <div
           className="relative h-full min-w-0 flex-1 overflow-hidden"
@@ -239,7 +239,7 @@ function LocationModal({ current, cities, onClose, onSave }) {
               value={value}
               onChange={(e) => setValue(e.target.value)}
               placeholder="e.g. Roorkee or 247667"
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none transition focus:border-[#fe4462] focus:ring-2 focus:ring-[#fe4462]/20 dark:border-white/10 dark:bg-white/5 dark:text-white"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none transition focus:!outline-none focus-visible:!outline-none dark:border-white/10 dark:bg-white/5 dark:text-white"
             />
 
             <p className="mb-2 mt-4 text-xs font-semibold uppercase tracking-wide text-gray-400">{t("location.popular")}</p>
