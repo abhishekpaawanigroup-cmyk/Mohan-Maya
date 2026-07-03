@@ -286,7 +286,7 @@ const Products = () => {
               onClick={() => setMobileFiltersOpen(false)}
             />
             <motion.div
-              className="fixed top-0 left-0 h-screen w-[320px] max-w-[85vw] bg-gray-50 dark:bg-[#0d0508] z-[999] overflow-y-auto p-4 lg:hidden"
+              className="fixed inset-y-0 left-0 w-[320px] max-w-[85vw] bg-gray-50 dark:bg-[#0d0508] z-[999] overflow-y-auto p-4 lg:hidden"
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}

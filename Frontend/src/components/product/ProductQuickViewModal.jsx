@@ -91,7 +91,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.97 }}
         transition={{ type: "spring", stiffness: 280, damping: 28 }}
-        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto lg:overflow-hidden rounded-3xl bg-white/95 dark:bg-[#140a0d]/95 backdrop-blur-2xl shadow-2xl ring-1 ring-black/5 dark:ring-white/10 outline-none grid grid-cols-1 lg:grid-cols-2"
+        className="relative w-full max-w-5xl max-h-[92dvh] overflow-y-auto lg:overflow-hidden rounded-3xl bg-white/95 dark:bg-[#140a0d]/95 backdrop-blur-2xl shadow-2xl ring-1 ring-black/5 dark:ring-white/10 outline-none grid grid-cols-1 lg:grid-cols-2"
       >
         <button
           onClick={onClose}
@@ -251,7 +251,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
         </div>
 
         {/* ── RIGHT: details ──────────────────────── */}
-        <div className="lg:max-h-[92vh] lg:overflow-y-auto p-6 sm:p-8 lg:p-10">
+        <div className="lg:max-h-[92dvh] lg:overflow-y-auto p-6 sm:p-8 lg:p-10">
           {product.category && (
             <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#fe4462] bg-[#fe4462]/10 px-3 py-1 rounded-full">
               {product.category}

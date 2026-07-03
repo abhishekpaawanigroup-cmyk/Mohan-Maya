@@ -138,7 +138,7 @@ function AuthDialog() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="auth-modal-title"
-        className="relative max-h-[92vh] w-full max-w-md overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl outline-none ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10 sm:p-8"
+        className="relative max-h-[92dvh] w-full max-w-md overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl outline-none ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10 sm:p-8"
       >
         <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#fe4462] to-[#c48212]" aria-hidden="true" />
 

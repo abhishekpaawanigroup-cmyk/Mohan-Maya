@@ -52,7 +52,7 @@ export default function CancelOrderModal({ order, onClose, onConfirm }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="cancel-order-title"
-        className="relative max-h-[92vh] w-full max-w-md overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10 sm:p-7"
+        className="relative max-h-[92dvh] w-full max-w-md overflow-y-auto rounded-xl bg-white p-6 shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10 sm:p-7"
       >
         <button
           onClick={() => !submitting && onClose()}

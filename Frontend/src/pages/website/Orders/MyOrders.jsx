@@ -121,10 +121,11 @@ export default function MyOrders() {
               value={search}
               onChange={(e) => changeSearch(e.target.value)}
               placeholder="Search by order ID or product name"
-              className="w-full rounded-full border border-gray-200 bg-white py-3 pl-11 pr-4 text-sm outline-none transition focus:border-[#fe4462] dark:border-white/10 dark:bg-white/5 dark:text-white"
+              className="w-full rounded-full border border-gray-200 bg-white py-3 pl-11 pr-4 text-sm outline-none transition  dark:border-white/10 dark:bg-white/5 dark:text-white"
             />
           </div>
         </div>
+        
 
         {/* Filter tabs */}
         <div className="mb-7 flex flex-wrap gap-2">

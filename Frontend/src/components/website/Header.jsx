@@ -390,7 +390,7 @@ export default function Header() {
               onClick={() => setOpenMenu(false)}
             />
             <motion.aside
-              className="fixed top-0 right-0 h-screen w-[88vw] max-w-[340px] sm:w-[380px] sm:max-w-[380px] bg-white text-gray-900 dark:bg-[#0d0508] dark:text-white z-[999] overflow-y-auto lg:hidden transition-colors duration-300"
+              className="fixed inset-y-0 right-0 w-[88vw] max-w-[340px] sm:w-[380px] sm:max-w-[380px] bg-white text-gray-900 dark:bg-[#0d0508] dark:text-white z-[999] overflow-y-auto lg:hidden transition-colors duration-300"
               initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >

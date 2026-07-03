@@ -77,13 +77,13 @@ const TrendyCollection = () => {
           {items.map((item) => (
             <SwiperSlide key={item.id}>
               <div className="flex flex-col h-full" data-fly-card>
-                <div className="group relative bg-[#c1bbbb8a] dark:bg-white/5 overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 rounded-full">
-                  <div className="h-80 flex items-center justify-center overflow-hidden">
+                <div className="group relative aspect-square w-full shrink-0 bg-[#c1bbbb8a] dark:bg-white/5 overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 rounded-full">
+                  <div className="flex h-full w-full items-center justify-center overflow-hidden">
                     <img
                       src={item.image}
                       alt={item.name}
                       loading="lazy"
-                      className="w-[50%] object-contain transition-transform duration-500 group-hover:scale-110"
+                      className="w-1/2 object-contain transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
 

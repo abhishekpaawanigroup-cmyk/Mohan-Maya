@@ -24,7 +24,7 @@ const WhyChooseUs = () => {
             WHY CHOOSE US
           </span>
 
-          <h2 className="text-5xl font-bold text-[#2b2626] dark:text-white mt-5">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#2b2626] dark:text-white mt-5">
             Discover the Art Behind
             <span className="text-[#fe4462]"> Every Miniature</span>
           </h2>

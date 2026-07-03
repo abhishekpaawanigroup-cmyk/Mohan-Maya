@@ -9,7 +9,7 @@ const Hero3DModel = lazy(() => import("../Shop/Hero3DModel"));
 
 const HeroSection = () => {
   return (
-    <section className="relative h-screen max-h-[1000px] overflow-hidden pt-30">
+    <section className="relative h-screen min-h-[640px] max-h-[1000px] overflow-hidden pt-30">
       {/* Background video (poster falls back to the image while it loads) */}
       <video
         autoPlay

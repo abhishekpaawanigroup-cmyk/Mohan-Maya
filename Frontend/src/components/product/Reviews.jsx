@@ -540,7 +540,7 @@ function Lightbox({ images, index, setIndex, onClose }) {
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.2 }}
-          className={`max-h-[82vh] max-w-[90vw] rounded-xl object-contain select-none transition-transform duration-300 ${
+          className={`max-h-[82dvh] max-w-[90vw] rounded-xl object-contain select-none transition-transform duration-300 ${
             zoom ? "scale-150 cursor-zoom-out" : "cursor-zoom-in"
           }`}
         />

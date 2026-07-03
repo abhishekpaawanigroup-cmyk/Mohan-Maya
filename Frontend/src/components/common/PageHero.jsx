@@ -40,7 +40,7 @@ export default function PageHero({
 
   return (
     <section
-      className="relative h-screen max-h-[800px] overflow-hidden"
+      className="relative h-screen min-h-[480px] max-h-[800px] overflow-hidden"
       aria-label={title}
     >
       {/* Background video (poster falls back to the page image while it loads) */}

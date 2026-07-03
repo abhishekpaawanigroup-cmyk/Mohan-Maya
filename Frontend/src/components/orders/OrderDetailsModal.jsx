@@ -55,7 +55,7 @@ export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, a
         role="dialog"
         aria-modal="true"
         aria-labelledby="order-details-title"
-        className="relative max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10"
+        className="relative max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10"
       >
         <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#fe4462] to-[#c48212]" aria-hidden="true" />
 
