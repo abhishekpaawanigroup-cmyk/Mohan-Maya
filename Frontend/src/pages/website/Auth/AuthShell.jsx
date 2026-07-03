@@ -8,7 +8,7 @@ import { FiArrowLeft } from "react-icons/fi";
  */
 export default function AuthShell({ title, subtitle, children, footer, backTo = "/auth", backLabel = "Back to sign in" }) {
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#fff5f7] via-[#fbfefb] to-[#fdf3e7] px-4 pt-24 pb-12 dark:from-[#1a0a0e] dark:via-[#0d0508] dark:to-[#160c11]">
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#fff5f7] via-[#fbfefb] to-[#fdf3e7] px-4 pt-24 lg:pt-36 pb-12 dark:from-[#1a0a0e] dark:via-[#0d0508] dark:to-[#160c11]">
       <div className="pointer-events-none absolute -top-28 -right-24 h-96 w-96 rounded-full bg-[#fe4462]/15 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-28 -left-24 h-96 w-96 rounded-full bg-[#c48212]/15 blur-3xl" />
 

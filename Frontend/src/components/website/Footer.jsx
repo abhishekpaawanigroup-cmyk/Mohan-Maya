@@ -8,20 +8,22 @@ import {
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdEmail } from "react-icons/md";
 import { FaYoutube } from "react-icons/fa";
+import { useI18n } from "../../context/I18nContext";
 
+// Link labels are i18n keys resolved at render.
 const services = [
-  { label: "Shop", to: "/shop" },
-  { label: "Track Order", to: "/track" },
-  { label: "FAQs", to: "/faq" },
-  { label: "Contact", to: "/contact" },
+  { key: "footer.shop", to: "/shop" },
+  { key: "topbar.trackOrder", to: "/track" },
+  { key: "help.faqs", to: "/faq" },
+  { key: "nav.contact", to: "/contact" },
 ];
 
 const company = [
-  { label: "Home", to: "/" },
-  { label: "About Us", to: "/about" },
-  { label: "Shop", to: "/shop" },
-  { label: "Videos", to: "/videos" },
-  { label: "Contact Us", to: "/contact" },
+  { key: "nav.home", to: "/" },
+  { key: "footer.aboutUs", to: "/about" },
+  { key: "footer.shop", to: "/shop" },
+  { key: "footer.videos", to: "/videos" },
+  { key: "footer.contactUs", to: "/contact" },
 ];
 
 const socials = [
@@ -30,16 +32,16 @@ const socials = [
   { Icon: FaInstagram, label: "Instagram", href: "https://instagram.com/mohanmaya_" },
 ];
 
-const LinkColumn = ({ title, links }) => (
+const LinkColumn = ({ title, links, t }) => (
   <div>
     <h3 className="text-2xl font-semibold mb-8 ml-[18px]">{title}</h3>
     <ul className="space-y-3">
       {links.map((item) => (
-        <li key={item.label}>
+        <li key={item.key}>
           <Link to={item.to} className="group flex items-center cursor-pointer">
             <MdKeyboardArrowRight className="opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-white text-[20px]" />
             <span className="text-gray-400 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">
-              {item.label}
+              {t(item.key)}
             </span>
           </Link>
         </li>
@@ -49,6 +51,7 @@ const LinkColumn = ({ title, links }) => (
 );
 
 export default function Footer() {
+  const { t } = useI18n();
   return (
     <footer className="bg-[#0f1115] text-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
@@ -65,8 +68,7 @@ export default function Footer() {
             </div>
             </div>
             <p className="text-gray-400 leading-6 mb-8">
-              Handcrafted miniature art that captures extraordinary detail and timeless
-              craftsmanship - created with love in Vrindavan.
+              {t("footer.tagline")}
             </p>
             <div className="flex gap-4">
               {socials.map(({ Icon, label, href }) => (
@@ -84,12 +86,12 @@ export default function Footer() {
             </div>
           </div>
 
-          <LinkColumn title="Services" links={services} />
-          <LinkColumn title="Company" links={company} />
+          <LinkColumn title={t("footer.services")} links={services} t={t} />
+          <LinkColumn title={t("footer.company")} links={company} t={t} />
 
           {/* Contact */}
           <div>
-            <h3 className="text-2xl font-semibold mb-8">Contact</h3>
+            <h3 className="text-2xl font-semibold mb-8">{t("footer.contact")}</h3>
             <div className="flex gap-4 mb-6 items-start">
               <div className="w-10 h-10 rounded-full bg-[#fe4462] flex items-center justify-center shrink-0">
                 <FaMapMarkerAlt />
@@ -114,7 +116,7 @@ export default function Footer() {
               </div>
               <div>
                 <h4 className="font-semibold">+91 99567 48903</h4>
-                <p className="text-gray-500">Mon - Sat: 9 AM - 6 PM</p>
+                <p className="text-gray-500">{t("footer.hours")}</p>
               </div>
             </div>
           </div>
@@ -122,11 +124,11 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="border-t border-gray-800 mt-8 pt-6 flex flex-col lg:flex-row justify-between items-center gap-6">
-          <p className="text-gray-400">© {new Date().getFullYear()} Mohan-Maya. All rights reserved.</p>
+          <p className="text-gray-400">© {new Date().getFullYear()} Mohan-Maya. {t("footer.rights")}</p>
           <div className="flex gap-4 text-gray-400">
-            <Link to="/terms" className="hover:text-white transition">Terms &amp; Conditions</Link>
+            <Link to="/terms" className="hover:text-white transition">{t("footer.terms")}</Link>
             <span>|</span>
-            <Link to="/privacy" className="hover:text-white transition">Privacy Policy</Link>
+            <Link to="/privacy" className="hover:text-white transition">{t("footer.privacy")}</Link>
           </div>
         </div>
       </div>

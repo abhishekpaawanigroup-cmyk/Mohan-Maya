@@ -98,7 +98,7 @@ export default function MyOrders() {
       : { title: `No ${filter} orders found`, hint: `You don't have any ${filter.toLowerCase()} orders right now.` };
 
   return (
-    <section className="min-h-screen bg-[#fbfefb] pb-20 pt-28 dark:bg-[#0d0508]">
+    <section className="min-h-screen bg-[#fbfefb] pb-20 pt-28 lg:pt-36 dark:bg-[#0d0508]">
       <div className="mx-auto max-w-6xl px-5">
         {/* Heading */}
         <ScrollReveal className="mb-8">

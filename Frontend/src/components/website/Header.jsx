@@ -1,264 +1,274 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { LuShoppingBag } from "react-icons/lu";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
-import { MdMenu } from "react-icons/md";
-import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram } from "react-icons/fa";
-import { FiMapPin, FiPhone, FiMail, FiX, FiMoon, FiSun, FiUser, FiLogOut, FiPackage, FiSettings, FiHeart, FiCheck, FiCreditCard, FiTag, FiRotateCcw, FiStar, FiBell, FiHelpCircle, FiChevronRight } from "react-icons/fi";
+import {
+  FiMapPin, FiX, FiMoon, FiSun, FiUser, FiLogOut, FiPackage,
+  FiSettings, FiHeart, FiCheck, FiCreditCard, FiTag, FiRotateCcw, FiStar, FiBell,
+  FiHelpCircle, FiChevronRight, FiChevronDown, FiGrid, FiMenu, FiShoppingBag,
+} from "react-icons/fi";
 import { useApp } from "../../context/AppContext";
+import { useI18n } from "../../context/I18nContext";
 import { useScrollThreshold, useClickOutside } from "../../hooks/useHooks";
+import { categories } from "../../data/products";
+import HeaderSearch from "./HeaderSearch";
+import AnnouncementBar from "./AnnouncementBar";
+import NotificationBell from "./NotificationBell";
 
-const navLinks = [
-  { label: "Home", path: "/" },
-  { label: "About", path: "/about" },
-  { label: "Shop", path: "/shop" },
-  { label: "Contact", path: "/contact" },
-  { label: "Community", path: "/Community" },
+// Secondary-nav links. Labels are i18n keys resolved at render. "New Arrivals"
+// and "Best Sellers" jump to the matching Home sections (hash routes handled by
+// ScrollToTop); the remaining "discover" entry funnels into the Shop PLP.
+const NAV = [
+  { key: "nav.home", to: "/", end: true },
+  { key: "nav.products", to: "/shop" },
+  { key: "nav.newArrivals", to: "/#upcoming", discover: true },
+  { key: "nav.bestSellers", to: "/#best-sellers", discover: true },
+  { key: "nav.offers", to: "/shop", discover: true },
+  { key: "nav.about", to: "/about" },
+  { key: "nav.contact", to: "/contact" },
+  { key: "nav.community", to: "/Community" },
 ];
 
 export default function Header() {
+  const navigate = useNavigate();
+  const scrolled = useScrollThreshold(50);
+
   const [openMenu, setOpenMenu] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [localSearch, setLocalSearch] = useState("");
-  const searchRef = useRef(null);
-  const navigate = useNavigate();
-
   const [profileOpen, setProfileOpen] = useState(false);
+  const [catOpen, setCatOpen] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
+
   const profileRef = useClickOutside(() => setProfileOpen(false));
+  const catRef = useClickOutside(() => setCatOpen(false));
 
-  // Boolean-only scroll state → Header no longer re-renders every scroll frame.
-  const scrolled = useScrollThreshold(50);
   const {
-    darkMode,
-    toggleDarkMode,
-    cartCount,
-    wishlist,
-    cartAnimating,
-    cartSuccess,
-    user,
-    logout,
-    addToast,
-    requireAuth,
-    openAuthModal,
-    orders,
+    darkMode, toggleDarkMode, cartCount, wishlist, cartAnimating, cartSuccess,
+    user, logout, addToast, requireAuth, openAuthModal, orders,
   } = useApp();
+  const { t, lang, setLang, languages } = useI18n();
 
-  // Protected nav targets open the auth modal (and resume) when signed out.
+  // Shared row style for the mobile drawer (reused across every section).
+  const drawerItemCls =
+    "flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-[15px] font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-white/10";
+
+  // Protected targets open the auth modal (and resume) when signed out.
   const goProtected = (path) => requireAuth(() => navigate(path));
 
-  useEffect(() => {
-    if (searchOpen) searchRef.current?.focus();
-  }, [searchOpen]);
-
-  useEffect(() => {
-    if (openMenu) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "";
-    return () => { document.body.style.overflow = ""; };
-  }, [openMenu]);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (localSearch.trim()) {
-      navigate(`/shop?search=${encodeURIComponent(localSearch.trim())}`);
-      setSearchOpen(false);
-      setLocalSearch("");
-    }
-  };
-
-  // Open the premium auth modal (logged-out profile / login / register).
   const openAuth = (mode) => {
     setProfileOpen(false);
     setOpenMenu(false);
     openAuthModal(mode);
   };
 
-  // Account dropdown items. `to` navigates; `soon` shows a coming-soon toast
-  // (UI ready, backend pending).
+  // Lock body scroll while the mobile drawer is open.
+  useEffect(() => {
+    document.body.style.overflow = openMenu ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [openMenu]);
+
+  // Escape closes any open header surface.
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      setProfileOpen(false);
+      setCatOpen(false);
+      setConfirmLogout(false);
+      setSearchOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   const accountMenu = [
-    { label: "My Profile", icon: FiUser, to: "/profile" },
-    { label: "My Orders", icon: FiPackage, to: "/orders" },
-    { label: "Wishlist", icon: FiHeart, to: "/wishlist" },
-    { label: "My Cart", icon: LuShoppingBag, to: "/cart" },
-    { label: "Manage Addresses", icon: FiMapPin, to: "/profile" },
+    { label: "My Profile", key: "account.myProfile", icon: FiUser, to: "/profile" },
+    { label: "My Orders", key: "account.myOrders", icon: FiPackage, to: "/orders" },
+    { label: "Wishlist", key: "account.wishlist", icon: FiHeart, to: "/wishlist" },
+    { label: "My Cart", key: "account.myCart", icon: LuShoppingBag, to: "/cart" },
+    { label: "Manage Addresses", key: "account.addresses", icon: FiMapPin, to: "/profile" },
     { label: "Payment Methods", icon: FiCreditCard, soon: true },
     { label: "Coupons & Offers", icon: FiTag, soon: true },
     { label: "Returns & Refunds", icon: FiRotateCcw, soon: true },
     { label: "Reviews & Ratings", icon: FiStar, soon: true },
-    { label: "Notifications", icon: FiBell, soon: true },
-    { label: "Help & Support", icon: FiHelpCircle, to: "/faq" },
-    { label: "Account Settings", icon: FiSettings, to: "/profile" },
+    { label: "Notifications", key: "notif.title", icon: FiBell, soon: true },
+    { label: "Help & Support", key: "account.help", icon: FiHelpCircle, to: "/faq" },
+    { label: "Account Settings", key: "account.settings", icon: FiSettings, to: "/profile" },
   ];
 
-  // Run a menu item, closing whichever surface it was opened from.
+  // Resolve a menu item's display text (translated when a key exists).
+  const menuText = (item) => (item.key ? t(item.key, item.label) : item.label);
+
   const onMenuItem = (item, close) => {
     close?.();
-    if (item.soon) addToast(`${item.label} - coming soon`, "info");
+    if (item.soon) addToast(`${menuText(item)} - coming soon`, "info");
     else navigate(item.to);
   };
 
-  const initials = user?.name?.trim()?.[0]?.toUpperCase() || "U";
+  const goCategory = (c, close) => {
+    close?.();
+    navigate(c === categories[0] ? "/shop" : `/shop?search=${encodeURIComponent(c)}`);
+  };
 
-  // ESC closes the profile dropdown / logout confirmation.
-  useEffect(() => {
-    if (!profileOpen && !confirmLogout) return;
-    const onKey = (e) => {
-      if (e.key === "Escape") {
-        setProfileOpen(false);
-        setConfirmLogout(false);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [profileOpen, confirmLogout]);
+  const goNav = (item, close) => {
+    close?.();
+    navigate(item.to);
+  };
+
+  const initials = user?.name?.trim()?.[0]?.toUpperCase() || "U";
+  const firstName = user?.name?.trim()?.split(/\s+/)[0] || "";
+
+  const navLinkCls = ({ isActive }) =>
+    `rounded-md px-3 py-1.5 text-[13px] font-semibold transition-colors ${
+      isActive
+        ? "text-[#fe4462] bg-[#fe4462]/10"
+        : "text-gray-700 hover:bg-[#fe4462]/10 hover:text-[#fe4462] dark:text-gray-300"
+    }`;
 
   return (
     <>
-      {/* ── Navbar ── */}
       <motion.header
-        className={`w-full fixed top-0 z-50 border-b-0 transition-all duration-300 ${
-          scrolled
-            ? "bg-[#fbfefbcc] dark:bg-[#0d0508]/90 backdrop-blur-lg shadow-lg border-b border-white/20 dark:border-white/5"
-            : darkMode
-            ? "bg-[#1a0a0e]"
-            : "bg-[#fbfefb]"
-        }`}
-        initial={{ y: -80 }}
+        initial={{ y: -70 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+        className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300 ${
+          scrolled
+            ? "border-black/5 bg-white/85 shadow-[0_6px_24px_-12px_rgba(0,0,0,0.25)] backdrop-blur-lg dark:border-white/5 dark:bg-[#0d0508]/85"
+            : "border-transparent bg-[#fbfefb] dark:bg-[#1a0a0e]"
+        }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-20">
+        {/* ── Announcement bar ── */}
+        <AnnouncementBar />
+
+        {/* ── Main row ── */}
+        <div className="mx-auto flex h-14 w-full max-w-[1600px] items-center gap-2 px-3 sm:gap-3 sm:px-4 lg:px-8">
           {/* Logo */}
-          <NavLink to="/" className="flex items-center gap-2.5 group">
-            <div className="w-14 h-14 rounded-full overflow-hidden ring-2 ring-[#fe4462]/30 group-hover:ring-[#fe4462] transition-all duration-300">
-              <img src="/header/logo.png" alt="Mohan Maya logo" className="w-full h-full object-cover" loading="lazy" />
-            </div>
-            <div className="block">
-              <span className="block text-2xl font-black text-gradient leading-none">M&amp;M</span>
-              <p className="text-[10px] tracking-widest text-gray-500 dark:text-gray-400 uppercase">Mohan Maya</p>
-            </div>
+          <NavLink to="/" className="group flex shrink-0 items-center gap-2" aria-label="Mohan Maya - home">
+            <span className="h-10 w-10 overflow-hidden rounded-full ring-2 ring-[#fe4462]/30 transition group-hover:ring-[#fe4462]">
+              <img src="/header/logo.png" alt="" className="h-full w-full object-cover" />
+            </span>
+            <span className="hidden leading-none min-[360px]:block">
+              <span className="block text-xl font-black text-gradient">M&amp;M</span>
+              <span className="block text-[9px] uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Mohan Maya</span>
+            </span>
           </NavLink>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:block">
-            <ul className="flex items-center gap-8">
-              {navLinks.map(({ label, path }) => (
-                <li key={path}>
-                  <NavLink
-                    to={path}
-                    end={path === "/"}
-                    className={({ isActive }) =>
-                      `relative font-semibold text-[15px] transition-colors duration-200 group
-                       ${isActive ? "text-[#fe4462]" : "text-gray-700 dark:text-gray-300 hover:text-[#fe4462]"}`
-                    }
-                  >
-                    {({ isActive }) => (
-                      <>
-                        {label}
-                        <span
-                          className={`absolute -bottom-1 left-0 h-0.5 bg-[#fe4462] transition-all duration-300 ${
-                            isActive ? "w-full" : "w-0 group-hover:w-full"
-                          }`}
-                        />
-                      </>
-                    )}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          {/* Inline search (tablet + desktop) */}
+          <div className="hidden flex-1 justify-center px-2 md:flex lg:px-4">
+            <HeaderSearch className="w-full max-w-2xl" />
+          </div>
 
-          {/* Right icons */}
-          <div className="flex items-center gap-2 sm:gap-4">
-            {/* Search toggle */}
+          {/* Right cluster */}
+          <div className="ml-auto flex items-center gap-0.5 sm:gap-1 md:ml-0">
+            {/* Mobile search toggle */}
             <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
+              onClick={() => setSearchOpen((v) => !v)}
               aria-label="Search"
+              aria-expanded={searchOpen}
+              className="rounded-full p-2.5 text-gray-700 transition hover:bg-[#fe4462]/10 dark:text-gray-200 md:hidden"
             >
               <IoSearch size={22} />
             </button>
 
-            {/* Dark mode -desktop only; on mobile/tablet it lives in the side menu */}
+            {/* Theme */}
             <motion.button
               onClick={toggleDarkMode}
-              className="max-lg:hidden p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
-              whileTap={{ rotate: 180, scale: 0.8 }}
-              aria-label="Toggle dark mode"
+              whileTap={{ rotate: 180, scale: 0.85 }}
+              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+              className="hidden rounded-full p-2.5 text-gray-700 transition hover:bg-[#fe4462]/10 dark:text-gray-200 lg:inline-flex"
             >
-              {darkMode ? <FiSun size={22} /> : <FiMoon size={22} />}
+              {darkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
             </motion.button>
 
-            {/* Wishlist -desktop only; on mobile/tablet it lives in the side menu */}
+            {/* Wishlist */}
             <button
               onClick={() => navigate("/wishlist")}
-              className="max-lg:hidden p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
-              aria-label="Wishlist"
+              aria-label={`Wishlist${wishlist.length ? `, ${wishlist.length} items` : ""}`}
+              className="relative hidden rounded-full p-2.5 transition hover:bg-[#fe4462]/10 lg:inline-flex"
             >
-              {wishlist.length > 0 ? (
-                <FaHeart size={20} className="text-[#fe4462] transition-colors duration-300" />
-              ) : (
-                <FaRegHeart size={20} className="transition-colors duration-300" />
+              {wishlist.length > 0
+                ? <FaHeart size={20} className="text-[#fe4462]" />
+                : <FaRegHeart size={20} className="text-gray-700 dark:text-gray-200" />}
+              {wishlist.length > 0 && (
+                <span className="absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-[#fe4462] px-1 text-[9px] font-bold text-white">
+                  {wishlist.length}
+                </span>
               )}
             </button>
 
-            {/* Cart -requires login: opens the auth modal when signed out, then
-                continues to the cart after a successful login/registration. */}
+            {/* Notifications */}
+            <NotificationBell buttonClass="relative grid h-10 w-10 place-items-center rounded-full text-gray-700 outline-none transition hover:bg-[#fe4462]/10 dark:text-gray-200" />
+
+            {/* Cart */}
             <button
               onClick={() => goProtected("/cart")}
-              className={`max-lg:hidden relative p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300 ${cartAnimating ? "animate-cart-bounce" : ""}`}
-              aria-label="Cart"
+              aria-label={`${t("account.cart")}${cartCount ? `, ${cartCount}` : ""}`}
+              className={`relative flex items-center gap-2 rounded-lg px-2.5 py-1.5 transition hover:bg-[#fe4462]/10 ${cartAnimating ? "animate-cart-bounce" : ""}`}
             >
-              <LuShoppingBag size={22} />
-              {cartCount > 0 && (
-                <motion.span
-                  key={cartCount}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute -top-0.5 -right-0.5 bg-[#fe4462] text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold"
-                >
-                  {cartCount}
-                </motion.span>
-              )}
-
-              {/* Success tick -brief pop confirming the item was added */}
-              <AnimatePresence>
-                {cartSuccess && (
+              <span className="relative">
+                <LuShoppingBag size={23} className="text-gray-700 dark:text-gray-200" />
+                {cartCount > 0 && (
                   <motion.span
-                    key="cart-tick"
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 600, damping: 18 }}
-                    className="absolute inset-0 m-auto w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md pointer-events-none"
+                    key={cartCount}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute -right-1.5 -top-1.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-[#fe4462] px-1 text-[10px] font-bold text-white"
                   >
-                    <FiCheck size={15} strokeWidth={3} />
+                    {cartCount}
                   </motion.span>
                 )}
-              </AnimatePresence>
+                <AnimatePresence>
+                  {cartSuccess && (
+                    <motion.span
+                      key="tick"
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      transition={{ type: "spring", stiffness: 600, damping: 18 }}
+                      className="pointer-events-none absolute inset-0 m-auto grid h-5 w-5 place-items-center rounded-full bg-emerald-500 text-white shadow"
+                    >
+                      <FiCheck size={13} strokeWidth={3} />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </span>
+              <span className="hidden text-sm font-bold text-gray-800 dark:text-white xl:inline">{t("account.cart")}</span>
             </button>
 
-            {/* Profile (desktop) */}
+            {/* Returns / Orders (stacked label) */}
+            <button
+              onClick={() => goProtected("/orders")}
+              className="hidden flex-col items-start rounded-lg px-2.5 py-1 leading-tight transition hover:bg-[#fe4462]/10 xl:flex"
+            >
+              <span className="text-[11px] text-gray-500 dark:text-gray-400">{t("account.returns")}</span>
+              <span className="text-sm font-bold text-gray-800 dark:text-white">{t("account.andOrders")}</span>
+            </button>
+
+            {/* Account (desktop) */}
             <div className="relative hidden lg:block" ref={profileRef}>
               <button
                 onClick={() => (user ? setProfileOpen((v) => !v) : openAuth("login"))}
-                className="flex items-center gap-2 p-1 pr-2 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
                 aria-label={user ? "Account menu" : "Sign in"}
-                aria-haspopup={user ? "true" : undefined}
+                aria-haspopup={user ? "menu" : undefined}
                 aria-expanded={user ? profileOpen : undefined}
+                className="flex items-center gap-2 rounded-lg px-2 py-1 text-left transition hover:bg-[#fe4462]/10"
               >
                 {user ? (
-                  <span className="w-9 h-9 rounded-full bg-[#fe4462] text-white flex items-center justify-center font-bold text-sm">
-                    {initials}
-                  </span>
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#fe4462] text-sm font-bold text-white">{initials}</span>
                 ) : (
-                  <span className="w-9 h-9 rounded-full border border-gray-300 dark:border-white/20 flex items-center justify-center">
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-gray-300 text-gray-600 dark:border-white/20 dark:text-gray-300">
                     <FiUser size={18} />
                   </span>
                 )}
-                {user && <span className="text-sm font-semibold max-w-[90px] truncate">{user.name}</span>}
+                <span className="hidden leading-tight xl:block">
+                  <span className="block max-w-[110px] truncate text-[11px] text-gray-500 dark:text-gray-400">
+                    {user ? `${t("account.hello")} ${firstName}` : t("account.helloSignIn")}
+                  </span>
+                  <span className="flex items-center gap-1 text-sm font-bold text-gray-800 dark:text-white">
+                    {t("account.account")} <FiChevronDown size={13} className={`transition-transform ${profileOpen ? "rotate-180" : ""}`} />
+                  </span>
+                </span>
               </button>
 
               <AnimatePresence>
@@ -268,40 +278,30 @@ export default function Header() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.97 }}
                     transition={{ duration: 0.18 }}
-                    className="absolute right-0 mt-3 w-72 max-w-[calc(100vw-1.5rem)] bg-white dark:bg-[#1a0a0e] rounded-lg shadow-xl ring-1 ring-gray-200/70 dark:ring-white/10 overflow-hidden z-50"
                     role="menu"
                     aria-label="Account menu"
+                    className="absolute right-0 z-50 mt-3 w-72 max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-xl bg-white shadow-xl ring-1 ring-gray-200/70 dark:bg-[#1a0a0e] dark:ring-white/10"
                   >
-                    {/* Header: avatar, name, email + order/cart counts (light theme) */}
-                    <div className="p-4 border-b border-gray-100 dark:border-white/10 bg-gray-50/60 dark:bg-white/5">
+                    <div className="border-b border-gray-100 bg-gray-50/60 p-4 dark:border-white/10 dark:bg-white/5">
                       <div className="flex items-center gap-3">
-                        <span className="w-11 h-11 rounded-full bg-[#fe4462] text-white ring-2 ring-[#fe4462]/20 flex items-center justify-center font-bold">
-                          {initials}
-                        </span>
+                        <span className="grid h-11 w-11 place-items-center rounded-full bg-[#fe4462] font-bold text-white ring-2 ring-[#fe4462]/20">{initials}</span>
                         <div className="min-w-0">
-                          <p className="font-semibold truncate text-gray-900 dark:text-white">{user.name}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
+                          <p className="truncate font-semibold text-gray-900 dark:text-white">{user.name}</p>
+                          <p className="truncate text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
                         </div>
                       </div>
                       <div className="mt-3 grid grid-cols-2 gap-2">
-                        <button
-                          onClick={() => { setProfileOpen(false); navigate("/orders"); }}
-                          className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 py-2 text-left transition hover:border-[#fe4462]"
-                        >
+                        <button onClick={() => { setProfileOpen(false); navigate("/orders"); }} className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-left transition hover:border-[#fe4462] dark:border-white/10 dark:bg-white/5">
                           <span className="block text-lg font-bold leading-none text-[#fe4462]">{orders.length}</span>
-                          <span className="text-[11px] text-gray-500 dark:text-gray-400">Orders</span>
+                          <span className="text-[11px] text-gray-500 dark:text-gray-400">{t("account.orders")}</span>
                         </button>
-                        <button
-                          onClick={() => { setProfileOpen(false); navigate("/cart"); }}
-                          className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 py-2 text-left transition hover:border-[#fe4462]"
-                        >
+                        <button onClick={() => { setProfileOpen(false); navigate("/cart"); }} className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-left transition hover:border-[#fe4462] dark:border-white/10 dark:bg-white/5">
                           <span className="block text-lg font-bold leading-none text-[#fe4462]">{cartCount}</span>
-                          <span className="text-[11px] text-gray-500 dark:text-gray-400">In Cart</span>
+                          <span className="text-[11px] text-gray-500 dark:text-gray-400">{t("account.inCart")}</span>
                         </button>
                       </div>
                     </div>
 
-                    {/* Scrollable menu */}
                     <div className="max-h-[min(60vh,360px)] overflow-y-auto py-1.5">
                       {accountMenu.map((item) => {
                         const Icon = item.icon;
@@ -310,256 +310,275 @@ export default function Header() {
                             key={item.label}
                             role="menuitem"
                             onClick={() => onMenuItem(item, () => setProfileOpen(false))}
-                            className="group w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-[#fe4462]/10 hover:text-[#fe4462] transition"
+                            className="group flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-700 transition hover:bg-[#fe4462]/10 hover:text-[#fe4462] dark:text-gray-200"
                           >
-                            <Icon size={16} className="shrink-0 text-gray-400 group-hover:text-[#fe4462] transition-colors" />
-                            <span className="flex-1 text-left">{item.label}</span>
-                            {item.soon ? (
-                              <span className="rounded-full bg-gray-100 dark:bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-400">
-                                Soon
-                              </span>
-                            ) : (
-                              <FiChevronRight size={15} className="text-gray-300 group-hover:text-[#fe4462] transition-colors" />
-                            )}
+                            <Icon size={16} className="shrink-0 text-gray-400 transition-colors group-hover:text-[#fe4462]" />
+                            <span className="flex-1 text-left">{menuText(item)}</span>
+                            {item.soon
+                              ? <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:bg-white/10">Soon</span>
+                              : <FiChevronRight size={15} className="text-gray-300 transition-colors group-hover:text-[#fe4462]" />}
                           </button>
                         );
                       })}
                     </div>
 
-                    {/* Logout (opens confirmation) */}
                     <button
                       role="menuitem"
                       onClick={() => { setProfileOpen(false); setConfirmLogout(true); }}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-500/10 transition border-t dark:border-white/10"
+                      className="flex w-full items-center gap-3 border-t px-4 py-3 text-sm font-medium text-red-500 transition hover:bg-red-500/10 dark:border-white/10"
                     >
-                      <FiLogOut size={16} /> Logout
+                      <FiLogOut size={16} /> {t("account.logout")}
                     </button>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* Mobile menu */}
+            {/* Hamburger */}
             <button
               onClick={() => setOpenMenu(true)}
-              className="lg:hidden p-2.5 rounded-full hover:bg-[#fe4462]/10 transition text-gray-700 dark:text-gray-300"
-              aria-label="Open menu"
+              aria-label={t("menu.menu")}
+              className="rounded-full p-2.5 text-gray-700 transition hover:bg-[#fe4462]/10 dark:text-gray-200 lg:hidden"
             >
-              <MdMenu size={28} />
+              <FiMenu size={24} />
             </button>
           </div>
         </div>
 
-        {/* Search bar dropdown */}
+        {/* Expandable mobile search */}
         <AnimatePresence>
           {searchOpen && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden border-t border-gray-100 dark:border-white/10 bg-white/95 dark:bg-[#1a0a0e]/95 backdrop-blur-xl"
+              key="mobile-search"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.18 }}
+              className="border-t border-gray-100 px-3 py-3 dark:border-white/10 sm:px-4 md:hidden"
             >
-              <form onSubmit={handleSearch} className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-3">
-                <input
-                  ref={searchRef}
-                  value={localSearch}
-                  onChange={(e) => setLocalSearch(e.target.value)}
-                  type="text"
-                  placeholder="Search miniatures, characters…"
-                  className="flex-1 bg-gray-100 dark:bg-white/10 !rounded-full px-5 py-3 text-sm font-medium placeholder-gray-400 dark:text-white border border-transparent outline-none focus:outline-none focus-visible:!outline-none focus:bg-gray-200/70 dark:focus:bg-white/15 focus:border-gray-300 dark:focus:border-white/20 transition-colors"
-                />
-                <button type="submit" className="btn-primary !py-3 !px-5 text-sm" aria-label="Submit search">
-                  <IoSearch size={18} />
-                </button>
-                <button type="button" onClick={() => setSearchOpen(false)} className="p-2.5 text-gray-500 hover:text-[#fe4462]" aria-label="Close search">
-                  <FiX size={20} />
-                </button>
-              </form>
+              <HeaderSearch autoFocus className="w-full" onNavigate={() => setSearchOpen(false)} />
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* ── Secondary nav row (desktop) ── */}
+        <div className="hidden border-t border-gray-100 dark:border-white/10 lg:block">
+          <div className="mx-auto w-full max-w-[1600px] px-8">
+            <nav aria-label="Primary" className="flex h-9 items-center gap-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {/* Categories dropdown */}
+              <div className="relative shrink-0" ref={catRef}>
+                <button
+                  onClick={() => setCatOpen((v) => !v)}
+                  aria-haspopup="menu"
+                  aria-expanded={catOpen}
+                  className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-bold text-gray-800 transition hover:bg-[#fe4462]/10 hover:text-[#fe4462] dark:text-white"
+                >
+                  <FiGrid size={15} /> {t("nav.categories")}
+                </button>
+                <AnimatePresence>
+                  {catOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.15 }}
+                      role="menu"
+                      aria-label="Categories"
+                      className="absolute left-0 top-full z-50 mt-1 w-60 overflow-hidden rounded-xl bg-white py-1.5 shadow-xl ring-1 ring-gray-200/70 dark:bg-[#1a0a0e] dark:ring-white/10"
+                    >
+                      {categories.map((c) => (
+                        <button
+                          key={c}
+                          role="menuitem"
+                          onClick={() => goCategory(c, () => setCatOpen(false))}
+                          className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 transition hover:bg-[#fe4462]/10 hover:text-[#fe4462] dark:text-gray-200"
+                        >
+                          <FiChevronRight size={14} className="text-gray-300" /> {c}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <span className="mx-1 h-5 w-px shrink-0 bg-gray-200 dark:bg-white/10" aria-hidden="true" />
+
+              <ul className="flex items-center gap-0.5">
+                {NAV.map((item) => (
+                  <li key={item.key} className="shrink-0">
+                    {item.discover ? (
+                      <button onClick={() => goNav(item)} className="rounded-md px-3 py-1.5 text-[13px] font-semibold text-gray-700 transition hover:bg-[#fe4462]/10 hover:text-[#fe4462] dark:text-gray-300">
+                        {t(item.key)}
+                      </button>
+                    ) : (
+                      <NavLink to={item.to} end={item.end} className={navLinkCls}>
+                        {t(item.key)}
+                      </NavLink>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        </div>
       </motion.header>
 
-      {/* ── Mobile Sidebar ── */}
+      {/* ── Mobile drawer ── */}
       <AnimatePresence>
         {openMenu && (
           <>
             <motion.div
-              className="fixed inset-0 bg-black/60 z-[998] lg:hidden"
+              className="fixed inset-0 z-[998] bg-black/60 lg:hidden"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setOpenMenu(false)}
             />
             <motion.aside
-              className="fixed inset-y-0 right-0 w-[88vw] max-w-[340px] sm:w-[380px] sm:max-w-[380px] bg-white text-gray-900 dark:bg-[#0d0508] dark:text-white z-[999] overflow-y-auto lg:hidden transition-colors duration-300"
+              className="fixed inset-y-0 right-0 z-[999] flex w-[88vw] max-w-[360px] flex-col bg-white text-gray-900 dark:bg-[#0d0508] dark:text-white lg:hidden"
               initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              transition={{ type: "spring", stiffness: 300, damping: 32 }}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menu"
             >
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center gap-3">
-                  <img src="/header/logo.png" alt="logo" className="w-12 h-12 rounded-full" />
-                  <span className="text-2xl font-black text-gradient">M&M</span>
+              {/* Drawer header */}
+              <div className="flex shrink-0 items-center justify-between border-b border-gray-200 p-4 dark:border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <img src="/header/logo.png" alt="" className="h-10 w-10 rounded-full ring-2 ring-[#fe4462]/30" />
+                  <div className="leading-none">
+                    <span className="block text-lg font-black text-gradient">M&amp;M</span>
+                    <span className="block text-[9px] uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Mohan Maya</span>
+                  </div>
                 </div>
-                <button
-                  onClick={() => setOpenMenu(false)}
-                  className="w-10 h-10 rounded-full bg-[#fe4462] text-white flex items-center justify-center hover:bg-[#d93550] transition"
-                  aria-label="Close menu"
-                >
+                <button onClick={() => setOpenMenu(false)} aria-label="Close menu" className="grid h-10 w-10 place-items-center rounded-full bg-[#fe4462] text-white transition hover:bg-[#d93550]">
                   <FiX size={18} />
                 </button>
               </div>
 
-              <div className="p-6">
-                <form onSubmit={(e) => { e.preventDefault(); navigate(`/shop?search=${localSearch}`); setOpenMenu(false); }}
-                  className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-700 pb-4 mb-6"
-                >
-                  <input
-                    value={localSearch}
-                    onChange={(e) => setLocalSearch(e.target.value)}
-                    placeholder="Search products…"
-                    className="bg-transparent flex-1 text-sm placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:outline-none focus-visible:!outline-none"
-                  />
-                  <button type="submit" aria-label="Submit search"><IoSearch size={20} className="text-gray-400 hover:text-[#fe4462] transition" /></button>
-                </form>
-
-                <nav className="space-y-1">
-                  {navLinks.map(({ label, path }) => (
-                    <NavLink
-                      key={path}
-                      to={path}
-                      end={path === "/"}
-                      onClick={() => setOpenMenu(false)}
-                      className={({ isActive }) =>
-                        `flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${
-                          isActive
-                            ? "bg-[#fe4462] text-white"
-                            : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10"
-                        }`
-                      }
-                    >
-                      {label}
-                    </NavLink>
-                  ))}
-                </nav>
-
-                {/* Quick actions - Wishlist, Cart, Theme toggle (relocated from the header) */}
-                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800 space-y-1">
-                  <button
-                    onClick={() => { setOpenMenu(false); navigate("/wishlist"); }}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10 transition"
-                  >
-                    {wishlist.length > 0 ? <FaHeart size={18} className="text-[#fe4462]" /> : <FaRegHeart size={18} />}
-                    <span className="flex-1 text-left">Wishlist</span>
-                    {wishlist.length > 0 && (
-                      <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#fe4462] px-1.5 text-[10px] font-bold text-white">
-                        {wishlist.length}
-                      </span>
-                    )}
-                  </button>
-                  <button
-                    onClick={() => { setOpenMenu(false); goProtected("/cart"); }}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10 transition"
-                  >
-                    <LuShoppingBag size={18} />
-                    <span className="flex-1 text-left">Cart</span>
-                    {cartCount > 0 && (
-                      <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#fe4462] px-1.5 text-[10px] font-bold text-white">
-                        {cartCount}
-                      </span>
-                    )}
-                  </button>
-                  <button
-                    onClick={toggleDarkMode}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10 transition"
-                  >
-                    {darkMode ? <FiSun size={18} /> : <FiMoon size={18} />}
-                    <span className="flex-1 text-left">{darkMode ? "Light Mode" : "Dark Mode"}</span>
-                  </button>
-                </div>
-
-                {/* Account section (mobile) */}
-                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
+              {/* Scrollable body */}
+              <div className="flex-1 overflow-y-auto pb-6">
+                {/* User profile */}
+                <div className="p-4">
                   {user ? (
-                    <>
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className="w-11 h-11 rounded-full bg-[#fe4462] text-white flex items-center justify-center font-bold">
-                          {initials}
-                        </span>
-                        <div className="min-w-0">
-                          <p className="font-semibold truncate text-gray-900 dark:text-white">{user.name}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
-                        </div>
-                      </div>
-                      <div className="space-y-1">
-                        {/* Wishlist & Cart live in the quick-actions section above, so they're excluded here to avoid duplicates. */}
-                        {accountMenu
-                          .filter((item) => item.to !== "/wishlist" && item.to !== "/cart")
-                          .map((item) => {
-                            const Icon = item.icon;
-                            return (
-                              <button
-                                key={item.label}
-                                onClick={() => onMenuItem(item, () => setOpenMenu(false))}
-                                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/10 transition"
-                              >
-                                <Icon size={18} /> <span className="flex-1 text-left">{item.label}</span>
-                                {item.soon && (
-                                  <span className="rounded-full bg-gray-100 dark:bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-400">Soon</span>
-                                )}
-                              </button>
-                            );
-                          })}
-                        <button
-                          onClick={() => { setOpenMenu(false); setConfirmLogout(true); }}
-                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-red-500 hover:bg-red-500/10 dark:text-red-400 transition"
-                        >
-                          <FiLogOut size={18} /> Logout
-                        </button>
-                      </div>
-                    </>
+                    <button
+                      onClick={() => { setOpenMenu(false); navigate("/profile"); }}
+                      className="flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-[#fe4462]/10 to-[#c48212]/10 p-3.5 text-left ring-1 ring-[#fe4462]/15 transition hover:ring-[#fe4462]/40"
+                    >
+                      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#fe4462] text-lg font-bold text-white">{initials}</span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate font-semibold text-gray-900 dark:text-white">{user.name}</span>
+                        <span className="block truncate text-xs text-gray-500 dark:text-gray-400">{user.email}</span>
+                      </span>
+                      <FiChevronRight className="shrink-0 text-gray-400" />
+                    </button>
                   ) : (
-                    <div className="space-y-3">
-                      <button onClick={() => openAuth("login")} className="btn-primary w-full justify-center">Login</button>
-                      <button onClick={() => openAuth("register")} className="w-full py-3 rounded-xl border border-gray-300 text-gray-700 dark:border-gray-700 dark:text-gray-200 hover:border-[#fe4462] hover:text-[#fe4462] transition font-medium">
-                        Register
-                      </button>
+                    <div className="rounded-2xl bg-gray-50 p-4 dark:bg-white/5">
+                      <div className="grid grid-cols-2 gap-3">
+                        <button onClick={() => openAuth("login")} className="btn-primary justify-center">{t("account.login")}</button>
+                        <button onClick={() => openAuth("register")} className="rounded-xl border border-gray-300 py-3 font-semibold text-gray-700 transition hover:border-[#fe4462] hover:text-[#fe4462] dark:border-white/15 dark:text-gray-200">{t("account.register")}</button>
+                      </div>
                     </div>
                   )}
                 </div>
 
-                <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
-                  <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Contact</h3>
-                  <div className="space-y-4">
-                    {[
-                      { icon: FiMapPin, text: "Ganga Enclave, Roorkee, Uttarakhand, India" },
-                      { icon: FiPhone, text: "+91 99567 48903" },
-                      { icon: FiMail, text: "support@mohanmaya.in" },
-                    ].map(({ icon: Icon, text }, i) => (
-                      <div key={i} className="flex items-center gap-3 text-gray-500 dark:text-gray-400">
-                        <div className="w-9 h-9 rounded-full border border-gray-300 dark:border-gray-700 flex items-center justify-center hover:bg-[#fe4462] hover:border-[#fe4462] hover:text-white transition cursor-pointer">
-                          <Icon size={15} />
-                        </div>
-                        <span className="text-sm">{text}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                {/* Navigation */}
+                <DrawerSection title={t("menu.menu")}>
+                  {NAV.map((item) =>
+                    item.discover ? (
+                      <button key={item.key} onClick={() => goNav(item, () => setOpenMenu(false))} className={drawerItemCls}>
+                        {t(item.key)}
+                      </button>
+                    ) : (
+                      <NavLink
+                        key={item.key}
+                        to={item.to}
+                        end={item.end}
+                        onClick={() => setOpenMenu(false)}
+                        className={({ isActive }) => `${drawerItemCls} ${isActive ? "!bg-[#fe4462] !text-white hover:!bg-[#fe4462]" : ""}`}
+                      >
+                        {t(item.key)}
+                      </NavLink>
+                    )
+                  )}
+                </DrawerSection>
 
-                <div className="flex gap-3 mt-8">
-                  {[
-                    { Icon: FaFacebookF, label: "Facebook" },
-                    { Icon: FaTwitter, label: "Twitter" },
-                    { Icon: FaInstagram, label: "Instagram" },
-                    { Icon: FaYoutube, label: "YouTube" },
-                  ].map(({ Icon, label }, i) => (
-                    <button
-                      key={i}
-                      aria-label={label}
-                      className="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-700 flex items-center justify-center hover:bg-[#fe4462] hover:border-[#fe4462] transition text-gray-500 dark:text-gray-400 hover:text-white"
-                    >
-                      <Icon size={14} />
+                {/* Categories */}
+                <DrawerSection title={t("menu.categories")}>
+                  {categories.map((c) => (
+                    <button key={c} onClick={() => goCategory(c, () => setOpenMenu(false))} className={drawerItemCls}>
+                      <FiGrid size={17} className="shrink-0 text-gray-400" /> <span className="flex-1 text-left">{c}</span>
                     </button>
                   ))}
-                </div>
+                </DrawerSection>
+
+                {/* Quick access */}
+                <DrawerSection title={t("menu.quickActions")}>
+                  <button onClick={() => { setOpenMenu(false); goProtected("/orders"); }} className={drawerItemCls}>
+                    <FiShoppingBag size={18} /> <span className="flex-1 text-left">{t("account.orders")}</span>
+                    {orders.length > 0 && <Badge>{orders.length}</Badge>}
+                  </button>
+                  <button onClick={() => { setOpenMenu(false); navigate("/wishlist"); }} className={drawerItemCls}>
+                    {wishlist.length > 0 ? <FaHeart size={18} className="text-[#fe4462]" /> : <FaRegHeart size={18} />}
+                    <span className="flex-1 text-left">{t("account.wishlist")}</span>
+                    {wishlist.length > 0 && <Badge>{wishlist.length}</Badge>}
+                  </button>
+                  <button onClick={() => { setOpenMenu(false); goProtected("/cart"); }} className={drawerItemCls}>
+                    <LuShoppingBag size={18} /> <span className="flex-1 text-left">{t("account.cart")}</span>
+                    {cartCount > 0 && <Badge>{cartCount}</Badge>}
+                  </button>
+                </DrawerSection>
+
+                {/* Settings (signed in) */}
+                {user && (
+                  <DrawerSection title={t("menu.account")}>
+                    {accountMenu
+                      .filter((item) => !["/wishlist", "/cart", "/orders"].includes(item.to))
+                      .map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <button key={item.label} onClick={() => onMenuItem(item, () => setOpenMenu(false))} className={drawerItemCls}>
+                            <Icon size={18} /> <span className="flex-1 text-left">{menuText(item)}</span>
+                            {item.soon && <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:bg-white/10">Soon</span>}
+                          </button>
+                        );
+                      })}
+                  </DrawerSection>
+                )}
+
+                {/* Preferences: theme + language */}
+                <DrawerSection title={t("menu.preferences")}>
+                  <button onClick={toggleDarkMode} className={drawerItemCls}>
+                    {darkMode ? <FiSun size={18} /> : <FiMoon size={18} />}
+                    <span className="flex-1 text-left">{darkMode ? t("menu.lightMode") : t("menu.darkMode")}</span>
+                  </button>
+                  <div className="mt-1 flex flex-wrap gap-2 px-1">
+                    {languages.map((l) => (
+                      <button
+                        key={l.code}
+                        onClick={() => setLang(l.code)}
+                        aria-pressed={lang === l.code}
+                        className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                          lang === l.code
+                            ? "border-[#fe4462] bg-[#fe4462]/10 text-[#fe4462]"
+                            : "border-gray-200 text-gray-600 hover:border-[#fe4462] hover:text-[#fe4462] dark:border-white/10 dark:text-gray-300"
+                        }`}
+                      >
+                        {l.native}
+                      </button>
+                    ))}
+                  </div>
+                </DrawerSection>
+
+                {/* Logout */}
+                {user && (
+                  <div className="px-4 pt-4">
+                    <button
+                      onClick={() => { setOpenMenu(false); setConfirmLogout(true); }}
+                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-200 px-4 py-3 font-semibold text-red-500 transition hover:bg-red-500 hover:text-white dark:border-red-500/30 dark:text-red-400"
+                    >
+                      <FiLogOut size={18} /> {t("account.logout")}
+                    </button>
+                  </div>
+                )}
               </div>
             </motion.aside>
           </>
@@ -570,10 +589,8 @@ export default function Header() {
       <AnimatePresence>
         {confirmLogout && (
           <motion.div
-            className="fixed inset-0 z-[1001] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[1001] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setConfirmLogout(false)}
             role="presentation"
           >
@@ -586,36 +603,41 @@ export default function Header() {
               role="dialog"
               aria-modal="true"
               aria-labelledby="logout-title"
-              className="max-h-full w-full max-w-sm overflow-y-auto rounded-3xl bg-white dark:bg-[#140a0d] p-6 shadow-2xl ring-1 ring-black/5 dark:ring-white/10"
+              className="max-h-full w-full max-w-sm overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10"
             >
               <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-red-500/10 text-red-500">
                 <FiLogOut size={26} />
               </div>
-              <h3 id="logout-title" className="mt-4 text-center text-lg font-bold text-gray-900 dark:text-white">
-                Sign out of your account?
-              </h3>
-              <p className="mt-1 text-center text-sm text-gray-500 dark:text-gray-400">
-                You'll need to sign in again to access your orders, wishlist, and cart.
-              </p>
+              <h3 id="logout-title" className="mt-4 text-center text-lg font-bold text-gray-900 dark:text-white">{t("logout.title")}</h3>
+              <p className="mt-1 text-center text-sm text-gray-500 dark:text-gray-400">{t("logout.desc")}</p>
               <div className="mt-6 flex gap-3">
-                <button
-                  onClick={() => setConfirmLogout(false)}
-                  className="flex-1 rounded-full border border-gray-200 dark:border-white/15 px-5 py-2.5 font-semibold text-gray-600 dark:text-gray-300 transition hover:border-[#fe4462] hover:text-[#fe4462]"
-                >
-                  Cancel
-                </button>
-                <button
-                  autoFocus
-                  onClick={() => { setConfirmLogout(false); logout(); navigate("/"); }}
-                  className="flex-1 rounded-full bg-red-500 px-5 py-2.5 font-semibold text-white transition hover:bg-red-600 active:scale-95"
-                >
-                  Logout
-                </button>
+                <button onClick={() => setConfirmLogout(false)} className="flex-1 rounded-full border border-gray-200 px-5 py-2.5 font-semibold text-gray-600 transition hover:border-[#fe4462] hover:text-[#fe4462] dark:border-white/15 dark:text-gray-300">{t("logout.cancel")}</button>
+                <button autoFocus onClick={() => { setConfirmLogout(false); logout(); navigate("/"); }} className="flex-1 rounded-full bg-red-500 px-5 py-2.5 font-semibold text-white transition hover:bg-red-600 active:scale-95">{t("account.logout")}</button>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+function Badge({ children }) {
+  return (
+    <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#fe4462] px-1.5 text-[10px] font-bold text-white">
+      {children}
+    </span>
+  );
+}
+
+// Titled, separated block used to structure the mobile drawer.
+function DrawerSection({ title, children }) {
+  return (
+    <div className="border-t border-gray-100 px-4 py-3 dark:border-white/10">
+      {title && (
+        <p className="mb-1 px-1 text-[11px] font-bold uppercase tracking-wider text-gray-400">{title}</p>
+      )}
+      <div className="space-y-0.5">{children}</div>
+    </div>
   );
 }

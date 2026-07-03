@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 const UpcomingCollection = () => {
   return (
     <section
-      className="relative min-h-[350px] sm:min-h-[450px] md:min-h-[500px] w-full bg-cover bg-center bg-no-repeat overflow-hidden"
+      id="upcoming"
+      className="relative min-h-[350px] sm:min-h-[450px] md:min-h-[500px] w-full bg-cover bg-center bg-no-repeat overflow-hidden scroll-mt-24 lg:scroll-mt-36"
       // style={{
       //   backgroundImage: "url('/upcoming-image/up-bg.png')",
       //   backgroundPosition: "bottom",

@@ -45,7 +45,7 @@ export default function Wishlist() {
   // ── Empty state ──────────────────────────────────────────
   if (!wishlist.length) {
     return (
-      <section className="relative overflow-hidden min-h-screen flex items-center bg-[#fbfefb] dark:bg-[#0d0508] pt-28 pb-20">
+      <section className="relative overflow-hidden min-h-screen flex items-center bg-[#fbfefb] dark:bg-[#0d0508] pt-28 lg:pt-36 pb-20">
         <div aria-hidden="true" className="pointer-events-none absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-[#fe4462]/10 blur-3xl" />
         <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 -right-24 h-[460px] w-[460px] rounded-full bg-[#c48212]/10 blur-3xl" />
 

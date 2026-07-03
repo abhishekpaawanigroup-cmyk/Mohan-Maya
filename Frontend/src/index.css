@@ -24,12 +24,33 @@ html {
   scrollbar-gutter: stable;
 }
 
-/* Accessible keyboard focus ring on all interactive elements. Uses
+/* Accessible keyboard focus ring on interactive elements (page content). Uses
    :focus-visible so it only shows for keyboard users, not mouse clicks. */
 :focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* Header/top-bar: the design calls for no visible focus ring — the UI must look
+   identical before and after clicking, with no browser/blue/pink outline. Focus
+   order, labels and tab-ability stay intact for screen readers; only the visual
+   ring is suppressed within the header. */
+header :focus,
+header :focus-visible {
+  outline: none;
+}
+/* Neutralise Tailwind focus-visible ring/box-shadow inside the header only. */
+header *:focus-visible {
+  box-shadow: none;
+}
+
+/* Every clickable control shows a pointer cursor (disabled controls don't). */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary,
+label[for] {
+  cursor: pointer;
 }
 
 body {

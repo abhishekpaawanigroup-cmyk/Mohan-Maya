@@ -247,7 +247,7 @@ export default function Auth() {
     "mt-6 inline-flex items-center justify-center rounded-full border-2 border-white px-10 py-2.5 text-sm font-bold uppercase tracking-wider text-white transition hover:bg-white hover:text-[#fe4462] active:scale-95";
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#fbfefb] px-4 pt-24 pb-12 dark:from-[#1a0a0e] dark:via-[#0d0508] dark:to-[#160c11]">
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#fbfefb] px-4 pt-24 lg:pt-36 pb-12 dark:from-[#1a0a0e] dark:via-[#0d0508] dark:to-[#160c11]">
       
 
       <Link
