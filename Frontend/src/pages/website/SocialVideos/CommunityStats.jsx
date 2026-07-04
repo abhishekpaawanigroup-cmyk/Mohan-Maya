@@ -5,7 +5,6 @@ import {
   FiVideo,
   FiEye,
   FiTrendingUp,
-  FiGrid,
   FiFilm,
   FiHeart,
   FiThumbsUp,
@@ -16,17 +15,23 @@ import { formatCompact } from "../../../utils/format";
 
 /**
  * "Community Highlights" -a premium, glassmorphism metrics band that adapts to
- * the currently selected platform. YouTube uses LIVE channel data; Instagram &
- * Facebook use curated figures (no public API). Colours, icons, labels, data and
- * animations all swap with the platform, with a smooth staggered crossfade.
+ * the currently selected platform. YouTube uses LIVE channel data and Instagram
+ * uses REAL aggregates computed from the reels API. Facebook stays curated (no
+ * public API). Colours, icons, labels, data and animations all swap with the
+ * platform, with a smooth staggered crossfade.
  */
-function buildStats(platform, channel) {
+function buildStats(platform, channel, igReels = []) {
   if (platform.key === "instagram") {
+    // Real, derived from the fetched reels (no fabricated numbers). Follower
+    // count isn't exposed by the reels dataset, so we surface reach/engagement.
+    const totalViews = igReels.reduce((sum, r) => sum + (r.views || 0), 0);
+    const totalLikes = igReels.reduce((sum, r) => sum + (r.likes || 0), 0);
+    const avgViews = igReels.length ? totalViews / igReels.length : 0;
     return [
-      { Icon: FiUsers, value: 18500, label: "Followers", hint: "and growing" },
-      { Icon: FiGrid, value: 326, label: "Posts", hint: "shared" },
-      { Icon: FiFilm, value: 148, label: "Reels", hint: "created" },
-      { Icon: FiHeart, value: 6.8, label: "Engagement", hint: "avg. rate", format: (n) => `${n.toFixed(1)}%` },
+      { Icon: FiFilm, value: igReels.length, label: "Latest Reels", hint: "fetched" },
+      { Icon: FiEye, value: totalViews, label: "Total Views", hint: "recent reels" },
+      { Icon: FiHeart, value: totalLikes, label: "Total Likes", hint: "recent reels" },
+      { Icon: FiTrendingUp, value: avgViews, label: "Avg. Views", hint: "per reel" },
     ];
   }
   if (platform.key === "facebook") {
@@ -134,11 +139,15 @@ function StatCard({ Icon, value, label, hint, format, accent, accent2, glow, rin
   );
 }
 
-export default function CommunityStats({ platform, channel, status }) {
-  const stats = buildStats(platform, channel);
+export default function CommunityStats({ platform, channel, status, igReels = [], igStatus }) {
+  const stats = buildStats(platform, channel, igReels);
   const isYouTube = platform.key === "youtube";
-  const loading = isYouTube && status === "loading";
-  const failed = isYouTube && status === "error";
+  const isInstagram = platform.key === "instagram";
+  const loading =
+    (isYouTube && status === "loading") ||
+    (isInstagram && (igStatus === "loading" || igStatus === "idle"));
+  const failed =
+    (isYouTube && status === "error") || (isInstagram && igStatus === "error");
   const PIcon = platform.Icon;
 
   return (

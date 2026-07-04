@@ -150,7 +150,13 @@ export default function SocialVideos() {
       </div>
 
       {/* ── Community stats (now below the videos, themed per platform) ── */}
-      <CommunityStats platform={theme} channel={channel} status={channelStatus} />
+      <CommunityStats
+        platform={theme}
+        channel={channel}
+        status={channelStatus}
+        igReels={instagram.reels}
+        igStatus={instagram.status}
+      />
 
       {/* ── Platform highlight cards ── */}
       <SocialHighlights platforms={PLATFORMS} channel={channel} status={channelStatus} />
