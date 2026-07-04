@@ -100,7 +100,7 @@ export default function PageHero({
                   hidden: { opacity: 0, y: 20 },
                   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
                 }}
-                className="text-lg md:text-xl text-gray-200 max-w-xl leading-relaxed"
+                className="text-lg mx-auto md:text-xl text-gray-200 max-w-xl leading-relaxed"
               >
                 {subtitle}
               </motion.p>

@@ -6,7 +6,7 @@ import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import {
   FiMapPin, FiX, FiMoon, FiSun, FiUser, FiLogOut, FiPackage,
-  FiSettings, FiHeart, FiCheck, FiCreditCard, FiTag, FiRotateCcw, FiStar, FiBell,
+  FiSettings, FiHeart, FiCheck, FiCreditCard, FiTag, FiRotateCcw, FiStar,
   FiHelpCircle, FiChevronRight, FiChevronDown, FiGrid, FiMenu, FiShoppingBag,
 } from "react-icons/fi";
 import { useApp } from "../../context/AppContext";
@@ -23,13 +23,37 @@ import NotificationBell from "./NotificationBell";
 const NAV = [
   { key: "nav.home", to: "/", end: true },
   { key: "nav.products", to: "/shop" },
-  { key: "nav.newArrivals", to: "/#upcoming", discover: true },
-  { key: "nav.bestSellers", to: "/#best-sellers", discover: true },
+  { key: "nav.newArrivals", to: "/#upcoming", discover: true, badge: "soon" },
+  { key: "nav.bestSellers", to: "/#best-sellers", discover: true, badge: "hot" },
   { key: "nav.offers", to: "/shop", discover: true },
   { key: "nav.about", to: "/about" },
   { key: "nav.contact", to: "/contact" },
+  { key: "nav.customerService", to: "/customer-service" },
   { key: "nav.community", to: "/Community" },
 ];
+
+// Compact nav badges ("Soon" / "Hot"). Solid brand fill for Hot (with a subtle
+// pulsing dot) and a soft brand-tinted pill for Soon — both on-theme, tiny, and
+// vertically centered so they never change nav row height or spacing.
+const NAV_BADGE_STYLES = {
+  hot: "bg-[#fe4462] text-white shadow-sm shadow-[#fe4462]/30",
+  soon: "bg-[#fe4462]/10 text-[#fe4462] ring-1 ring-inset ring-[#fe4462]/20 dark:bg-[#fe4462]/15",
+};
+
+function NavBadge({ type }) {
+  if (!type) return null;
+  const isHot = type === "hot";
+  return (
+    <span
+      className={`ml-1.5 inline-flex shrink-0 items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none tracking-wide ${NAV_BADGE_STYLES[type]}`}
+    >
+      {isHot && (
+        <span className="h-1.5 w-1.5 rounded-full bg-white/90 animate-pulse" aria-hidden="true" />
+      )}
+      {isHot ? "Hot" : "Soon"}
+    </span>
+  );
+}
 
 export default function Header() {
   const navigate = useNavigate();
@@ -92,7 +116,6 @@ export default function Header() {
     { label: "Coupons & Offers", icon: FiTag, soon: true },
     { label: "Returns & Refunds", icon: FiRotateCcw, soon: true },
     { label: "Reviews & Ratings", icon: FiStar, soon: true },
-    { label: "Notifications", key: "notif.title", icon: FiBell, soon: true },
     { label: "Help & Support", key: "account.help", icon: FiHelpCircle, to: "/faq" },
     { label: "Account Settings", key: "account.settings", icon: FiSettings, to: "/profile" },
   ];
@@ -410,8 +433,9 @@ export default function Header() {
                 {NAV.map((item) => (
                   <li key={item.key} className="shrink-0">
                     {item.discover ? (
-                      <button onClick={() => goNav(item)} className="rounded-md px-3 py-1.5 text-[13px] font-semibold text-gray-700 transition hover:bg-[#fe4462]/10 hover:text-[#fe4462] dark:text-gray-300">
+                      <button onClick={() => goNav(item)} className="inline-flex items-center rounded-md px-3 py-1.5 text-[13px] font-semibold text-gray-700 transition hover:bg-[#fe4462]/10 hover:text-[#fe4462] dark:text-gray-300">
                         {t(item.key)}
+                        <NavBadge type={item.badge} />
                       </button>
                     ) : (
                       <NavLink to={item.to} end={item.end} className={navLinkCls}>
@@ -488,7 +512,8 @@ export default function Header() {
                   {NAV.map((item) =>
                     item.discover ? (
                       <button key={item.key} onClick={() => goNav(item, () => setOpenMenu(false))} className={drawerItemCls}>
-                        {t(item.key)}
+                        <span className="flex-1 text-left">{t(item.key)}</span>
+                        <NavBadge type={item.badge} />
                       </button>
                     ) : (
                       <NavLink

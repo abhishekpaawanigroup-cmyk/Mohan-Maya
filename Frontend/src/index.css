@@ -32,17 +32,17 @@ html {
   border-radius: 4px;
 }
 
-/* Header/top-bar: the design calls for no visible focus ring - the UI must look
-   identical before and after clicking, with no browser/blue/pink outline. Focus
-   order, labels and tab-ability stay intact for screen readers; only the visual
-   ring is suppressed within the header. */
-header :focus,
-header :focus-visible {
+/* Header/top-bar: stay clean on MOUSE/TOUCH interaction (no ring on click), but
+   keep a subtle KEYBOARD focus ring for accessibility (WCAG 2.4.7 Focus Visible).
+   :focus:not(:focus-visible) targets pointer focus; :focus-visible targets
+   keyboard nav, which must remain visible. */
+header :focus:not(:focus-visible) {
   outline: none;
 }
-/* Neutralise Tailwind focus-visible ring/box-shadow inside the header only. */
-header *:focus-visible {
-  box-shadow: none;
+header :focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 6px;
 }
 
 /* Every clickable control shows a pointer cursor (disabled controls don't). */
@@ -56,6 +56,10 @@ label[for] {
 body {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
+  /* Crisper type across the site for a more premium feel. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* Respect users who prefer reduced motion. */
@@ -154,6 +158,24 @@ body {
     background-color: var(--brand);
     color: #fff;
   }
+
+  /* Shared premium interaction states for both button variants. */
+  .btn-primary:active,
+  .btn-outline:active {
+    transform: translateY(0) scale(0.97);
+  }
+  .btn-primary:focus-visible,
+  .btn-outline:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+  .btn-primary:disabled,
+  .btn-outline:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
 }
 
 @layer utilities {
@@ -163,6 +185,14 @@ body {
   .animate-cart-bounce {
     animation: cartBounce 0.6s ease;
   }
+  /* Soft, layered "premium" elevation used by cards/surfaces. */
+  .shadow-soft {
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 12px 30px -12px rgba(16, 24, 40, 0.14);
+  }
+  .dark .shadow-soft {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 36px -16px rgba(0, 0, 0, 0.6);
+  }
+
   .skeleton {
     background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
     background-size: 800px 104px;

@@ -45,11 +45,11 @@ export default function ProductCard({ product, onQuickView }) {
       data-fly-card
       whileHover={{ y: -6 }}
       transition={{ type: "spring", stiffness: 300, damping: 22 }}
-      className="group bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-soft transition-shadow duration-300 hover:shadow-xl dark:border-white/10 dark:bg-white/5"
     >
       {/* Image - clicking the image area opens the same Quick View modal as the eye icon */}
       <div
-        className={`relative overflow-hidden pt-4 pb-2 bg-[#e5e5e5] dark:bg-white/5 ${onQuickView ? "cursor-pointer" : ""}`}
+        className={`relative overflow-hidden bg-gradient-to-b from-gray-50 to-gray-100 pt-6 pb-4 dark:from-white/10 dark:to-white/[0.03] ${onQuickView ? "cursor-pointer" : ""}`}
         onClick={onQuickView ? () => onQuickView(product) : undefined}
         role={onQuickView ? "button" : undefined}
         aria-label={onQuickView ? `Quick view ${product.name}` : undefined}
@@ -68,7 +68,7 @@ export default function ProductCard({ product, onQuickView }) {
         />
 
         {discount > 0 && (
-          <span className="absolute top-3 left-3 bg-[#fe4462] text-white text-xs font-semibold px-3 py-1 rounded-full">
+          <span className="absolute top-3 left-3 rounded-full bg-[#fe4462] px-2.5 py-1 text-[11px] font-bold text-white shadow-sm shadow-[#fe4462]/30">
             {discount}% OFF
           </span>
         )}
@@ -110,7 +110,7 @@ export default function ProductCard({ product, onQuickView }) {
 
         <div className="flex items-center gap-2 mt-2">
           <span className="text-lg font-bold text-[#fe4462]">₹{product.price}</span>
-          {product.oldPrice && (
+          {discount > 0 && (
             <span className="text-gray-400 line-through text-sm">₹{product.oldPrice}</span>
           )}
         </div>
@@ -119,7 +119,7 @@ export default function ProductCard({ product, onQuickView }) {
 
         <button
           onClick={(e) => addToCart(product, 1, e)}
-          className="mt-3.5 w-full flex items-center justify-center gap-2 bg-[#fe4462] hover:bg-[#d93550] text-white py-2.5 rounded-xl font-medium transition-colors"
+          className="mt-3.5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#fe4462] py-2.5 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#d93550] hover:shadow-lg hover:shadow-[#fe4462]/25 active:scale-[0.98]"
         >
           <FiShoppingBag size={18} />
           Add to Cart

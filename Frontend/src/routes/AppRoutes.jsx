@@ -9,6 +9,7 @@ const Home = lazy(() => import("../pages/website/Home/Home"));
 const About = lazy(() => import("../pages/website/About/About"));
 const Shop = lazy(() => import("../pages/website/Shop/Shop"));
 const Contact = lazy(() => import("../pages/website/Contact/Contact"));
+const CustomerService = lazy(() => import("../pages/website/CustomerService/CustomerService"));
 const Faq = lazy(() => import("../pages/website/Faq/Faq"));
 const SocialVideos = lazy(() => import("../pages/website/SocialVideos/SocialVideos"));
 const PrivacyPolicy = lazy(() => import("../pages/website/Privacy/PrivacyPolicy"));
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
       { path: "about", element: <About /> },
       { path: "shop", element: <Shop /> },
       { path: "contact", element: <Contact /> },
+      { path: "customer-service", element: <CustomerService /> },
       { path: "faq", element: <Faq /> },
       { path: "Community", element: <SocialVideos /> },
       { path: "privacy", element: <PrivacyPolicy /> },
