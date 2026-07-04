@@ -119,7 +119,7 @@ export default function HeaderSearch({ onNavigate, autoFocus = false, className 
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 6 }}
                 transition={{ duration: 0.15 }}
-                className="absolute left-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl bg-white py-1.5 shadow-xl ring-1 ring-gray-200/70 dark:bg-[#1a0a0e] dark:ring-white/10"
+                className="absolute left-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-lg bg-white py-1.5 shadow-xl ring-1 ring-gray-200/70 dark:bg-[#1a0a0e] dark:ring-white/10"
               >
                 {categories.map((c) => (
                   <li key={c} role="option" aria-selected={c === category}>

@@ -200,7 +200,7 @@ export default function Header() {
             {/* Notifications — sized to match the Wishlist icon exactly */}
             <NotificationBell
               iconSize={20}
-              buttonClass="relative inline-flex rounded-full p-2.5 text-gray-700 outline-none transition hover:bg-[#fe4462]/10 dark:text-gray-200"
+              buttonClass="relative inline-flex items-center justify-center rounded-full p-2.5 text-gray-700 outline-none transition hover:bg-[#fe4462]/10 dark:text-gray-200"
             />
 
             {/* Cart */}
@@ -365,7 +365,7 @@ export default function Header() {
         </AnimatePresence>
 
         {/* ── Secondary nav row (desktop) ── */}
-        <div className="hidden border-t border-gray-100 dark:border-white/10 lg:block">
+        <div className="hidden border-t border-gray-100 dark:border-white/10 lg:block py-1">
           <div className="mx-auto w-full max-w-[1600px] px-8">
             <nav aria-label="Primary" className="flex h-9 items-center gap-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {/* Categories dropdown */}
