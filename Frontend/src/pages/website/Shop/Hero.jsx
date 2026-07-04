@@ -1,12 +1,41 @@
 import { Suspense, lazy } from "react";
-import { FaArrowRight } from "react-icons/fa";
+import { motion, useReducedMotion } from "framer-motion";
+import { FaArrowRight, FaStar } from "react-icons/fa";
+import { FiTruck, FiRefreshCw, FiLock, FiCheckCircle } from "react-icons/fi";
 import Breadcrumb from "../../../components/common/Breadcrumb";
 
 // Lazy so the heavy three.js bundle only downloads with the hero, never blocking
 // initial page render.
 const Hero3DModel = lazy(() => import("./Hero3DModel"));
 
+// Realistic customer placeholders (reuse the local testimonial portraits so no
+// external/network image is needed). Swap for real customer photos later.
+const CUSTOMERS = [
+  "/testimonials-images/pic1.png",
+  "/testimonials-images/pic2.png",
+  "/testimonials-images/pic3.png",
+  "/testimonials-images/pic4.png",
+];
+
+const TRUST_BADGES = [
+  { icon: FiTruck, label: "Free Shipping" },
+  { icon: FiRefreshCw, label: "Easy Returns" },
+  { icon: FiLock, label: "Secure Checkout" },
+  { icon: FiCheckCircle, label: "Premium Quality" },
+];
+
 const Hero = () => {
+  // Respect the user's reduced-motion preference: drop the slide offset but keep
+  // the (near-instant) fade so nothing pops in abruptly.
+  const reduce = useReducedMotion();
+  const groupV = {
+    hidden: {},
+    show: { transition: { staggerChildren: 0.12, delayChildren: 0.15 } },
+  };
+  const itemV = {
+    hidden: { opacity: 0, y: reduce ? 0 : 16 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  };
 
   return (
     <section className="relative h-screen min-h-[680px] max-h-[1000px] overflow-hidden pt-30">
@@ -42,7 +71,7 @@ const Hero = () => {
  
           {/* Left (centered until lg, where the 2-col grid + model appear) */}
 
-          <div className="flex flex-col items-center lg:items-start gap-8 text-center lg:text-left">
+          <div className="flex flex-col items-center lg:items-start gap-6 sm:gap-8 text-center lg:text-left">
  
             {/* Breadcrumb - above all hero text */}
             <Breadcrumb items={[{ label: "Home", to: "/" }, { label: "Shop" }]} light />
@@ -96,10 +125,72 @@ const Hero = () => {
               </a>
 
             </div>
- 
- 
+
+            {/* Social proof / trust — directly below the CTA */}
+            <motion.div
+              variants={groupV}
+              initial="hidden"
+              animate="show"
+              className="flex flex-col items-center lg:items-start gap-5"
+            >
+              {/* Overlapping avatars + customer count & rating */}
+              <motion.div
+                variants={itemV}
+                className="flex items-center gap-4"
+              >
+                <div className="flex -space-x-3">
+                  {CUSTOMERS.map((src) => (
+                    <img
+                      key={src}
+                      src={src}
+                      alt=""
+                      loading="lazy"
+                      aria-hidden="true"
+                      className="relative h-10 w-10 sm:h-11 sm:w-11 rounded-full border-2 border-white object-cover shadow-[0_4px_14px_rgba(0,0,0,0.4)] ring-1 ring-black/5 transition duration-300 hover:z-10 hover:-translate-y-1 hover:scale-105"
+                    />
+                  ))}
+                </div>
+
+                <div className="text-left">
+                  <p className="font-bold text-white leading-tight">
+                    10,000+{" "}
+                    <span className="font-medium text-gray-300">Happy Customers</span>
+                  </p>
+                  <div className="mt-1 flex items-center gap-1.5">
+                    <span className="flex text-[#ffb400]" aria-hidden="true">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <FaStar key={i} className="h-3.5 w-3.5" />
+                      ))}
+                    </span>
+                    <span className="text-sm font-semibold text-white">4.9/5</span>
+                    <span className="text-xs text-gray-400">Customer Rating</span>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Trust badges — wrap neatly on small screens */}
+              <motion.ul
+                variants={itemV}
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2.5"
+              >
+                {TRUST_BADGES.map(({ icon: Icon, label }) => (
+                  <li
+                    key={label}
+                    className="group flex items-center gap-2 text-sm text-gray-200"
+                  >
+                    <span className="grid h-7 w-7 place-items-center rounded-full bg-white/10 text-[#fe4462] ring-1 ring-white/15 transition duration-300 group-hover:bg-[#fe4462] group-hover:text-white">
+                      <Icon className="h-3.5 w-3.5" />
+                    </span>
+                    <span className="font-medium transition-colors duration-300 group-hover:text-white">
+                      {label}
+                    </span>
+                  </li>
+                ))}
+              </motion.ul>
+            </motion.div>
+
           </div>
- 
+
           {/* Right - hidden below lg; only shown once the 2-col grid is active
               so the model never stacks under the text or gets clipped. */}
 
