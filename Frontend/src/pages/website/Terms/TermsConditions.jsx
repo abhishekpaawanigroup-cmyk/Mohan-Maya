@@ -120,7 +120,7 @@ const sections = [
       <>
         <p>
           This section serves as our <strong>Shipping Policy</strong>. Standard orders are typically
-          delivered within 5–7 business days; custom orders may take 7–14 business days.
+          delivered within 5-7 business days; custom orders may take 7-14 business days.
         </p>
         <ul>
           <li>Free shipping is available on eligible orders above ₹999.</li>
@@ -142,7 +142,7 @@ const sections = [
         </p>
         <ul>
           <li>Personalised and custom-made items are not eligible for return or exchange.</li>
-          <li>Approved refunds are processed to the original payment method within 5–10 business days.</li>
+          <li>Approved refunds are processed to the original payment method within 5-10 business days.</li>
           <li>For any issue, reach our team via the{" "}
             <Link to="/contact" className="text-[#fe4462] font-semibold hover:underline">contact page</Link>.
           </li>

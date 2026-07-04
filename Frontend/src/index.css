@@ -32,7 +32,7 @@ html {
   border-radius: 4px;
 }
 
-/* Header/top-bar: the design calls for no visible focus ring — the UI must look
+/* Header/top-bar: the design calls for no visible focus ring - the UI must look
    identical before and after clicking, with no browser/blue/pink outline. Focus
    order, labels and tab-ability stay intact for screen readers; only the visual
    ring is suppressed within the header. */

@@ -216,7 +216,7 @@ function LocationModal({ current, cities, onClose, onSave }) {
           exit={{ opacity: 0, y: 12, scale: 0.98 }}
           transition={{ type: "spring", stiffness: 280, damping: 26 }}
           role="dialog" aria-modal="true" aria-labelledby="loc-title"
-          className="relative max-h-full w-full max-w-md overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10"
+          className="relative max-h-full w-full max-w-md overflow-y-auto rounded-xl bg-white p-6 shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10"
         >
           <button onClick={onClose} aria-label="Close" className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full text-gray-500 transition hover:bg-[#fe4462]/10 hover:text-[#fe4462]">
             <FiX size={20} />

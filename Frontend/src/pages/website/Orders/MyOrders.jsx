@@ -49,7 +49,7 @@ export default function MyOrders() {
   }, [filtering]);
 
   // Changing a filter resets to page 1 and triggers the transition skeleton.
-  // Search also resets the page (kept instant — no skeleton flash on typing).
+  // Search also resets the page (kept instant - no skeleton flash on typing).
   const changeFilter = (f) => {
     if (f === filter) return;
     setFilter(f);
@@ -175,7 +175,7 @@ export default function MyOrders() {
         ) : (
           <AnimatePresence mode="wait" initial={false}>
             {filtering ? (
-              // Transition skeleton — makes a filter switch clearly perceptible.
+              // Transition skeleton - makes a filter switch clearly perceptible.
               <motion.div
                 key="filtering"
                 initial={{ opacity: 0 }}
@@ -272,7 +272,7 @@ function OrderCard({ order, onDetails, onTrack, onCancel }) {
   const c = order.customer || {};
   const address = [c.city, c.state, c.pincode].filter(Boolean).join(", ");
   const deliveryValue = cancelled
-    ? "—"
+    ? "-"
     : minDate.getTime() === maxDate.getTime()
       ? fmtDate(maxDate)
       : rangeLabel;
@@ -295,7 +295,7 @@ function OrderCard({ order, onDetails, onTrack, onCancel }) {
         <OrderStatusBadge status={status} size="sm" />
       </div>
 
-      {/* Body — everything on the left, single unified column */}
+      {/* Body - everything on the left, single unified column */}
       <div className="flex flex-1 flex-col p-4 sm:p-5">
         {/* Product */}
         <div className="flex items-center gap-3 sm:gap-4">
@@ -349,7 +349,7 @@ function OrderCard({ order, onDetails, onTrack, onCancel }) {
           <span className="text-lg font-bold text-[#fe4462]">{inr(order.totals?.total)}</span>
         </div>
 
-        {/* Actions — pinned to the bottom so they align across cards */}
+        {/* Actions - pinned to the bottom so they align across cards */}
         <div className="mt-auto flex flex-wrap gap-2 pt-4">
           <button
             onClick={onDetails}

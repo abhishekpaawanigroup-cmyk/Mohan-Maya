@@ -11,7 +11,7 @@ import { products, categories } from "../../data/products";
 /**
  * Reusable premium search bar for the header (used both inline on desktop/tablet
  * and inside the expandable mobile search). Fully keyboard-accessible combobox:
- * type to see live product suggestions (sourced from the local catalog — no
+ * type to see live product suggestions (sourced from the local catalog - no
  * backend needed), arrow keys to move, Enter to search, Escape to dismiss.
  *
  * On submit it routes to `/shop?search=<term>`; the Shop page's existing filter
@@ -96,7 +96,7 @@ export default function HeaderSearch({ onNavigate, autoFocus = false, className 
   return (
     <form ref={wrapRef} role="search" onSubmit={onSubmit} className={`relative ${className}`}>
       <div className="flex items-stretch rounded-full bg-white ring-1 ring-gray-200 dark:bg-white/5 dark:ring-white/10">
-        {/* Category scope — custom dropdown; label reflects the current choice
+        {/* Category scope - custom dropdown; label reflects the current choice
             and only the hovered option ever highlights. */}
         <div ref={catRef} className="relative hidden shrink-0 sm:block">
           <button
@@ -169,8 +169,8 @@ export default function HeaderSearch({ onNavigate, autoFocus = false, className 
           )}
         </div>
 
-        {/* Voice search — UI ready for future integration */}
-        <IconAction icon={FiMic} label={t("search.voice")} onClick={() => addToast(`${t("search.voice")} — coming soon`, "info")} />
+        {/* Voice search - UI ready for future integration */}
+        <IconAction icon={FiMic} label={t("search.voice")} onClick={() => addToast(`${t("search.voice")} - coming soon`, "info")} />
 
         <button
           type="submit"

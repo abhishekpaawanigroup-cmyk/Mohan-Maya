@@ -36,7 +36,7 @@ const keyFeatures = [
 ];
 
 const shipping = [
-  { icon: Truck, title: "Free shipping", desc: "On orders over ₹999 · delivered in 5–7 days" },
+  { icon: Truck, title: "Free shipping", desc: "On orders over ₹999 · delivered in 5-7 days" },
   { icon: RefreshCw, title: "7-day replacement", desc: "Easy returns on damaged or defective items" },
   { icon: ShieldCheck, title: "Secure checkout", desc: "100% protected payments" },
 ];

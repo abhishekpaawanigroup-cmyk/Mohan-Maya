@@ -32,10 +32,10 @@ const HeroSection = () => {
       <div className="relative z-20 max-w-7xl mx-auto h-full px-6 md:px-12 flex items-center">
         <div className="grid lg:grid-cols-2 gap-10 items-center w-full h-full">
 
-          {/* Left - About text (centered on mobile where the model is hidden) */}
-          <div className="text-white text-center md:text-left">
+          {/* Left - About text (centered until lg, where the model appears) */}
+          <div className="text-white text-center lg:text-left">
             {/* Breadcrumb - above all hero text */}
-            <Breadcrumb items={[{ label: "Home", to: "/" }, { label: "About" }]} light className="mb-4 flex justify-center md:justify-start" />
+            <Breadcrumb items={[{ label: "Home", to: "/" }, { label: "About" }]} light className="mb-4 flex justify-center lg:justify-start" />
 
             <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4">
               Every Creation Begins With <br/> <span className="text-[#fe4462]">A Story</span>
@@ -45,7 +45,7 @@ const HeroSection = () => {
               We transform imagination into handcrafted miniatures, designed to capture emotions , memories and timeless moments.
             </p>
 
-            <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+            <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
               <Link to="/shop" className="px-6 py-3 bg-[#fe4462] text-[#fff] border border-[#fe4462] hover:text-[#fff] rounded-full font-semibold transition cursor-pointer mt-8 inline-flex group items-center gap-1">
                 Get Started
                 <FiArrowRight className="group-hover:translate-x-1 duration-300" />
@@ -59,8 +59,9 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Right - auto-rotating mm-modal.glb; hidden on mobile (≤768px), shown from tablet up */}
-          <div className="relative hidden md:flex justify-center items-center self-center lg:self-stretch h-[420px] sm:h-[520px] lg:h-full">
+          {/* Right - auto-rotating mm-modal.glb; hidden below lg so it only
+              appears once the 2-col grid is active (never stacks/clips). */}
+          <div className="relative hidden lg:flex justify-center items-center self-stretch h-full">
             <Suspense fallback={null}>
               {/* Canvas fills the container so the model stays centered; the
                   pulled-back camera (z=4.8) adds top/bottom margin so the full

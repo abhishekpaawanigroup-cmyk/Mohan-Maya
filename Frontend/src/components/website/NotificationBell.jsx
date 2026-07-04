@@ -12,7 +12,7 @@ import { useClickOutside, useLocalStorage } from "../../hooks/useHooks";
 import { useI18n } from "../../context/I18nContext";
 
 // Seeded notifications (stand-in for a backend feed). `id` is a stable key used
-// to persist read state — replace this array with an API response later and the
+// to persist read state - replace this array with an API response later and the
 // unread/read logic keeps working unchanged.
 const NOTIFICATIONS = [
   {
@@ -54,7 +54,7 @@ export default function NotificationBell({ buttonClass = "", iconSize = 18 }) {
   const { t } = useI18n();
   const [readIds, setReadIds] = useLocalStorage("mm-notif-read", []);
   const [open, setOpen] = useState(false);
-  // Ids that were unread at the moment this panel was opened — highlighted as
+  // Ids that were unread at the moment this panel was opened - highlighted as
   // "New" for this viewing even though they're immediately marked read.
   const [highlight, setHighlight] = useState([]);
   const ref = useClickOutside(() => setOpen(false));

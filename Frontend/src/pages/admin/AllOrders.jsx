@@ -294,7 +294,7 @@ function OrderTableRow({ order, onDetails, onStatusChange }) {
     >
       <td className="px-4 py-3.5 font-semibold text-gray-900 dark:text-white">#{order.id}</td>
       <td className="px-4 py-3.5">
-        <p className="font-medium text-gray-800 dark:text-gray-100">{c.fullName || "—"}</p>
+        <p className="font-medium text-gray-800 dark:text-gray-100">{c.fullName || "-"}</p>
         <p className="text-xs text-gray-500 dark:text-gray-400">{c.phone || order.ownerEmail}</p>
       </td>
       <td className="px-4 py-3.5 text-gray-600 dark:text-gray-300">{fmtDate(order.createdAt)}</td>
@@ -338,8 +338,8 @@ function OrderMobileCard({ order, onDetails, onStatusChange }) {
         <OrderStatusBadge status={s} size="sm" />
       </div>
       <div className="mt-3 space-y-1 text-sm">
-        <Line label="Customer" value={c.fullName || "—"} />
-        <Line label="Phone" value={c.phone || "—"} />
+        <Line label="Customer" value={c.fullName || "-"} />
+        <Line label="Phone" value={c.phone || "-"} />
         <Line label="Email" value={order.ownerEmail} />
         <Line label="Items" value={itemCount(order)} />
         <Line label="Payment" value={pay.label} valueClass={PAYMENT_TONE[pay.tone]} />

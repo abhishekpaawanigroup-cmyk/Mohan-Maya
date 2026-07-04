@@ -25,11 +25,11 @@ export function getDeliveryEstimate(minDays = 3, maxDays = 5, from = new Date())
   return { minDays, maxDays, minDate, maxDate, rangeLabel: formatRange(minDate, maxDate) };
 }
 
-/** Human-friendly window, e.g. "Mon, 12 – Wed, 14 Jun". */
+/** Human-friendly window, e.g. "Mon, 12 - Wed, 14 Jun". */
 export function formatRange(minDate, maxDate) {
   const month = (d) => d.toLocaleDateString("en-IN", { month: "short" });
   const left = `${DAY[minDate.getDay()]}, ${minDate.getDate()}`;
   const sameMonth = minDate.getMonth() === maxDate.getMonth();
   const right = `${DAY[maxDate.getDay()]}, ${maxDate.getDate()} ${month(maxDate)}`;
-  return sameMonth ? `${left} – ${right}` : `${left} ${month(minDate)} – ${right}`;
+  return sameMonth ? `${left} - ${right}` : `${left} ${month(minDate)} - ${right}`;
 }

@@ -18,7 +18,7 @@ const FAQS = [
   },
   {
     q: "How long does shipping take?",
-    a: "Standard orders are typically delivered within 5–7 business days. Custom and personalized pieces are handcrafted to order and may take 7–14 business days depending on the complexity of the design. You’ll receive a tracking link as soon as your order ships.",
+    a: "Standard orders are typically delivered within 5-7 business days. Custom and personalized pieces are handcrafted to order and may take 7-14 business days depending on the complexity of the design. You’ll receive a tracking link as soon as your order ships.",
   },
   {
     q: "Can I return or exchange a product?",
@@ -34,7 +34,7 @@ const FAQS = [
   },
   {
     q: "How can I contact customer support?",
-    a: "Our team is available Monday to Saturday, 9 AM–6 PM. You can reach us through the Contact page, by email at support@mohanmaya.in, or by phone at +91 99567 48903. We aim to respond to every query within 24 hours.",
+    a: "Our team is available Monday to Saturday, 9 AM-6 PM. You can reach us through the Contact page, by email at support@mohanmaya.in, or by phone at +91 99567 48903. We aim to respond to every query within 24 hours.",
   },
   {
     q: "Are my payment details secure?",

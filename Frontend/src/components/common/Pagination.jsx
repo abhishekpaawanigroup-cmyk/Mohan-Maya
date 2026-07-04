@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 /**
- * Reusable pagination bar with a "Showing X–Y of N" summary, optional
+ * Reusable pagination bar with a "Showing X-Y of N" summary, optional
  * page-size selector, and numbered pages with ellipses. Purely presentational -
  * the parent owns page/perPage state so filters & search persist across pages.
  */
@@ -28,7 +28,7 @@ export default function Pagination({
     >
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-600 dark:text-gray-300">
         <span>
-          Showing <strong className="text-gray-900 dark:text-white">{start}–{end}</strong> of{" "}
+          Showing <strong className="text-gray-900 dark:text-white">{start}-{end}</strong> of{" "}
           <strong className="text-gray-900 dark:text-white">{total}</strong> {label}
         </span>
         <span className="text-gray-400" aria-hidden="true">·</span>

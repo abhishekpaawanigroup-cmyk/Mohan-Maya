@@ -107,7 +107,7 @@ export const PAYMENT_LABELS = {
 };
 
 export function paymentLabel(order) {
-  return PAYMENT_LABELS[order?.customer?.payment] || "—";
+  return PAYMENT_LABELS[order?.customer?.payment] || "-";
 }
 
 /**
@@ -218,7 +218,7 @@ export function downloadInvoice(order) {
         ${escapeHtml([c.address, c.city, c.state, c.pincode].filter(Boolean).join(", "))}<br>
         ${escapeHtml(c.phone || "")} ${c.email ? "· " + escapeHtml(c.email) : ""}
       </p></div>
-      <div><strong>Payment</strong><p class="muted">${PAYMENT_LABELS[c.payment] || "—"}<br>Status: ${
+      <div><strong>Payment</strong><p class="muted">${PAYMENT_LABELS[c.payment] || "-"}<br>Status: ${
     paymentStatus(order).label
   }</p></div>
     </div>

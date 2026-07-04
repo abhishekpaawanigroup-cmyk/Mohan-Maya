@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
  *
  * Why: a `position: fixed` overlay is normally positioned against the viewport,
  * but if ANY ancestor establishes a containing block (a CSS `transform`,
- * `filter`, `perspective`, `contain`, `will-change`, etc. — Framer Motion adds
+ * `filter`, `perspective`, `contain`, `will-change`, etc. - Framer Motion adds
  * transforms during animations, and the app wraps each page in an animated
  * `motion.div`), the overlay would instead resolve against that ancestor and
  * could be clipped or shifted out of the viewport. Portaling to <body> escapes

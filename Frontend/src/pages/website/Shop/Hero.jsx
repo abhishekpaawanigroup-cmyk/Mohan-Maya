@@ -40,9 +40,9 @@ const Hero = () => {
  
         <div className="grid lg:grid-cols-2 gap-10 items-center w-full h-full">
  
-          {/* Left (centered on mobile where the model is hidden) */}
+          {/* Left (centered until lg, where the 2-col grid + model appear) */}
 
-          <div className="flex flex-col items-center md:items-start gap-8 text-center md:text-left">
+          <div className="flex flex-col items-center lg:items-start gap-8 text-center lg:text-left">
  
             {/* Breadcrumb - above all hero text */}
             <Breadcrumb items={[{ label: "Home", to: "/" }, { label: "Shop" }]} light />
@@ -100,9 +100,10 @@ const Hero = () => {
  
           </div>
  
-          {/* Right - hidden on mobile (≤768px), shown from tablet up */}
+          {/* Right - hidden below lg; only shown once the 2-col grid is active
+              so the model never stacks under the text or gets clipped. */}
 
-          <div className="relative hidden md:flex justify-center items-center self-center lg:self-stretch h-[300px] sm:h-[420px] lg:h-full">
+          <div className="relative hidden lg:flex justify-center items-center self-stretch h-full">
  
          
  

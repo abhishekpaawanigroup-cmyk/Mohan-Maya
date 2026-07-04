@@ -15,7 +15,7 @@ export default function ExpectedDelivery({ minDays = 3, maxDays = 5, compact = f
       <p className={`flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 ${className}`}>
         <FiTruck size={13} className="shrink-0 text-[#fe4462]" />
         <span>
-          Delivery in <span className="font-semibold text-gray-700 dark:text-gray-200">{minDays}–{maxDays} business days</span>
+          Delivery in <span className="font-semibold text-gray-700 dark:text-gray-200">{minDays}-{maxDays} business days</span>
         </span>
       </p>
     );
@@ -30,7 +30,7 @@ export default function ExpectedDelivery({ minDays = 3, maxDays = 5, compact = f
       </span>
       <div className="min-w-0">
         <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">
-          Estimated Delivery: {minDays}–{maxDays} business days
+          Estimated Delivery: {minDays}-{maxDays} business days
         </p>
         <p className="text-xs text-gray-500 dark:text-gray-400">
           Arrives by <span className="font-medium text-gray-700 dark:text-gray-300">{rangeLabel}</span>

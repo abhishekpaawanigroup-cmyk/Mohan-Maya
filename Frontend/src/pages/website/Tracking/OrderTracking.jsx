@@ -116,7 +116,7 @@ function TrackedOrder({ order }) {
         <Fact
           icon={FiCalendar}
           label={cancelled ? "Delivery" : "Est. delivery"}
-          value={cancelled ? "—" : minDate.getTime() === maxDate.getTime() ? fmtDate(maxDate) : rangeLabel}
+          value={cancelled ? "-" : minDate.getTime() === maxDate.getTime() ? fmtDate(maxDate) : rangeLabel}
         />
         <Fact icon={FiPackage} label="Total" value={inr(order.totals?.total)} tone="text-[#fe4462] font-bold" />
       </div>

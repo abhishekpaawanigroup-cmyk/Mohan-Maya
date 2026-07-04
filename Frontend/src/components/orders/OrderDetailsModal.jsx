@@ -17,8 +17,8 @@ import {
  * Props:
  *  - order            the order object
  *  - onClose          () => void
- *  - onTrack          (id) => void   (optional — shows "Track this order")
- *  - onCancel         (order) => void (optional — shows "Cancel Order" when eligible)
+ *  - onTrack          (id) => void   (optional - shows "Track this order")
+ *  - onCancel         (order) => void (optional - shows "Cancel Order" when eligible)
  *  - adminMode        boolean         (shows the owning customer's email)
  */
 export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, adminMode = false }) {
@@ -94,20 +94,20 @@ export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, a
           {/* Meta grid */}
           <div className="grid gap-4 sm:grid-cols-2">
             <Meta icon={FiCalendar} label="Estimated delivery">
-              {cancelled ? "—" : minDate.getTime() === maxDate.getTime() ? fmtDate(maxDate) : rangeLabel}
+              {cancelled ? "-" : minDate.getTime() === maxDate.getTime() ? fmtDate(maxDate) : rangeLabel}
             </Meta>
             <Meta icon={FiCreditCard} label="Payment">
               {paymentLabel(order)}
               <span className={`mt-0.5 block text-xs font-semibold ${PAYMENT_TONE[pay.tone]}`}>{pay.label}</span>
             </Meta>
             <Meta icon={FiUser} label="Billing details">
-              <span className="block">{c.fullName || "—"}</span>
+              <span className="block">{c.fullName || "-"}</span>
               {c.email && <span className="block font-normal text-gray-500 dark:text-gray-400">{c.email}</span>}
               {c.phone && <span className="block font-normal text-gray-500 dark:text-gray-400">{c.phone}</span>}
             </Meta>
             <Meta icon={FiMapPin} label="Shipping address">
               <span className="block font-normal leading-relaxed text-gray-600 dark:text-gray-300">
-                {[c.address, c.city, c.state, c.pincode].filter(Boolean).join(", ") || "—"}
+                {[c.address, c.city, c.state, c.pincode].filter(Boolean).join(", ") || "-"}
               </span>
             </Meta>
             {instructions && (

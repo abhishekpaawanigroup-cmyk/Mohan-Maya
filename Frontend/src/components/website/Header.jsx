@@ -197,7 +197,7 @@ export default function Header() {
               )}
             </button>
 
-            {/* Notifications — sized to match the Wishlist icon exactly */}
+            {/* Notifications - sized to match the Wishlist icon exactly */}
             <NotificationBell
               iconSize={20}
               buttonClass="relative inline-flex items-center justify-center rounded-full p-2.5 text-gray-700 outline-none transition hover:bg-[#fe4462]/10 dark:text-gray-200"
