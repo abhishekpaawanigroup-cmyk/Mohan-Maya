@@ -29,6 +29,20 @@ export const env = {
     apiKey: process.env.YOUTUBE_API_KEY,
     channelId: process.env.YOUTUBE_CHANNEL_ID,
   },
+  // Instagram Reels (via Apify). OPTIONAL: if the token is absent the reels
+  // endpoint simply reports "not configured" and the rest of the site is
+  // unaffected. Accepts either INSTAGRAM_API_KEY or APIFY_TOKEN so it matches
+  // whichever name is set on the host (e.g. Render). Never hardcode the token.
+  instagram: {
+    // Preferred: a fully-formed Apify API URL (token embedded) configured on the
+    // host as INSTAGRAM — the backend just GETs it. Falls back to a bare token +
+    // actor/username if that style is used instead.
+    apiUrl: process.env.INSTAGRAM || process.env.INSTAGRAM_API_URL || "",
+    apiToken: process.env.INSTAGRAM_API_KEY || process.env.APIFY_TOKEN || "",
+    username: process.env.INSTAGRAM_USERNAME || "mohanmaya_",
+    // Apify actor that returns a profile's reels; overridable per deployment.
+    actorId: process.env.INSTAGRAM_APIFY_ACTOR || "apify~instagram-reel-scraper",
+  },
   // Comma-separated list of allowed browser origins for CORS.
   // Defaults cover the common Vite dev ports.
   clientOrigins: (process.env.CLIENT_ORIGINS ||

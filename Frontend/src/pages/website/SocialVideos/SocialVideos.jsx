@@ -5,10 +5,12 @@ import SectionHeading from "../../../components/common/SectionHeading";
 import { usePageMeta } from "../../../hooks/useHooks";
 import { useYouTubeVideos } from "../../../hooks/useYouTubeVideos";
 import { useYouTubeChannel } from "../../../hooks/useYouTubeChannel";
+import { useInstagramReels } from "../../../hooks/useInstagramReels";
 import { PLATFORMS, platformMap, themeVars } from "./platforms";
 import Tabs from "./Tabs";
 import ChannelHeader from "./ChannelHeader";
 import YouTubeTab from "./YouTubeTab";
+import InstagramTab from "./InstagramTab";
 import ComingSoon from "./ComingSoon";
 import CommunityStats from "./CommunityStats";
 import SocialHighlights from "./SocialHighlights";
@@ -33,6 +35,9 @@ export default function SocialVideos() {
   const youtube = useYouTubeVideos();
   // Live channel stats (subscribers / videos / views) for the dashboard cards.
   const { channel, status: channelStatus } = useYouTubeChannel();
+  // Reels load lazily — only once the Instagram tab is first opened, so the
+  // page (YouTube by default) never triggers the metered Instagram fetch.
+  const instagram = useInstagramReels(tab === "instagram");
 
   // Active platform drives the content-section + stats theme via CSS variables.
   const theme = platformMap[tab];
@@ -124,6 +129,15 @@ export default function SocialVideos() {
                       status={youtube.status}
                       error={youtube.error}
                       retry={youtube.retry}
+                    />
+                  ) : tab === "instagram" ? (
+                    <InstagramTab
+                      reels={instagram.reels}
+                      status={instagram.status}
+                      error={instagram.error}
+                      configured={instagram.configured}
+                      retry={instagram.retry}
+                      profileUrl={platformMap.instagram.href}
                     />
                   ) : (
                     <ComingSoon platform={theme} />

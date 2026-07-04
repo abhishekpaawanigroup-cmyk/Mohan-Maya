@@ -103,8 +103,8 @@ function TopicItem({ id, topic, isOpen, onToggle }) {
             {topic.q}
           </span>
           <span
-            className={`grid h-9 w-9 shrink-0 place-items-center rounded-full transition-all duration-300 ${
-              isOpen ? "rotate-45 bg-[#fe4462] text-white" : "bg-[#fe4462]/10 text-[#fe4462]"
+            className={`grid h-9 w-9 shrink-0 place-items-center rounded-full transition-all duration-300 ease-in-out ${
+              isOpen ? "rotate-45 bg-[#fe4462] text-white" : "rotate-0 bg-[#fe4462]/10 text-[#fe4462]"
             }`}
             aria-hidden="true"
           >
@@ -122,10 +122,14 @@ function TopicItem({ id, topic, isOpen, onToggle }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{
+              height: { duration: 0.3, ease: "easeInOut" },
+              opacity: { duration: 0.22, ease: "easeInOut" },
+            }}
             className="overflow-hidden"
+            style={{ willChange: "height, opacity" }}
           >
-            <p className="-mt-1 px-5 pb-5 text-sm leading-relaxed text-gray-600 dark:text-gray-300 sm:px-6 sm:pb-6 sm:text-base">
+            <p className="px-5 pb-5 pt-1 text-sm leading-relaxed text-gray-600 dark:text-gray-300 sm:px-6 sm:pb-6 sm:text-base">
               {topic.a}
             </p>
           </motion.div>
