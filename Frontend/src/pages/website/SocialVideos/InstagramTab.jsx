@@ -7,9 +7,9 @@ import ReelCard from "./ReelCard";
 import ReelSkeleton from "./ReelSkeleton";
 import Pagination from "./Pagination";
 
-// Portrait reels sit 2-up on mobile, up to 4-up on desktop.
-const GRID = "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6 auto-rows-fr";
-const PER_PAGE = 12;
+// Responsive grid: 1-up mobile, 2-up tablet, 4-up desktop (8 cards = 2 rows).
+const GRID = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 auto-rows-fr";
+const PER_PAGE = 8;
 
 /** Shared centered state panel (loading-error / empty / not-configured). */
 function StateCard({ icon, title, body, children }) {

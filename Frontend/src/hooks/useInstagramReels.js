@@ -29,7 +29,8 @@ export function useInstagramReels(enabled) {
     setError(null);
 
     try {
-      const data = await fetchInstagramReels({ limit: 24 }, ac.signal);
+      // Fetch a deeper set so the 8-per-page grid has real pagination.
+      const data = await fetchInstagramReels({ limit: 48 }, ac.signal);
       if (ac.signal.aborted) return;
       setReels(data.reels);
       setConfigured(data.configured);

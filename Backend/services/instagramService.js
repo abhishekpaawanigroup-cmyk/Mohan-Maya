@@ -40,13 +40,22 @@ function pickCaption(item) {
   return item.caption?.text || item.text || "";
 }
 
-/** Normalise one raw Apify item into the frontend reel shape (or null). */
+/** Classify an item as Reel / Carousel / Post from its type + productType. */
+function pickMediaType(item) {
+  const type = String(item.type || "").toLowerCase();
+  const product = String(item.productType || "").toLowerCase();
+  if (type === "sidecar" || type === "carousel") return "Carousel";
+  if (product === "clips" || type === "video") return "Reel";
+  return "Post";
+}
+
+/** Normalise one raw Apify item into the frontend card shape (or null). */
 function normalizeReel(item) {
   const shortCode = item.shortCode || item.shortcode || item.code || item.id;
   const permalink =
     item.url ||
     item.postUrl ||
-    (shortCode ? `https://www.instagram.com/reel/${shortCode}/` : null);
+    (shortCode ? `https://www.instagram.com/p/${shortCode}/` : null);
   const publishedAt = item.timestamp || item.takenAt || item.taken_at || null;
 
   return {
@@ -55,8 +64,10 @@ function normalizeReel(item) {
     thumbnail: pickThumbnail(item),
     permalink,
     publishedAt,
+    mediaType: pickMediaType(item),
     views: Number(item.videoViewCount ?? item.viewCount ?? 0) || 0,
     likes: Number(item.likesCount ?? item.likeCount ?? 0) || 0,
+    comments: Number(item.commentsCount ?? item.commentCount ?? 0) || 0,
   };
 }
 
