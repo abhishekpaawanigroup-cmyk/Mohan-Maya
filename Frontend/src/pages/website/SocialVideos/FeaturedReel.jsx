@@ -38,13 +38,15 @@ export default function FeaturedReel({ reel }) {
       className="group relative grid lg:grid-cols-2 lg:items-stretch overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-xl shadow-[0_20px_70px_-30px_rgba(225,48,108,0.45)]"
     >
       {/* ── Thumbnail ── */}
+  
       <a
         href={permalink}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`View the latest ${type.toLowerCase()} on Instagram`}
-        className="relative block aspect-video lg:aspect-auto lg:min-h-[340px] overflow-hidden bg-[#fbfefb] dark:bg-white/5"
-      >
+        className="relative block aspect-video w-full overflow-hidden bg-gradient-to-br from-amber-100 via-pink-100 to-purple-100 dark:from-amber-950/40 dark:via-pink-950/40 dark:to-purple-950/40 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${imageUrl})` }}>
+            <div class="absolute inset-0 w-full h-full bg-black/80"></div>
         {imageUrl && imgOk ? (
           <img
             src={imageUrl}
@@ -52,7 +54,7 @@ export default function FeaturedReel({ reel }) {
             loading="eager"
             decoding="async"
             onError={() => setImgOk(false)}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="relative h-full object-contain transition-transform duration-700 group-hover:scale-105 block mx-auto"
           />
         ) : (
           <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-[#e1306c]/15 to-[#f77737]/15 text-[#e1306c]">
@@ -88,7 +90,7 @@ export default function FeaturedReel({ reel }) {
           <FaInstagram size={13} /> Instagram
         </span>
       </a>
-
+      
       {/* ── Content ── */}
       <div className="relative flex flex-col justify-center p-7 sm:p-9 lg:p-11">
         <span className="pointer-events-none absolute -top-10 -right-10 h-40 w-40 rounded-full bg-[var(--soft)] blur-3xl" />
@@ -97,7 +99,7 @@ export default function FeaturedReel({ reel }) {
           Recently Uploaded
         </span>
 
-        <h3 className="relative mt-5 text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-tight text-gray-900 dark:text-white line-clamp-3 group-hover:text-[var(--accent)] transition-colors">
+        <h3 className="relative mt-5 text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-tight text-gray-900 dark:text-white line-clamp-3 transition-colors">
           {caption || "View this post on Instagram"}
         </h3>
 
@@ -122,7 +124,7 @@ export default function FeaturedReel({ reel }) {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-white font-semibold px-7 py-3.5 rounded-full shadow-lg shadow-[var(--ring)] hover:shadow-xl hover:shadow-[var(--ring)] hover:-translate-y-0.5 transition-all duration-300"
           >
-            <FaInstagram size={20} /> Watch Now <FiExternalLink size={15} />
+            <FaInstagram size={20} /> Watch Now
           </a>
         </div>
       </div>

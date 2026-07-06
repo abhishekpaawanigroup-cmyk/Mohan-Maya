@@ -61,9 +61,9 @@ export default function FeaturedVideo({ video }) {
         </span>
 
         {/* Platform badge */}
-        <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#ff0000] text-white shadow-lg">
+        {/* <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#ff0000] text-white shadow-lg">
           <FaYoutube size={13} /> YouTube
-        </span>
+        </span> */}
       </a>
 
       {/* ── Content ── */}
@@ -75,7 +75,7 @@ export default function FeaturedVideo({ video }) {
          Recently Uploaded
         </span>
 
-        <h3 className="relative mt-5 text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-tight text-gray-900 dark:text-white line-clamp-3 group-hover:text-[var(--accent)] transition-colors">
+        <h3 className="relative mt-5 text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-tight text-gray-900 dark:text-white line-clamp-3 transition-colors">
           {title}
         </h3>
 
@@ -92,7 +92,7 @@ export default function FeaturedVideo({ video }) {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-white font-semibold px-7 py-3.5 rounded-full shadow-lg shadow-[var(--ring)] hover:shadow-xl hover:shadow-[var(--ring)] hover:-translate-y-0.5 transition-all duration-300"
           >
-            <FaYoutube size={20} /> Watch Now <FiExternalLink size={15} />
+            <FaYoutube size={20} /> Watch Now 
           </a>
         </div>
       </div>
