@@ -43,6 +43,9 @@ export const env = {
     // Apify actor that returns a profile's reels; overridable per deployment.
     actorId: process.env.INSTAGRAM_APIFY_ACTOR || "apify~instagram-reel-scraper",
   },
+  facebook: {
+    apiUrl: process.env.FACEBOOK || process.env.FACEBOOK_API_URL || "",
+  },
   // Comma-separated list of allowed browser origins for CORS.
   // Defaults cover the common Vite dev ports.
   clientOrigins: (process.env.CLIENT_ORIGINS ||

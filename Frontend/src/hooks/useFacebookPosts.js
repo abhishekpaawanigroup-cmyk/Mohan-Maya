@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchFacebookPosts } from "../services/facebookApi";
 
+const REFRESH_MS = 60_000;
+
 export function useFacebookPosts(enabled) {
   const [posts, setPosts] = useState([]);
   const [profile, setProfile] = useState(null);
@@ -13,7 +15,7 @@ export function useFacebookPosts(enabled) {
     abortRef.current?.abort();
     const ac = new AbortController();
     abortRef.current = ac;
-    setStatus("loading");
+    setStatus((prev) => (prev === "loading" ? prev : "loading"));
     setError(null);
 
     try {
@@ -23,6 +25,14 @@ export function useFacebookPosts(enabled) {
       setProfile(data.profile || null);
       setConfigured(data.configured ?? true);
       setStatus("ready");
+
+      if (import.meta.env.DEV) {
+        console.debug("[facebook] ui posts loaded", {
+          count: data.posts?.length || 0,
+          profile: data.profile || null,
+          sample: data.posts?.[0] || null,
+        });
+      }
     } catch (e) {
       if (e?.name === "AbortError") return;
       setError(e);
@@ -39,9 +49,13 @@ export function useFacebookPosts(enabled) {
       return;
     }
 
-    const t = setTimeout(load, 0);
+    load();
+    const intervalId = window.setInterval(() => {
+      load();
+    }, REFRESH_MS);
+
     return () => {
-      clearTimeout(t);
+      window.clearInterval(intervalId);
       abortRef.current?.abort();
     };
   }, [enabled, load]);

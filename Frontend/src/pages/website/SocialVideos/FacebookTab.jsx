@@ -274,7 +274,8 @@ export default function FacebookTab({ posts, profile, status, error, configured,
     );
   }
 
-  const [featured, ...rest] = posts;
+  const validPosts = (posts || []).filter(Boolean);
+  const [featured, ...rest] = validPosts;
   const totalPages = Math.max(1, Math.ceil(rest.length / PER_PAGE));
   const safePage = Math.min(page, totalPages);
   const pagePosts = rest.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
@@ -293,7 +294,7 @@ export default function FacebookTab({ posts, profile, status, error, configured,
           <div className="flex items-center justify-between gap-4 mb-7">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">More Posts</h3>
             <span className="text-sm font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
-              {posts.length} posts · Page {safePage} of {totalPages}
+              {validPosts.length} posts · Page {safePage} of {totalPages}
             </span>
           </div>
 
