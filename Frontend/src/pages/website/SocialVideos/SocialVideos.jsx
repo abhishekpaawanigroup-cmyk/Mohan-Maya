@@ -135,6 +135,7 @@ export default function SocialVideos() {
                   ) : tab === "instagram" ? (
                     <InstagramTab
                       reels={instagram.reels}
+                      profile={instagram.profile}
                       status={instagram.status}
                       error={instagram.error}
                       configured={instagram.configured}

@@ -15,6 +15,7 @@ import { fetchInstagramReels } from "../services/instagramApi";
  */
 export function useInstagramReels(enabled) {
   const [reels, setReels] = useState([]);
+  const [profile, setProfile] = useState(null);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState(null);
   const [configured, setConfigured] = useState(true);
@@ -33,6 +34,7 @@ export function useInstagramReels(enabled) {
       const data = await fetchInstagramReels({ limit: 48 }, ac.signal);
       if (ac.signal.aborted) return;
       setReels(data.reels);
+      setProfile(data.profile || null);
       setConfigured(data.configured);
       setStatus("ready");
     } catch (e) {
@@ -56,5 +58,5 @@ export function useInstagramReels(enabled) {
 
   const retry = useCallback(() => load(), [load]);
 
-  return { reels, status, error, configured, retry };
+  return { reels, profile, status, error, configured, retry };
 }

@@ -22,8 +22,8 @@ export async function fetchInstagramReels({ limit = 24 } = {}, signal) {
   const data = await res.json();
   return {
     reels: Array.isArray(data.reels) ? data.reels : [],
+    profile: data.profile || null,
     total: data.total ?? 0,
-    // Backend flags whether the token is configured; default true if absent.
     configured: data.configured !== false,
   };
 }

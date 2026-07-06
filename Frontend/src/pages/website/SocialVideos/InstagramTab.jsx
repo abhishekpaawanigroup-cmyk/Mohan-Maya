@@ -41,12 +41,55 @@ function FollowButton({ profileUrl }) {
   );
 }
 
+function SocialProfileHeader({ profile, profileUrl }) {
+  const href = profile?.profileUrl || profileUrl;
+  const name = profile?.name || "@mohanmaya_";
+  const avatar = profile?.profilePicture;
+  const followers = Number(profile?.followers ?? 0);
+  const posts = Number(profile?.postCount ?? 0);
+
+  return (
+    <div className="relative overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-xl p-6 shadow-[0_14px_40px_-24px_rgba(225,48,108,0.45)]">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-4">
+          <span className="relative grid h-20 w-20 shrink-0 place-items-center overflow-hidden rounded-full bg-[#e1306c] text-white shadow-lg">
+            {avatar ? (
+              <img src={avatar} alt={`${name} profile`} className="h-full w-full object-cover" />
+            ) : (
+              <FaInstagram size={32} />
+            )}
+          </span>
+          <div>
+            <p className="text-sm uppercase tracking-[0.22em] text-gray-500 dark:text-gray-400">Instagram</p>
+            <h2 className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{name}</h2>
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{profile?.followers ? `${followers.toLocaleString()} followers` : "Real-time updates from the community"}</p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-3 items-center">
+          <div className="rounded-3xl bg-[#faf5f8] dark:bg-white/5 px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200">
+            {posts.toLocaleString()} reels
+          </div>
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-white font-semibold px-5 py-3 rounded-full shadow-lg shadow-[var(--ring)] hover:-translate-y-0.5 transition-all duration-300"
+          >
+            <FaInstagram size={16} /> Follow
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /**
  * Instagram tab: a paginated grid of the latest reels, mirroring YouTubeTab's
  * loading / error / empty handling, plus a graceful "not configured" state so a
  * missing backend token never surfaces as a scary error.
  */
-export default function InstagramTab({ reels, status, error, configured, retry, profileUrl }) {
+export default function InstagramTab({ reels, profile, status, error, configured, retry, profileUrl }) {
   const [page, setPage] = useState(1);
   const gridRef = useRef(null);
 
@@ -137,6 +180,7 @@ export default function InstagramTab({ reels, status, error, configured, retry, 
 
   return (
     <div className="space-y-12">
+      {(profile || profileUrl) && <SocialProfileHeader profile={profile} profileUrl={profileUrl} />}
       {featured && <FeaturedReel reel={featured} />}
 
       {rest.length > 0 && (

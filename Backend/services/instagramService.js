@@ -53,6 +53,40 @@ function pickMediaType(item) {
   return "Post";
 }
 
+/** Best-effort profile metadata from a raw reel item. */
+function pickProfile(item, usernameFallback) {
+  const user = item.user || item.from || item.author || item.owner || item.account || {};
+  const profileName =
+    user.name ||
+    user.username ||
+    user.handle ||
+    item.username ||
+    item.userName ||
+    item.profileName ||
+    usernameFallback ||
+    "Mohan Maya";
+  const profilePicture =
+    user.profilePic ||
+    user.profilePicture ||
+    user.picture ||
+    item.profilePic ||
+    item.profilePicture ||
+    item.thumbnail ||
+    "";
+  const profileUrl =
+    user.profileUrl ||
+    item.profileUrl ||
+    item.url ||
+    item.permalink ||
+    item.link ||
+    (usernameFallback ? `https://www.instagram.com/${usernameFallback.replace(/^@/, "")}/` : "");
+  const followers =
+    Number(user.followersCount ?? user.followers ?? item.followersCount ?? item.followerCount ?? item.followers ?? item.followers_count ?? 0) || null;
+  const postCount = Number(user.postCount ?? user.posts ?? item.postCount ?? item.postsCount ?? 0) || null;
+
+  return { profileName, profilePicture, profileUrl, followers, postCount };
+}
+
 /** Normalise one raw Apify item into the frontend card shape (or null). */
 function normalizeReel(item) {
   const shortCode = item.shortCode || item.shortcode || item.code || item.id;
@@ -86,6 +120,8 @@ function normalizeReel(item) {
     ? `/api/instagram/img?url=${encodeURIComponent(bestCdnUrl)}`
     : null;
 
+  const profileData = pickProfile(item, env.instagram.username);
+
   return {
     id: shortCode || permalink || null,
     caption: pickCaption(item).trim(),
@@ -102,6 +138,11 @@ function normalizeReel(item) {
     views: Number(item.videoViewCount ?? item.viewCount ?? 0) || 0,
     likes: Number(item.likesCount ?? item.likeCount ?? 0) || 0,
     comments: Number(item.commentsCount ?? item.commentCount ?? 0) || 0,
+    profileName: profileData.profileName,
+    profilePicture: profileData.profilePicture,
+    profileUrl: profileData.profileUrl,
+    followers: profileData.followers,
+    postCount: profileData.postCount,
   };
 }
 
@@ -157,6 +198,17 @@ export async function getLatestReels({ limit = 24 } = {}) {
       )
       .slice(0, safeLimit);
 
-    return { reels, total: reels.length, configured: true };
+    const topReel = reels[0] || null;
+    const profile = topReel
+      ? {
+          name: topReel.profileName,
+          profilePicture: topReel.profilePicture,
+          profileUrl: topReel.profileUrl,
+          followers: topReel.followers,
+          postCount: topReel.postCount || reels.length,
+        }
+      : null;
+
+    return { reels, total: reels.length, configured: true, profile };
   });
 }
