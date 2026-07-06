@@ -37,7 +37,7 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="px-4 sm:px-6 py-16 sm:py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
+    <section className="px-4 sm:px-6 py-16 bg-[#fbfefb] dark:bg-[#0d0508]">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}

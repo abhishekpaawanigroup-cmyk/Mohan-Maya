@@ -8,7 +8,7 @@ const BestSellers = () => {
   const { addToCart } = useApp();
 
   return (
-    <section id="best-sellers" className="bg-[#fbfefb] dark:bg-[#0d0508] py-24 scroll-mt-24 lg:scroll-mt-36">
+    <section id="best-sellers" className="bg-[#fbfefb] dark:bg-[#0d0508] py-12 scroll-mt-24 lg:scroll-mt-36">
       <div className="max-w-7xl mx-auto px-5">
         <SectionHeading
           badge="This Week"

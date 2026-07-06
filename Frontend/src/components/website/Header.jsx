@@ -267,7 +267,7 @@ export default function Header() {
               onClick={() => goProtected("/orders")}
               className="hidden flex-col items-start rounded-lg px-2.5 py-1 leading-tight transition hover:bg-[#fe4462]/10 xl:flex"
             >
-              <span className="text-[11px] text-gray-500 dark:text-gray-400">{t("account.returns")}</span>
+              <span className="text-[12px] font-bold text-gray-800 dark:text-white">{t("account.returns")}</span>
               <span className="text-sm font-bold text-gray-800 dark:text-white">{t("account.andOrders")}</span>
             </button>
 
@@ -288,7 +288,7 @@ export default function Header() {
                   </span>
                 )}
                 <span className="hidden leading-tight xl:block">
-                  <span className="block max-w-[110px] truncate text-[11px] text-gray-500 dark:text-gray-400">
+                  <span className="block max-w-[110px] truncate text-[12px] font-bold text-gray-800 dark:text-white">
                     {user ? `${t("account.hello")} ${firstName}` : t("account.helloSignIn")}
                   </span>
                   <span className="flex items-center gap-1 text-sm font-bold text-gray-800 dark:text-white">

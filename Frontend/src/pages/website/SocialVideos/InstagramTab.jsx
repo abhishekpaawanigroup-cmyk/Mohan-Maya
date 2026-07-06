@@ -49,8 +49,9 @@ function SocialProfileHeader({ profile, profileUrl }) {
   const posts = Number(profile?.postCount ?? 0);
 
   return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-xl p-6 shadow-[0_14px_40px_-24px_rgba(225,48,108,0.45)]">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="relative overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-[url('/social/yt-header.png')] bg-cover bg-center bg-no-repeat backdrop-blur-xl p-5 sm:py-14 sm:px-8 shadow-[0_14px_40px_-24px_rgba(225,48,108,0.45)]">
+      <div className="absolute inset-0 bg-black/70"></div>
+      <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <span className="relative grid h-20 w-20 shrink-0 place-items-center overflow-hidden rounded-full bg-[#e1306c] text-white shadow-lg">
             {avatar ? (
@@ -60,11 +61,12 @@ function SocialProfileHeader({ profile, profileUrl }) {
             )}
           </span>
           <div>
-            <p className="text-sm uppercase tracking-[0.22em] text-gray-500 dark:text-gray-400">Instagram</p>
-            <h2 className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{name}</h2>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{profile?.followers ? `${followers.toLocaleString()} followers` : "Real-time updates from the community"}</p>
+            <p className="text-sm uppercase tracking-[0.22em] text-white">Instagram</p>
+            <h2 className="mt-1 text-2xl font-bold text-white">{name}</h2>
+            <p className="mt-2 text-sm text-white">{profile?.followers ? `${followers.toLocaleString()} followers` : "Real-time updates from the community"}</p>
           </div>
         </div>
+        
 
         <div className="flex flex-wrap gap-3 items-center">
           <div className="rounded-3xl bg-[#faf5f8] dark:bg-white/5 px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200">
@@ -81,6 +83,7 @@ function SocialProfileHeader({ profile, profileUrl }) {
         </div>
       </div>
     </div>
+    
   );
 }
 

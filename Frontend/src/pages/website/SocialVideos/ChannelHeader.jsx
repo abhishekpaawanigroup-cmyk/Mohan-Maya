@@ -95,8 +95,9 @@ export default function ChannelHeader({ channel, status, verified = true, fallba
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.55, ease: [0.25, 0.4, 0.25, 1] }}
-        className="relative overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-xl p-5 sm:p-7 shadow-[0_14px_50px_-22px_rgba(0,0,0,0.3)]"
+        className="relative overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-[url('/social/yt-header.png')] bg-cover bg-center bg-no-repeat backdrop-blur-xl p-5 sm:py-14 sm:px-8 shadow-[0_14px_50px_-22px_rgba(0,0,0,0.3)]"
       >
+        <div className="absolute inset-0 bg-black/70"></div>
         {/* Brand wash */}
         <span className="pointer-events-none absolute -top-16 -right-10 h-44 w-44 rounded-full bg-[#ff0000]/10 blur-3xl" />
 
@@ -111,7 +112,7 @@ export default function ChannelHeader({ channel, status, verified = true, fallba
 
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <h3 className="truncate text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                <h3 className="truncate text-xl sm:text-2xl font-bold text-white dark:text-white">
                   {name}
                 </h3>
                 {verified && (
@@ -127,15 +128,15 @@ export default function ChannelHeader({ channel, status, verified = true, fallba
               {isLoading ? (
                 <div className="mt-2 h-4 w-40 rounded skeleton" />
               ) : (
-                <p className="mt-1 text-sm font-medium text-gray-500 dark:text-gray-400">
-                  <span className="font-semibold text-gray-700 dark:text-gray-200">
+                <p className="mt-1 text-sm font-medium text-white">
+                  <span className="font-semibold text-white">
                     {formatCompact(channel?.subscriberCount ?? 0)}
                   </span>{" "}
                   subscribers
                   {channel?.videoCount ? (
                     <>
-                      <span className="mx-2 text-gray-300 dark:text-gray-600">•</span>
-                      <span className="font-semibold text-gray-700 dark:text-gray-200">
+                      <span className="mx-2 text-white">•</span>
+                      <span className="font-semibold text-white">
                         {formatCompact(channel.videoCount)}
                       </span>{" "}
                       videos
