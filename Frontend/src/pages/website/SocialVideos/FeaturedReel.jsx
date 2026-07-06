@@ -5,6 +5,7 @@ import { FiPlay, FiExternalLink, FiClock, FiHeart, FiMessageCircle } from "react
 import { formatVideoDate, formatCompact } from "../../../utils/format";
 
 const IG_GRADIENT = "linear-gradient(135deg, #e1306c, #f77737)";
+const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
 
 /**
  * Hero treatment for the account's most recent reel — the Instagram counterpart
@@ -17,6 +18,16 @@ export default function FeaturedReel({ reel }) {
   const isReel = type === "Reel";
   const date = formatVideoDate(publishedAt);
   const [imgOk, setImgOk] = useState(true);
+
+  const imageUrl = reel.proxyUrl
+    ? `${API_BASE}${reel.proxyUrl}`
+    : reel.display_url ||
+      reel.displayUrl ||
+      reel.thumbnail ||
+      reel.thumbnailUrl ||
+      reel.thumbnailSrc ||
+      reel.imageUrl ||
+      reel.image;
 
   return (
     <motion.article
@@ -34,9 +45,9 @@ export default function FeaturedReel({ reel }) {
         aria-label={`View the latest ${type.toLowerCase()} on Instagram`}
         className="relative block aspect-[4/5] lg:aspect-auto overflow-hidden bg-[#fbfefb] dark:bg-white/5"
       >
-        {thumbnail && imgOk ? (
+        {imageUrl && imgOk ? (
           <img
-            src={thumbnail}
+            src={imageUrl}
             alt={caption ? `${type}: ${caption.slice(0, 80)}` : `Instagram ${type.toLowerCase()}`}
             loading="eager"
             decoding="async"

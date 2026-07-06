@@ -6,12 +6,13 @@ import { usePageMeta } from "../../../hooks/useHooks";
 import { useYouTubeVideos } from "../../../hooks/useYouTubeVideos";
 import { useYouTubeChannel } from "../../../hooks/useYouTubeChannel";
 import { useInstagramReels } from "../../../hooks/useInstagramReels";
+import { useFacebookPosts } from "../../../hooks/useFacebookPosts";
 import { PLATFORMS, platformMap, themeVars } from "./platforms";
 import Tabs from "./Tabs";
 import ChannelHeader from "./ChannelHeader";
 import YouTubeTab from "./YouTubeTab";
 import InstagramTab from "./InstagramTab";
-import ComingSoon from "./ComingSoon";
+import FacebookTab from "./FacebookTab";
 import CommunityStats from "./CommunityStats";
 import SocialHighlights from "./SocialHighlights";
 
@@ -38,6 +39,7 @@ export default function SocialVideos() {
   // Reels load lazily — only once the Instagram tab is first opened, so the
   // page (YouTube by default) never triggers the metered Instagram fetch.
   const instagram = useInstagramReels(tab === "instagram");
+  const facebook = useFacebookPosts(tab === "facebook");
 
   // Active platform drives the content-section + stats theme via CSS variables.
   const theme = platformMap[tab];
@@ -139,9 +141,17 @@ export default function SocialVideos() {
                       retry={instagram.retry}
                       profileUrl={platformMap.instagram.href}
                     />
-                  ) : (
-                    <ComingSoon platform={theme} />
-                  )}
+                  ) : tab === "facebook" ? (
+                    <FacebookTab
+                      posts={facebook.posts}
+                      profile={facebook.profile}
+                      status={facebook.status}
+                      error={facebook.error}
+                      configured={facebook.configured}
+                      retry={facebook.retry}
+                      profileUrl={platformMap.facebook.href}
+                    />
+                  ) : null}
                 </motion.div>
               </AnimatePresence>
             </div>

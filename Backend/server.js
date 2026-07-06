@@ -4,6 +4,7 @@ import cors from "cors";
 import { env } from "./config/env.js";
 import youtubeRoutes from "./routes/youtube.js";
 import instagramRoutes from "./routes/instagram.js";
+import facebookRoutes from "./routes/facebook.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
@@ -33,6 +34,7 @@ app.get("/api/health", (req, res) =>
 
 app.use("/api/youtube", youtubeRoutes);
 app.use("/api/instagram", instagramRoutes);
+app.use("/api/facebook", facebookRoutes);
 
 // --- Errors -----------------------------------------------------------------
 app.use(notFound);
