@@ -5,10 +5,11 @@ import { FaInstagram } from "react-icons/fa";
 import ScrollReveal from "../../../components/common/ScrollReveal";
 import ReelCard from "./ReelCard";
 import ReelSkeleton from "./ReelSkeleton";
+import FeaturedReel from "./FeaturedReel";
 import Pagination from "./Pagination";
 
 // Responsive grid: 1-up mobile, 2-up tablet, 4-up desktop (8 cards = 2 rows).
-const GRID = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 auto-rows-fr";
+const GRID = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 auto-rows-fr";
 const PER_PAGE = 8;
 
 /** Shared centered state panel (loading-error / empty / not-configured). */
@@ -56,13 +57,25 @@ export default function InstagramTab({ reels, status, error, configured, retry, 
     window.scrollTo({ top, behavior: "smooth" });
   };
 
-  // ── First load / not yet started → skeletons. ──
+  // ── First load / not yet started → featured + grid skeletons. ──
   if ((status === "loading" || status === "idle") && reels.length === 0) {
     return (
-      <div className={GRID}>
-        {Array.from({ length: 8 }).map((_, i) => (
-          <ReelSkeleton key={i} />
-        ))}
+      <div className="space-y-10">
+        <div className="grid lg:grid-cols-2 overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-xl">
+          <div className="aspect-[4/5] lg:aspect-auto lg:min-h-[360px] skeleton" />
+          <div className="p-7 sm:p-9 lg:p-11 space-y-4">
+            <div className="h-6 w-32 skeleton rounded-full" />
+            <div className="h-8 w-3/4 skeleton rounded" />
+            <div className="h-8 w-1/2 skeleton rounded" />
+            <div className="h-5 w-40 skeleton rounded" />
+            <div className="h-12 w-48 skeleton rounded-full mt-2" />
+          </div>
+        </div>
+        <div className={GRID}>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <ReelSkeleton key={i} />
+          ))}
+        </div>
       </div>
     );
   }
@@ -111,10 +124,11 @@ export default function InstagramTab({ reels, status, error, configured, retry, 
     );
   }
 
-  // ── Loaded content: client-paginated grid. ──
-  const totalPages = Math.max(1, Math.ceil(reels.length / PER_PAGE));
+  // ── Loaded content: featured reel + client-paginated grid (mirrors YouTube). ──
+  const [featured, ...rest] = reels;
+  const totalPages = Math.max(1, Math.ceil(rest.length / PER_PAGE));
   const safePage = Math.min(page, totalPages);
-  const pageReels = reels.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
+  const pageReels = rest.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
 
   const goTo = (p) => {
     setPage(p);
@@ -122,34 +136,40 @@ export default function InstagramTab({ reels, status, error, configured, retry, 
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between gap-4">
-        <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Latest Reels</h3>
-        <span className="text-sm font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
-          {reels.length} reels · Page {safePage} of {totalPages}
-        </span>
-      </div>
+    <div className="space-y-12">
+      {featured && <FeaturedReel reel={featured} />}
 
-      <div ref={gridRef} className="scroll-mt-28">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={safePage}
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -14 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className={GRID}
-          >
-            {pageReels.map((r, i) => (
-              <ScrollReveal key={r.id} direction="up" delay={Math.min(i * 0.05, 0.25)} className="h-full">
-                <ReelCard reel={r} />
-              </ScrollReveal>
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      {rest.length > 0 && (
+        <div>
+          <div className="flex items-center justify-between gap-4 mb-7">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">More Reels</h3>
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
+              {reels.length} reels · Page {safePage} of {totalPages}
+            </span>
+          </div>
 
-      <Pagination page={safePage} totalPages={totalPages} onChange={goTo} />
+          <div ref={gridRef} className="scroll-mt-28">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={safePage}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -14 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className={GRID}
+              >
+                {pageReels.map((r, i) => (
+                  <ScrollReveal key={r.id} direction="up" delay={Math.min(i * 0.05, 0.25)} className="h-full">
+                    <ReelCard reel={r} />
+                  </ScrollReveal>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <Pagination page={safePage} totalPages={totalPages} onChange={goTo} />
+        </div>
+      )}
     </div>
   );
 }

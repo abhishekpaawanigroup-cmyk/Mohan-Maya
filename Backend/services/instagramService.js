@@ -25,10 +25,14 @@ const ig = axios.create({ timeout: 90_000 });
 /** Best-effort thumbnail from the various field names Apify actors emit. */
 function pickThumbnail(item) {
   return (
+    item.display_url ||
     item.displayUrl ||
     item.thumbnailUrl ||
+    item.thumbnail_url ||
     item.thumbnailSrc ||
+    item.thumbnail_src ||
     item.imageUrl ||
+    item.image_url ||
     item.image ||
     ""
   );
@@ -58,10 +62,40 @@ function normalizeReel(item) {
     (shortCode ? `https://www.instagram.com/p/${shortCode}/` : null);
   const publishedAt = item.timestamp || item.takenAt || item.taken_at || null;
 
+  const display_url = item.display_url || item.displayUrl || null;
+  const thumbnailUrl = item.thumbnailUrl || item.thumbnail_url || null;
+  const thumbnailSrc = item.thumbnailSrc || item.thumbnail_src || null;
+  const imageUrl = item.imageUrl || item.image_url || null;
+  const image = item.image || null;
+
+  // Best CDN URL available for this item (used to build the proxy URL).
+  const bestCdnUrl =
+    display_url ||
+    thumbnailUrl ||
+    thumbnailSrc ||
+    imageUrl ||
+    image ||
+    (Array.isArray(item.images) && item.images[0]) ||
+    null;
+
+  // All Instagram CDN URLs return 403 when fetched directly by a browser
+  // because they are session-bound signed URLs. We route them through the
+  // backend /api/instagram/img proxy which fetches them server-to-server
+  // with the correct headers, then streams the bytes back.
+  const proxyUrl = bestCdnUrl
+    ? `/api/instagram/img?url=${encodeURIComponent(bestCdnUrl)}`
+    : null;
+
   return {
     id: shortCode || permalink || null,
     caption: pickCaption(item).trim(),
+    display_url,
     thumbnail: pickThumbnail(item),
+    proxyUrl,
+    thumbnailUrl,
+    thumbnailSrc,
+    imageUrl,
+    image,
     permalink,
     publishedAt,
     mediaType: pickMediaType(item),
