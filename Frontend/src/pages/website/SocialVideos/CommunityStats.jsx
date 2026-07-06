@@ -20,26 +20,25 @@ import { formatCompact } from "../../../utils/format";
  * public API). Colours, icons, labels, data and animations all swap with the
  * platform, with a smooth staggered crossfade.
  */
-function buildStats(platform, channel, igReels = []) {
+function buildStats(platform, channel, igReels = [], fbPosts = []) {
   if (platform.key === "instagram") {
-    // Real, derived from the fetched reels (no fabricated numbers). Follower
-    // count isn't exposed by the reels dataset, so we surface reach/engagement.
-    const totalViews = igReels.reduce((sum, r) => sum + (r.views || 0), 0);
-    const totalLikes = igReels.reduce((sum, r) => sum + (r.likes || 0), 0);
-    const avgViews = igReels.length ? totalViews / igReels.length : 0;
+    const totalViews = igReels.reduce((sum, reel) => sum + (Number(reel?.views) || 0), 0);
+    const totalLikes = igReels.reduce((sum, reel) => sum + (Number(reel?.likes) || 0), 0);
     return [
-      { Icon: FiFilm, value: igReels.length, label: "Latest Reels", hint: "fetched" },
-      { Icon: FiEye, value: totalViews, label: "Total Views", hint: "recent reels" },
-      { Icon: FiHeart, value: totalLikes, label: "Total Likes", hint: "recent reels" },
-      { Icon: FiTrendingUp, value: avgViews, label: "Avg. Views", hint: "per reel" },
+      { Icon: FiFilm, value: igReels.length, label: "Reels", hint: "published" },
+      { Icon: FiEye, value: totalViews, label: "Total Views", hint: "across reels" },
+      { Icon: FiHeart, value: totalLikes, label: "Total Likes", hint: "across reels" },
+      { Icon: FiTrendingUp, value: igReels.length ? totalViews / igReels.length : 0, label: "Avg. Views", hint: "per reel" },
     ];
   }
   if (platform.key === "facebook") {
+    const totalViews = fbPosts.reduce((sum, post) => sum + (Number(post?.views) || 0), 0);
+    const totalLikes = fbPosts.reduce((sum, post) => sum + (Number(post?.likes) || 0), 0);
     return [
-      { Icon: FiUsers, value: 12400, label: "Followers", hint: "on Facebook" },
-      { Icon: FiThumbsUp, value: 9800, label: "Page Likes", hint: "total" },
-      { Icon: FiFileText, value: 540, label: "Posts", hint: "shared" },
-      { Icon: FiTrendingUp, value: 210000, label: "Monthly Reach", hint: "people" },
+      { Icon: FiFileText, value: fbPosts.length, label: "Posts", hint: "published" },
+      { Icon: FiHeart, value: totalLikes, label: "Total Likes", hint: "across posts" },
+      { Icon: FiEye, value: totalViews, label: "Total Views", hint: "across posts" },
+      { Icon: FiTrendingUp, value: fbPosts.length ? totalViews / fbPosts.length : 0, label: "Avg. Views", hint: "per post" },
     ];
   }
   // YouTube -live channel data.
@@ -85,6 +84,8 @@ const cardVariants = {
 };
 
 function StatCard({ Icon, value, label, hint, format, accent, accent2, glow, ring, loading, failed }) {
+  const hasValue = Number.isFinite(Number(value)) && value !== null && value !== undefined;
+
   return (
     <motion.div
       variants={cardVariants}
@@ -111,7 +112,7 @@ function StatCard({ Icon, value, label, hint, format, accent, accent2, glow, rin
             <span className="inline-block h-8 w-16 rounded-md skeleton align-middle" />
           ) : failed ? (
             <span className="text-gray-400">-</span>
-          ) : (
+          ) : hasValue ? (
             <span
               style={{
                 backgroundImage: `linear-gradient(90deg, ${accent}, ${accent2})`,
@@ -120,8 +121,10 @@ function StatCard({ Icon, value, label, hint, format, accent, accent2, glow, rin
                 color: "transparent",
               }}
             >
-              <CountUp value={value} format={format} />
+              <CountUp value={Number(value)} format={format} />
             </span>
+          ) : (
+            <span className="text-gray-400">N/A</span>
           )}
         </h3>
       </div>
@@ -139,15 +142,17 @@ function StatCard({ Icon, value, label, hint, format, accent, accent2, glow, rin
   );
 }
 
-export default function CommunityStats({ platform, channel, status, igReels = [], igStatus }) {
-  const stats = buildStats(platform, channel, igReels);
+export default function CommunityStats({ platform, channel, status, igReels = [], igStatus, fbPosts = [], fbStatus }) {
+  const stats = buildStats(platform, channel, igReels, fbPosts);
   const isYouTube = platform.key === "youtube";
   const isInstagram = platform.key === "instagram";
+  const isFacebook = platform.key === "facebook";
   const loading =
     (isYouTube && status === "loading") ||
-    (isInstagram && (igStatus === "loading" || igStatus === "idle"));
+    (isInstagram && (igStatus === "loading" || igStatus === "idle")) ||
+    (isFacebook && (fbStatus === "loading" || fbStatus === "idle"));
   const failed =
-    (isYouTube && status === "error") || (isInstagram && igStatus === "error");
+    (isYouTube && status === "error") || (isInstagram && igStatus === "error") || (isFacebook && fbStatus === "error");
   const PIcon = platform.Icon;
 
   return (

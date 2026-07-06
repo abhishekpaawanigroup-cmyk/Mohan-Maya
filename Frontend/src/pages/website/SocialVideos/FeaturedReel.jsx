@@ -35,7 +35,7 @@ export default function FeaturedReel({ reel }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-      className="group relative grid lg:grid-cols-2 overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-xl shadow-[0_20px_70px_-30px_rgba(225,48,108,0.45)]"
+      className="group relative grid lg:grid-cols-2 lg:items-stretch overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-xl shadow-[0_20px_70px_-30px_rgba(225,48,108,0.45)]"
     >
       {/* ── Thumbnail ── */}
       <a
@@ -43,7 +43,7 @@ export default function FeaturedReel({ reel }) {
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`View the latest ${type.toLowerCase()} on Instagram`}
-        className="relative block aspect-[4/5] lg:aspect-auto overflow-hidden bg-[#fbfefb] dark:bg-white/5"
+        className="relative block aspect-video lg:aspect-auto lg:min-h-[340px] overflow-hidden bg-[#fbfefb] dark:bg-white/5"
       >
         {imageUrl && imgOk ? (
           <img
@@ -94,10 +94,10 @@ export default function FeaturedReel({ reel }) {
         <span className="pointer-events-none absolute -top-10 -right-10 h-40 w-40 rounded-full bg-[var(--soft)] blur-3xl" />
 
         <span className="relative inline-flex w-fit items-center gap-2 rounded-full border border-[var(--ring)] bg-[var(--soft)] px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-[var(--accent)]">
-          Just Posted
+          Recently Uploaded
         </span>
 
-        <h3 className="relative mt-5 text-xl sm:text-2xl lg:text-[1.75rem] font-bold leading-tight text-gray-900 dark:text-white line-clamp-4 group-hover:text-[var(--accent)] transition-colors">
+        <h3 className="relative mt-5 text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-tight text-gray-900 dark:text-white line-clamp-3 group-hover:text-[var(--accent)] transition-colors">
           {caption || "View this post on Instagram"}
         </h3>
 
@@ -122,7 +122,7 @@ export default function FeaturedReel({ reel }) {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-white font-semibold px-7 py-3.5 rounded-full shadow-lg shadow-[var(--ring)] hover:shadow-xl hover:shadow-[var(--ring)] hover:-translate-y-0.5 transition-all duration-300"
           >
-            <FaInstagram size={20} /> View on Instagram <FiExternalLink size={15} />
+            <FaInstagram size={20} /> Watch Now <FiExternalLink size={15} />
           </a>
         </div>
       </div>

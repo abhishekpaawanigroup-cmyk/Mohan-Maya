@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiAlertCircle, FiInbox, FiRefreshCw, FiClock, FiHeart, FiMessageCircle, FiShare2, FiEye, FiExternalLink } from "react-icons/fi";
+import { FiAlertCircle, FiInbox, FiRefreshCw, FiClock, FiHeart, FiMessageCircle, FiShare2, FiEye, FiExternalLink, FiPlay } from "react-icons/fi";
 import { FaFacebookF } from "react-icons/fa";
 import ScrollReveal from "../../../components/common/ScrollReveal";
 import Pagination from "./Pagination";
@@ -39,7 +39,7 @@ function FacebookCard({ post }) {
           <span className="absolute inset-0 grid place-items-center pointer-events-none">
             <span className="relative grid place-items-center h-16 w-16 rounded-full bg-white/95 text-[#1877f2] shadow-2xl scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
               <span className="absolute inset-0 rounded-full bg-white/60 animate-ping opacity-0 group-hover:opacity-40" />
-              <FiExternalLink className="relative" size={24} />
+              <FiPlay className="relative ml-1" size={24} />
             </span>
           </span>
         )}
@@ -80,10 +80,10 @@ function FacebookCard({ post }) {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Open this Facebook ${post.type || "post"}`}
+            aria-label={`Watch this Facebook ${post.type || "post"}`}
             className="mt-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:shadow-lg hover:shadow-[var(--ring)] text-white text-sm font-semibold px-4 py-3 rounded-full transition-all duration-300 group-hover:gap-3"
           >
-            <FaFacebookF size={16} /> Open on Facebook <FiExternalLink size={13} />
+            <FaFacebookF size={16} /> Watch on Facebook <FiExternalLink size={13} />
           </a>
         )}
       </div>
@@ -103,14 +103,14 @@ function FeaturedFacebook({ post, profileUrl }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-      className="group relative grid lg:grid-cols-2 overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-xl shadow-[0_20px_70px_-30px_rgba(24,119,242,0.45)]"
+      className="group relative grid lg:grid-cols-2 lg:items-stretch overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-xl shadow-[0_20px_70px_-30px_rgba(24,119,242,0.45)]"
     >
       <a
         href={href}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`Open the latest Facebook ${post.type || "post"}`}
-        className="relative block aspect-video lg:aspect-auto overflow-hidden bg-[#fbfefb] dark:bg-white/5"
+        className="relative block aspect-video lg:aspect-auto lg:min-h-[340px] overflow-hidden bg-[#fbfefb] dark:bg-white/5"
       >
         {post.thumbnail && imgOk ? (
           <img
@@ -132,7 +132,7 @@ function FeaturedFacebook({ post, profileUrl }) {
           <span className="absolute inset-0 grid place-items-center pointer-events-none">
             <span className="relative grid place-items-center h-20 w-20 rounded-full bg-white/95 text-[var(--accent)] shadow-2xl scale-90 group-hover:scale-100 transition-transform duration-500">
               <span className="absolute inset-0 rounded-full bg-white/60 animate-ping opacity-40" />
-              <FiExternalLink className="relative" size={34} />
+              <FiPlay className="relative ml-1.5" size={34} />
             </span>
           </span>
         )}
@@ -154,7 +154,7 @@ function FeaturedFacebook({ post, profileUrl }) {
         <span className="pointer-events-none absolute -top-10 -right-10 h-40 w-40 rounded-full bg-[var(--soft)] blur-3xl" />
 
         <span className="relative inline-flex w-fit items-center gap-2 rounded-full border border-[var(--ring)] bg-[var(--soft)] px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-[var(--accent)]">
-          Just Posted
+          Recently Uploaded
         </span>
 
         {profileUrl && (
@@ -163,7 +163,7 @@ function FeaturedFacebook({ post, profileUrl }) {
           </a>
         )}
 
-        <h3 className="relative mt-5 text-xl sm:text-2xl lg:text-[1.75rem] font-bold leading-tight text-gray-900 dark:text-white line-clamp-4 group-hover:text-[var(--accent)] transition-colors">
+        <h3 className="relative mt-5 text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-tight text-gray-900 dark:text-white line-clamp-3 group-hover:text-[var(--accent)] transition-colors">
           {post.caption || "Open this post on Facebook"}
         </h3>
 
@@ -192,7 +192,7 @@ function FeaturedFacebook({ post, profileUrl }) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-white font-semibold px-7 py-3.5 rounded-full shadow-lg shadow-[var(--ring)] hover:shadow-xl hover:shadow-[var(--ring)] hover:-translate-y-0.5 transition-all duration-300"
             >
-              <FaFacebookF size={20} /> View on Facebook <FiExternalLink size={15} />
+              <FaFacebookF size={20} /> View Now <FiExternalLink size={15} />
             </a>
           </div>
         )}

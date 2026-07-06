@@ -166,6 +166,8 @@ export default function SocialVideos() {
         status={channelStatus}
         igReels={instagram.reels}
         igStatus={instagram.status}
+        fbPosts={facebook.posts}
+        fbStatus={facebook.status}
       />
 
       {/* ── Platform highlight cards ── */}
