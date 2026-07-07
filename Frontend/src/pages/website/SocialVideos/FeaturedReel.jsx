@@ -99,7 +99,7 @@ export default function FeaturedReel({ reel }) {
           Recently Uploaded
         </span>
 
-        <h3 className="relative mt-5 text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-tight text-gray-900 dark:text-white line-clamp-3 transition-colors">
+        <h3 className="relative mt-5 text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-[1.5] text-gray-900 dark:text-white line-clamp-3 transition-colors">
           {caption || "View this post on Instagram"}
         </h3>
 
