@@ -42,7 +42,8 @@ export default function ReelCard({ reel }) {
 
   return (
     <article className="group relative flex flex-col h-full rounded-3xl overflow-hidden bg-white/80 dark:bg-white/[0.04] border border-white/60 dark:border-white/10 backdrop-blur-xl shadow-[0_10px_40px_-18px_rgba(0,0,0,0.25)] hover:shadow-[0_24px_55px_-18px_rgba(254,68,98,0.4)] hover:-translate-y-1.5 transition-all duration-500">
-      <div className="relative aspect-video overflow-hidden bg-[#fbfefb] dark:bg-white/5">
+      <div className="relative aspect-video overflow-hidden bg-[#fbfefb] dark:bg-white/5 bg-cover bg-center bg-no-repeat"  style={{ backgroundImage: `url(${imageUrl})` }}>
+       <div class="absolute inset-0 w-full h-full bg-black/80"></div>
         {imageUrl && imgOk ? (
           <img
             src={imageUrl}
@@ -50,8 +51,8 @@ export default function ReelCard({ reel }) {
             loading="lazy"
             decoding="async"
             onError={() => setImgOk(false)}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            className="relative h-full object-contain transition-transform duration-700 group-hover:scale-110 block mx-auto"
+          
           />
         ) : (
           <div className="grid h-full w-full place-items-center bg-gradient-to-br from-[#e1306c]/15 to-[#f77737]/15 text-[#e1306c]">
@@ -63,9 +64,9 @@ export default function ReelCard({ reel }) {
 
         {isReel && (
           <span className="absolute inset-0 grid place-items-center pointer-events-none">
-            <span className="relative grid place-items-center h-16 w-16 rounded-full bg-white/95 text-[var(--accent)] shadow-2xl scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
+            <span className="relative grid place-items-center h-12 w-12 rounded-full bg-white/95 text-[var(--accent)] shadow-2xl scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
               <span className="absolute inset-0 rounded-full bg-white/60 animate-ping opacity-0 group-hover:opacity-40" />
-              <FiPlay className="relative ml-1" size={26} />
+              <FiPlay className="relative ml-1" size={22} />
             </span>
           </span>
         )}
@@ -79,15 +80,19 @@ export default function ReelCard({ reel }) {
       </div>
 
       <div className="p-5 flex flex-col flex-1">
-        {date && (
-          <p className="mb-2 inline-flex items-center gap-1.5 text-xs font-medium text-gray-400 dark:text-gray-500">
+  
+        <h3 className="font-bold text-[15px] leading-snug text-gray-900 dark:text-white line-clamp-2 overflow-hidden  transition-colors">
+          {caption ? caption.replace(/\s+/g, " ").trim().slice(0, 210) : `Instagram ${type.toLowerCase()}`}
+        </h3>
+
+        <div className="flex justify-between items-center mt-4 ">
+
+                {date && (
+          <p className=" inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-gray-500">
             <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> {date}
           </p>
         )}
 
-        <h3 className="font-bold text-[15px] leading-snug text-gray-900 dark:text-white line-clamp-2 min-h-[2.65rem] group-hover:text-[var(--accent)] transition-colors">
-          {caption ? caption.replace(/\s+/g, " ").trim().slice(0, 110) : `Instagram ${type.toLowerCase()}`}
-        </h3>
 
         {permalink && (
           <a
@@ -95,11 +100,12 @@ export default function ReelCard({ reel }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Watch ${type.toLowerCase()} on Instagram`}
-            className="mt-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:shadow-lg hover:shadow-[var(--ring)] text-white text-sm font-semibold px-4 py-3 rounded-full transition-all duration-300 group-hover:gap-3"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 ring-1 ring-inset ring-gray-200 transition-all duration-200 hover:bg-red-600 hover:text-white hover:ring-red-600 dark:bg-slate-700 dark:text-gray-200 dark:ring-slate-600 dark:hover:bg-red-600 dark:hover:text-white dark:hover:ring-red-600"
           >
-            <FaInstagram size={16} /> Watch on Instagram <FiExternalLink size={13} />
+            <FaInstagram size={16} /> Watch
           </a>
         )}
+        </div>
       </div>
     </article>
   );

@@ -27,38 +27,48 @@ export default function VideoCard({ video }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
 
         {/* Play indicator */}
-        <span className="absolute inset-0 grid place-items-center pointer-events-none">
-          <span className="relative grid place-items-center h-16 w-16 rounded-full bg-white/95 text-[var(--accent)] shadow-2xl scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
+        <span className="absolute inset-0 grid place-items-center">
+
+          <a href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="relative grid place-items-center pointer-events-auto h-10 w-10 rounded-full bg-white/95 text-[var(--accent)] shadow-2xl scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
+
             <span className="absolute inset-0 rounded-full bg-white/60 animate-ping opacity-0 group-hover:opacity-40" />
-            <FiPlay className="relative ml-1" size={26} />
-          </span>
+            <FiPlay className="relative ml-1" size={20} />
+
+          </a>
+
         </span>
 
         {/* Platform badge */}
-        <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#ff0000] text-white shadow-lg backdrop-blur-sm">
+        {/* <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#ff0000] text-white shadow-lg backdrop-blur-sm">
           <FaYoutube size={13} /> YouTube
-        </span>
+        </span> */}
       </div>
 
       <div className="p-5 flex flex-col flex-1">
-        {date && (
-          <p className="mb-2 inline-flex items-center gap-1.5 text-xs font-medium text-gray-400 dark:text-gray-500">
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> {date}
-          </p>
-        )}
-        <h3 className="font-bold text-[15px] leading-snug text-gray-900 dark:text-white line-clamp-2 min-h-[2.65rem] group-hover:text-[var(--accent)] transition-colors">
+
+        <h3 className="font-bold text-[15px] leading-snug text-gray-900 dark:text-white line-clamp-2 min-h-[2.65rem] transition-colors">
           {title}
         </h3>
 
-        <a
+        <div className="flex justify-between items-center mt-2" >     
+             {date && (
+          <p className=" inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-gray-500">
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> {date}
+          </p>
+        )}
+          <a
           href={href}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Watch "${title}" on YouTube`}
-          className="mt-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:shadow-lg hover:shadow-[var(--ring)] text-white text-sm font-semibold px-4 py-3 rounded-full transition-all duration-300 group-hover:gap-3"
-        >
-          <FaYoutube size={16} /> Watch on YouTube <FiExternalLink size={13} />
-        </a>
+          className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 ring-1 ring-inset ring-gray-200 transition-all duration-200 hover:bg-red-600 hover:text-white hover:ring-red-600 dark:bg-slate-700 dark:text-gray-200 dark:ring-slate-600 dark:hover:bg-red-600 dark:hover:text-white dark:hover:ring-red-600">
+          <FaYoutube size={16} /> Watch 
+        </a></div>
+
+      
       </div>
     </article>
   );
