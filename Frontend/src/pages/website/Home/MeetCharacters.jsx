@@ -60,7 +60,7 @@ export default function MeetCharacters() {
   const trackTransform = `translateX(calc(${safeIndex} * (100% + ${GAP}px) / ${perView} * -1))`;
 
   return (
-    <section className="relative overflow-hidden py-12 bg-[#fbfefb] dark:bg-[#0d0508]">
+    <section className="relative overflow-hidden py-8 sm:py-10 md:py-12 lg:py-14 xl:py-16 bg-[#fbfefb] dark:bg-[#0d0508]">
       {/* Soft blurred gradient orbs for depth (decorative, non-interactive) */}
      
       

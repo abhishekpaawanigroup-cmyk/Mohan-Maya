@@ -188,7 +188,7 @@ export default function PrivacyPolicy() {
         cta={{ label: "Contact Us", to: "/contact" }}
       />
 
-      <section className="py-16 sm:py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
+      <section className="py-16 sm:py-20 bg-[#fbfefb] dark:bg-[#0d0508] bg-[#fbfefb] dark:bg-[#0d0508]">
         <div className="max-w-6xl mx-auto px-5">
           <ScrollReveal className="mb-8">
             <p className="text-sm text-gray-400">Last updated: {LAST_UPDATED}</p>

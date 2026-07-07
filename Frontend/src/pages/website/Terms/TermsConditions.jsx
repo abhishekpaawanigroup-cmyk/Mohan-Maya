@@ -302,7 +302,7 @@ export default function TermsConditions() {
         cta={{ label: "Contact Us", to: "/contact" }}
       />
 
-      <section className="py-16 sm:py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
+      <section className="py-16 sm:py-20 bg-[#fbfefb] dark:bg-[#0d0508] bg-[#fbfefb] dark:bg-[#0d0508]">
         <div className="max-w-6xl mx-auto px-5">
           {/* Meta row */}
           <ScrollReveal className="flex flex-wrap items-center justify-between gap-4 mb-8">

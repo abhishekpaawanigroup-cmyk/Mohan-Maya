@@ -171,7 +171,7 @@ const Hero = () => {
               {/* Trust badges — wrap neatly on small screens */}
               <motion.ul
                 variants={itemV}
-                className="flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2.5"
+                className="flex flex-wrap items-center justify-start lg:justify-start gap-x-5 gap-y-2.5"
               >
                 {TRUST_BADGES.map(({ icon: Icon, label }) => (
                   <li

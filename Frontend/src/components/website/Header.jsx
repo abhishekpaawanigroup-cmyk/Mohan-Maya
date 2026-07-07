@@ -165,15 +165,15 @@ export default function Header() {
         <AnnouncementBar />
 
         {/* ── Main row ── */}
-        <div className="mx-auto flex h-14 w-full max-w-[1600px] items-center gap-2 px-3 sm:gap-3 sm:px-4 lg:px-8">
+        <div className="mx-auto flex h-14 w-full max-w-[1600px] items-center gap-2 px-3 sm:gap-3 sm:px-4 lg:px-10 py-8">
           {/* Logo */}
           <NavLink to="/" className="group flex shrink-0 items-center gap-2" aria-label="Mohan Maya - home">
-            <span className="h-10 w-10 overflow-hidden rounded-full ring-2 ring-[#fe4462]/30 transition group-hover:ring-[#fe4462]">
+            <span className="h-12 w-12 overflow-hidden rounded-full ring-2 ring-[#fe4462]/30 transition group-hover:ring-[#fe4462]">
               <img src="/header/logo.png" alt="" className="h-full w-full object-cover" />
             </span>
             <span className="hidden leading-none min-[360px]:block">
-              <span className="block text-xl font-black text-gradient">M&amp;M</span>
-              <span className="block text-[9px] uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Mohan Maya</span>
+              <span className="block text-2xl font-black text-gradient">M&amp;M</span>
+              <span className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Mohan Maya</span>
             </span>
           </NavLink>
 
@@ -291,7 +291,7 @@ export default function Header() {
                   <span className="block max-w-[110px] truncate text-[12px] font-bold text-gray-800 dark:text-white">
                     {user ? `${t("account.hello")} ${firstName}` : t("account.helloSignIn")}
                   </span>
-                  <span className="flex items-center gap-1 text-sm font-bold text-gray-800 dark:text-white">
+                  <span className="flex items-center gap-2 text-sm font-bold text-gray-800 dark:text-white">
                     {t("account.account")} <FiChevronDown size={13} className={`transition-transform ${profileOpen ? "rotate-180" : ""}`} />
                   </span>
                 </span>

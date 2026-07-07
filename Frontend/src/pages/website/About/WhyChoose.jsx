@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const WhyChooseUs = () => {
   return (
-  <section className="py-16 bg-[#fbfefb] dark:bg-[#0d0508] relative overflow-hidden">
+  <section className="py-8 sm:py-10 md:py-12 lg:py-14 xl:py-16 bg-[#fbfefb] dark:bg-[#0d0508] relative overflow-hidden">
  
       {/* Background */}
       {/* <div className="absolute w-[500px] h-[500px] rounded-full bg-[#ffecef] opacity-1 -left-40 top-20"></div>

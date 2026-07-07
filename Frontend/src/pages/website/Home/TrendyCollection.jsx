@@ -21,7 +21,7 @@ const TrendyCollection = () => {
   const items = trendyData[activeTab] || [];
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
+    <section className="py-8 sm:py-10 md:py-12 lg:py-14 xl:py-16 bg-[#fbfefb] dark:bg-[#0d0508]">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-8 mb-14">

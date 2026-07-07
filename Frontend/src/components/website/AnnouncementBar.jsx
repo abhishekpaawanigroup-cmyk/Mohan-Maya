@@ -67,7 +67,7 @@ export default function AnnouncementBar() {
 
   return (
     <div className="border-b border-white/10 bg-[#1b1819] text-gray-200 transition-colors dark:bg-[#0d0508]">
-      <div className="mx-auto flex h-10 w-full max-w-[1600px] items-center justify-between gap-3 px-3 text-[11px] sm:px-4 lg:px-8 xl:text-xs">
+      <div className="mx-auto flex h-10 w-full max-w-[1600px] items-center justify-between gap-3 px-3 text-[11px] sm:px-4 lg:px-10 xl:text-xs">
         {/* Rotating announcement */}
         <div
           className="relative h-full min-w-0 flex-1 overflow-hidden"
