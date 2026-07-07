@@ -17,7 +17,8 @@ function FacebookCard({ post }) {
 
   return (
     <article className="group relative flex flex-col h-full rounded-3xl overflow-hidden bg-white/80 dark:bg-white/[0.04] border border-white/60 dark:border-white/10 backdrop-blur-xl shadow-[0_10px_40px_-18px_rgba(0,0,0,0.25)] hover:shadow-[0_24px_55px_-18px_rgba(24,119,242,0.4)] hover:-translate-y-1.5 transition-all duration-500">
-      <div className="relative aspect-video overflow-hidden bg-[#fbfefb] dark:bg-white/5">
+      <div className="relative aspect-video overflow-hidden bg-[#fbfefb] dark:bg-white/5 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${post.thumbnail})` }}>
+        <div class="absolute inset-0 w-full h-full bg-black/80"></div>
         {post.thumbnail && imgOk ? (
           <img
             src={post.thumbnail}
@@ -25,7 +26,8 @@ function FacebookCard({ post }) {
             loading="lazy"
             decoding="async"
             onError={() => setImgOk(false)}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className="relative h-full object-contain transition-transform duration-700 group-hover:scale-110 block mx-auto"
+
           />
         ) : (
           <div className="grid h-full w-full place-items-center bg-gradient-to-br from-[#1877f2]/15 to-[#0a5dc2]/15 text-[#1877f2]">
@@ -37,9 +39,9 @@ function FacebookCard({ post }) {
 
         {isVideo && (
           <span className="absolute inset-0 grid place-items-center pointer-events-none">
-            <span className="relative grid place-items-center h-16 w-16 rounded-full bg-white/95 text-[#1877f2] shadow-2xl scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
+            <span className="relative grid place-items-center h-12 w-12 rounded-full bg-white/95 text-[#1877f2] shadow-2xl scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
               <span className="absolute inset-0 rounded-full bg-white/60 animate-ping opacity-0 group-hover:opacity-40" />
-              <FiPlay className="relative ml-1" size={24} />
+              <FiPlay className="relative ml-1" size={20} />
             </span>
           </span>
         )}
@@ -49,18 +51,8 @@ function FacebookCard({ post }) {
         </span>
       </div>
 
-      <div className="p-5 flex flex-col flex-1">
-        {date && (
-          <p className="mb-2 inline-flex items-center gap-1.5 text-xs font-medium text-gray-400 dark:text-gray-500">
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> {date}
-          </p>
-        )}
-
-        <h3 className="font-bold text-[15px] leading-snug text-gray-900 dark:text-white line-clamp-2 min-h-[2.65rem] group-hover:text-[var(--accent)] transition-colors">
-          {post.caption ? post.caption.replace(/\s+/g, " ").trim().slice(0, 110) : "Facebook post"}
-        </h3>
-
-        <div className="mt-4 flex flex-wrap items-center gap-3 text-xs font-semibold text-gray-500 dark:text-gray-400">
+          <div className="px-5 py-3 flex flex-col flex-1">
+  <div className="mb-2 flex flex-wrap items-center gap-3 text-xs font-semibold text-gray-600 dark:text-gray-400">
           {post.likes != null && post.likes > 0 && (
             <span className="inline-flex items-center gap-1.5"><FiHeart size={13} /> {formatCompact(post.likes)}</span>
           )}
@@ -75,17 +67,31 @@ function FacebookCard({ post }) {
           )}
         </div>
 
+        <h3 className="font-bold text-[15px] leading-snug text-gray-900 dark:text-white line-clamp-2">
+          {post.caption ? post.caption.replace(/\s+/g, " ").trim().slice(0, 110) : "Facebook post"}
+        </h3>
+
+       
+
+
+<div className="flex justify-between items-center mt-4">
+         {date && (
+          <p className=" inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-gray-500">
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> {date}
+          </p>
+        )}
         {href && (
           <a
             href={href}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Watch this Facebook ${post.type || "post"}`}
-            className="mt-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:shadow-lg hover:shadow-[var(--ring)] text-white text-sm font-semibold px-4 py-3 rounded-full transition-all duration-300 group-hover:gap-3"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 ring-1 ring-inset ring-gray-200 transition-all duration-200 hover:bg-red-600 hover:text-white hover:ring-red-600 dark:bg-slate-700 dark:text-gray-200 dark:ring-slate-600 dark:hover:bg-red-600 dark:hover:text-white dark:hover:ring-red-600"
           >
-            <FaFacebookF size={16} /> Watch on Facebook <FiExternalLink size={13} />
+            <FaFacebookF size={12} /> Watch
           </a>
         )}
+        </div>
       </div>
     </article>
   );
@@ -149,15 +155,17 @@ function FeaturedFacebook({ post, profileUrl }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-      className="group relative grid lg:grid-cols-2 lg:items-stretch overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-xl shadow-[0_20px_70px_-30px_rgba(24,119,242,0.45)]"
+      className="group relative grid lg:grid-cols-2 lg:items-stretch overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-xl shadow-[0_20px_70px_-30px_rgba(24,119,242,0.45)] "
     >
       <a
         href={href}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`Open the latest Facebook ${post.type || "post"}`}
-        className="relative block aspect-video lg:aspect-auto lg:min-h-[340px] overflow-hidden bg-[#fbfefb] dark:bg-white/5"
-      >
+        className="relative block aspect-video w-full overflow-hidden bg-gradient-to-br from-amber-100 via-pink-100 to-purple-100 dark:from-amber-950/40 dark:via-pink-950/40 dark:to-purple-950/40 bg-cover bg-center bg-no-repeat"
+         style={{ backgroundImage: `url(${post.thumbnail})` }}>
+            <div class="absolute inset-0 w-full h-full bg-black/80"></div>
+
         {post.thumbnail && imgOk ? (
           <img
             src={post.thumbnail}
@@ -165,7 +173,7 @@ function FeaturedFacebook({ post, profileUrl }) {
             loading="eager"
             decoding="async"
             onError={() => setImgOk(false)}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="relative h-full object-contain transition-transform duration-700 group-hover:scale-105 block mx-auto"
           />
         ) : (
           <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-[#1877f2]/15 to-[#0a5dc2]/15 text-[#1877f2]">
@@ -184,16 +192,16 @@ function FeaturedFacebook({ post, profileUrl }) {
         )}
 
         <span className="absolute top-4 left-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--accent)] text-white text-xs font-bold uppercase tracking-wide shadow-lg">
-          <span className="relative flex h-2 w-2">
+          {/* <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full rounded-full bg-white opacity-75 animate-ping" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
-          </span>
+          </span> */}
           Latest {post.type || "Post"}
         </span>
 
-        <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#1877f2] text-white shadow-lg">
+        {/* <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#1877f2] text-white shadow-lg">
           <FaFacebookF size={13} /> Facebook
-        </span>
+        </span> */}
       </a>
 
       <div className="relative flex flex-col justify-center p-7 sm:p-9 lg:p-11">
@@ -209,7 +217,7 @@ function FeaturedFacebook({ post, profileUrl }) {
           </a>
         )}
 
-        <h3 className="relative mt-5 text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-tight text-gray-900 dark:text-white line-clamp-3 group-hover:text-[var(--accent)] transition-colors">
+        <h3 className="relative mt-5 text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-[1.5] text-gray-900 dark:text-white line-clamp-3 ">
           {post.caption || "Open this post on Facebook"}
         </h3>
 
@@ -236,9 +244,9 @@ function FeaturedFacebook({ post, profileUrl }) {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-white font-semibold px-7 py-3.5 rounded-full shadow-lg shadow-[var(--ring)] hover:shadow-xl hover:shadow-[var(--ring)] hover:-translate-y-0.5 transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-white font-semibold px-7 py-3.5 rounded-full shadow-lg shadow-[var(--ring)] hover:shadow-xl hover:shadow-[var(--ring)] hover:-translate-y-0.5 transition-all duration-300"
             >
-              <FaFacebookF size={20} /> View Now <FiExternalLink size={15} />
+              <FaFacebookF size={20} /> View Now
             </a>
           </div>
         )}
