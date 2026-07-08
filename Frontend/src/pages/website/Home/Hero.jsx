@@ -12,11 +12,11 @@ const Hero = () => {
         />
 
         <div className="absolute top-1/2 left-1/2 z-20 w-full px-4 text-center text-white -translate-x-1/2 -translate-y-1/2">
-          <h1 className="font-bold text-3xl sm:text-4xl md:text-6xl">
+          <h1 className="font-bold text-3xl sm:text-4xl md:text-[64px]">
             Every Miniature Holds <br/> <span className="text-[#fe4462]">A Story</span>
           </h1>
 
-          <p className="text-lg leading-relaxed max-w-[650px] mx-auto mt-4">
+          <p className="text-xl leading-normal max-w-[650px] mx-auto mt-4">
             Handcrafted miniatures inspired by Krishna's divine world, created to bring beauty, faith, and timeless memories into your home. 
           </p>
 

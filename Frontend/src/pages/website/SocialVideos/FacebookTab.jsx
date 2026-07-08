@@ -86,7 +86,7 @@ function FacebookCard({ post }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Watch this Facebook ${post.type || "post"}`}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 ring-1 ring-inset ring-gray-200 transition-all duration-200 hover:bg-red-600 hover:text-white hover:ring-red-600 dark:bg-slate-700 dark:text-gray-200 dark:ring-slate-600 dark:hover:bg-red-600 dark:hover:text-white dark:hover:ring-red-600"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 ring-1 ring-inset ring-gray-200 transition-all duration-200 hover:bg-blue-600 hover:text-white hover:ring-blue-600 dark:bg-slate-700 dark:text-gray-200 dark:ring-slate-600 dark:hover:bg-blue-600 dark:hover:text-white dark:hover:ring-blue-600"
           >
             <FaFacebookF size={12} /> Watch
           </a>
