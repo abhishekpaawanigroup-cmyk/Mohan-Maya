@@ -94,7 +94,7 @@ export default function HeaderSearch({ onNavigate, autoFocus = false, className 
   };
 
   return (
-    <form ref={wrapRef} role="search" onSubmit={onSubmit} className={`relative ${className}`}>
+    <form ref={wrapRef} role="search" onSubmit={onSubmit} className={`header-search relative ${className}`}>
       <div className="flex items-stretch rounded-full bg-white ring-1 ring-gray-200 dark:bg-white/5 dark:ring-white/10">
         {/* Category scope - custom dropdown; label reflects the current choice
             and only the hovered option ever highlights. */}
@@ -155,7 +155,7 @@ export default function HeaderSearch({ onNavigate, autoFocus = false, className 
             aria-activedescendant={active >= 0 ? `header-sugg-${active}` : undefined}
             aria-label={t("search.button")}
             placeholder={t("search.placeholder")}
-            className="w-full bg-transparent py-3 pl-4 pr-9 text-sm text-gray-800 outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500"
+            className="w-full bg-transparent py-3 pl-4 pr-9 text-sm text-gray-800 outline-none placeholder:text-gray-400 focus:outline-none focus-visible:outline-none dark:text-white dark:placeholder:text-gray-500"
           />
           {query && (
             <button

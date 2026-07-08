@@ -45,6 +45,16 @@ header :focus-visible {
   border-radius: 6px;
 }
 
+/* Keep the header search UI visually clean on click/focus. */
+header .header-search input:focus-visible,
+header .header-search button:focus-visible,
+header .header-search [type="button"]:focus-visible,
+header .header-search [type="submit"]:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 9999px;
+}
+
 /* Every clickable control shows a pointer cursor (disabled controls don't). */
 button:not(:disabled),
 [role="button"]:not([aria-disabled="true"]),
