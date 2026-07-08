@@ -3,7 +3,7 @@ import LazyVideo from "../../../components/common/LazyVideo";
 
 const Hero = () => {
   return (
-    <div className="relative pb-10 mt-20 bg-[#fbfefb] dark:bg-[#0d0508]">
+    <div className="relative pb-10 mt-24 bg-[#fbfefb] dark:bg-[#0d0508]">
       {/* Hero Video Section */}
       <div className="w-full h-[650px] sm:h-[750px] lg:h-[875px] relative overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-black/50 after:z-10">
         <LazyVideo

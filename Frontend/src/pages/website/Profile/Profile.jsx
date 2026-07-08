@@ -27,7 +27,6 @@ import { HiSparkles } from "react-icons/hi2";
 import { useApp } from "../../../context/AppContext";
 import { usePageMeta } from "../../../hooks/useHooks";
 import ScrollReveal from "../../../components/common/ScrollReveal";
-import RecentlyViewed from "../../../components/product/RecentlyViewed";
 import { AccountModals } from "./accountModals";
 
 const card =
@@ -150,7 +149,7 @@ export default function Profile() {
   return (
     <div className="bg-[#fbfefb] dark:bg-[#0d0508]">
       {/* ── Premium profile hero ── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#1b1016] via-[#23121a] to-[#0d0508] pt-28 lg:pt-36 pb-20 sm:pb-24 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#1b1016] via-[#23121a] to-[#0d0508] pt-28 lg:pt-36 pb-20 sm:pb-24 text-white mt-20">
         <div className="pointer-events-none absolute -top-24 -left-20 h-80 w-80 rounded-full bg-[#fe4462]/25 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-28 right-0 h-80 w-80 rounded-full bg-[#c48212]/20 blur-3xl" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.05] bg-[radial-gradient(circle_at_1px_1px,#fff_1px,transparent_0)] [background-size:22px_22px]" />
@@ -458,9 +457,6 @@ export default function Profile() {
           </div>
         </div>
       </section>
-
-      {/* Recently viewed (reuses the shared, catalog-resolved section) */}
-      <RecentlyViewed className="!py-0 pb-20" />
 
       <AccountModals open={modal} editingAddress={editingAddress} onClose={closeModal} />
     </div>

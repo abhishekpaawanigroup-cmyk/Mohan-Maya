@@ -204,7 +204,7 @@ const Hero = () => {
 
             {/* Auto-rotating 3D model (replaces the character image) */}
             <Suspense fallback={null}>
-              <Hero3DModel className="!absolute inset-0 z-10 !w-[80%] !h-[80%]" />
+              <Hero3DModel className="!absolute inset-0 z-10 !w-[70%] !h-[70%] mt-20 ml-20" />
             </Suspense>
  
           </div>
