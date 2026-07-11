@@ -38,9 +38,33 @@ export default function MeetCharacters() {
   );
   const [index, setIndex] = useState(0);
 
-  // Helper function to preserve existing filters when selecting a character
+  // Helper function to preserve shop filters when selecting a character
+  // If on home page, restore last used shop filters from localStorage
   const getCharacterLink = (characterName) => {
-    const params = new URLSearchParams(searchParams);
+    let params = new URLSearchParams(searchParams);
+
+    // If searchParams is empty (on home page), restore filters from shop page
+    if (params.toString() === "") {
+      try {
+        const savedFilters = localStorage.getItem("shopFilters");
+        if (savedFilters) {
+          const filters = JSON.parse(savedFilters);
+          if (filters.category && filters.category !== "All Products") {
+            params.set("category", filters.category);
+          }
+          if (filters.price && filters.price !== "all") {
+            params.set("price", filters.price);
+          }
+          if (filters.sort && filters.sort !== "featured") {
+            params.set("sort", filters.sort);
+          }
+        }
+      } catch (e) {
+        // Silently ignore localStorage errors
+      }
+    }
+
+    // Set or update the character parameter
     params.set("character", characterName);
     return `/shop?${params.toString()}`;
   };

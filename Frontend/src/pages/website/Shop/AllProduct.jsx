@@ -37,14 +37,39 @@ const Products = () => {
   // Show skeletons while the debounced search is catching up with typing.
   const loading = search !== debouncedSearch;
 
+  // Persist active filters to localStorage for cross-page continuity
+  useEffect(() => {
+    const filterState = {
+      category: selectedCategory,
+      character: selectedCharacter,
+      price,
+      sort,
+    };
+    localStorage.setItem("shopFilters", JSON.stringify(filterState));
+  }, [selectedCategory, selectedCharacter, price, sort]);
+
   // Keep the URL in sync with all filters (shareable links).
+  // Use replace: true to avoid polluting history with intermediate states.
   useEffect(() => {
     const next = new URLSearchParams();
-    if (debouncedSearch) next.set("search", debouncedSearch);
-    if (selectedCategory && selectedCategory !== "All Products") next.set("category", selectedCategory);
-    if (selectedCharacter && selectedCharacter !== "All Characters") next.set("character", selectedCharacter);
-    if (price && price !== "all") next.set("price", price);
-    if (sort && sort !== "featured") next.set("sort", sort);
+
+    // Set all active filters in URL, omit defaults
+    if (debouncedSearch) {
+      next.set("search", debouncedSearch);
+    }
+    if (selectedCategory && selectedCategory !== "All Products") {
+      next.set("category", selectedCategory);
+    }
+    if (selectedCharacter && selectedCharacter !== "All Characters") {
+      next.set("character", selectedCharacter);
+    }
+    if (price && price !== "all") {
+      next.set("price", price);
+    }
+    if (sort && sort !== "featured") {
+      next.set("sort", sort);
+    }
+
     setSearchParams(next, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch, selectedCategory, selectedCharacter, price, sort]);
@@ -58,14 +83,31 @@ const Products = () => {
     const urlPrice = searchParams.get("price") || "all";
     const urlSort = searchParams.get("sort") || "featured";
 
-    // Only update state if URL differs from current state (prevents loops)
-    if (search !== urlSearch || selectedCategory !== urlCategory ||
-        selectedCharacter !== urlCharacter || price !== urlPrice || sort !== urlSort) {
-      if (search !== urlSearch) setSearch(urlSearch);
-      if (selectedCategory !== urlCategory) setSelectedCategory(urlCategory);
-      if (selectedCharacter !== urlCharacter) setSelectedCharacter(urlCharacter);
-      if (price !== urlPrice) setPrice(urlPrice);
-      if (sort !== urlSort) setSort(urlSort);
+    // Update each filter independently to ensure all changes are captured
+    const updates = [];
+    if (search !== urlSearch) {
+      setSearch(urlSearch);
+      updates.push("search");
+    }
+    if (selectedCategory !== urlCategory) {
+      setSelectedCategory(urlCategory);
+      updates.push("category");
+    }
+    if (selectedCharacter !== urlCharacter) {
+      setSelectedCharacter(urlCharacter);
+      updates.push("character");
+    }
+    if (price !== urlPrice) {
+      setPrice(urlPrice);
+      updates.push("price");
+    }
+    if (sort !== urlSort) {
+      setSort(urlSort);
+      updates.push("sort");
+    }
+
+    // Only reset page if any filter changed
+    if (updates.length > 0) {
       setPage(1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
