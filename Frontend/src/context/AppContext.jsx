@@ -227,28 +227,37 @@ export function AppProvider({ children }) {
 
   const toggleWishlist = useCallback(
     (product, wishlistKey = null) => {
-      // Wishlist is open to everyone - no authentication required. Toggle
-      // silently; the heart icon's filled/outline state is the only feedback.
-      // The functional updater stays pure, so Strict Mode's double-invoke can't
-      // duplicate the item.
-      const key = wishlistKey || product?.wishlistKey;
-      setWishlist((prev) => {
-        const exists = prev.some((i) => {
-          if (key) return i.wishlistKey === key;
-          return i.id === product.id;
-        });
-
-        if (exists) {
-          return prev.filter((i) => {
-            if (key) return i.wishlistKey !== key;
-            return i.id !== product.id;
+      const commit = () => {
+        // Toggle silently; the heart icon's filled/outline state is the only feedback.
+        // The functional updater stays pure, so Strict Mode's double-invoke can't
+        // duplicate the item.
+        const key = wishlistKey || product?.wishlistKey;
+        setWishlist((prev) => {
+          const exists = prev.some((i) => {
+            if (key) return i.wishlistKey === key;
+            return i.id === product.id;
           });
-        }
 
-        return [...prev, key ? { ...product, wishlistKey: key } : product];
-      });
+          if (exists) {
+            return prev.filter((i) => {
+              if (key) return i.wishlistKey !== key;
+              return i.id !== product.id;
+            });
+          }
+
+          return [...prev, key ? { ...product, wishlistKey: key } : product];
+        });
+      };
+
+      // Require authentication to add/remove wishlist items
+      if (!user) {
+        requireAuth(commit);
+        return false; // deferred - caller should skip any post-toggle side effects
+      }
+      commit();
+      return true;
     },
-    [setWishlist]
+    [user, requireAuth, setWishlist]
   );
 
   // ── Coupons ─────────────────────────────────────────────

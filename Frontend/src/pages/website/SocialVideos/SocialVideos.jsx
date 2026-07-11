@@ -185,7 +185,7 @@ export default function SocialVideos() {
             className="relative overflow-hidden rounded-[2rem] px-6 py-14 sm:px-12 sm:py-20 text-center shadow-2xl"
           >
             {/* Brand gradient backdrop */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#260b0b] to-[#bb0000]" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#1e2c4c] to-[#000000]" />
 
             {/* Layered decorative glows + subtle grid */}
             <div className="pointer-events-none absolute -top-20 -right-10 w-72 h-72 rounded-full bg-white/15 blur-3xl" />

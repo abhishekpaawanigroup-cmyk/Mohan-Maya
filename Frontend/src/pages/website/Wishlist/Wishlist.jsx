@@ -34,11 +34,12 @@ export default function Wishlist() {
   };
   const moveAllToCart = () => {
     [...wishlist].forEach((item) => {
-      addToCart(item, 1);
-      toggleWishlist(item);
+      if (addToCart(item, 1)) toggleWishlist(item);
     });
   };
-  const clearWishlist = () => [...wishlist].forEach((item) => toggleWishlist(item));
+  const clearWishlist = () => {
+    [...wishlist].forEach((item) => toggleWishlist(item));
+  };
 
   const totalValue = wishlist.reduce((sum, i) => sum + (Number(i.price) || 0), 0);
 
@@ -62,7 +63,7 @@ export default function Wishlist() {
             Your wishlist is empty
           </h1>
           <p className="mt-3 text-gray-500 dark:text-gray-400 leading-relaxed">
-            Your wishlist is waiting for your favorite items. Browse the collection
+            Your wishlist is waiting for your favourite items. Browse the collection
             and tap the heart on any piece to save it here.
           </p>
           <Link
