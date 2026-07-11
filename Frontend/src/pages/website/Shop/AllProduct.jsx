@@ -15,16 +15,17 @@ const PAGE_SIZE = 9;
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  // Initialize all filters from URL parameters
   const [search, setSearch] = useState(searchParams.get("search") || "");
-  const debouncedSearch = useDebounce(search, 300);
-
-  const [selectedCategory, setSelectedCategory] = useState("All Products");
-  const [selectedCharacter, setSelectedCharacter] = useState("All Characters");
-  const [price, setPrice] = useState("all");
-  const [sort, setSort] = useState("featured");
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get("category") || "All Products");
+  const [selectedCharacter, setSelectedCharacter] = useState(searchParams.get("character") || "All Characters");
+  const [price, setPrice] = useState(searchParams.get("price") || "all");
+  const [sort, setSort] = useState(searchParams.get("sort") || "featured");
   const [page, setPage] = useState(1);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  const debouncedSearch = useDebounce(search, 300);
 
   const prefersReducedMotion = useReducedMotion();
   const productsTopRef = useRef(null);
@@ -36,20 +37,38 @@ const Products = () => {
   // Show skeletons while the debounced search is catching up with typing.
   const loading = search !== debouncedSearch;
 
-  // Keep the URL in sync with the search box (shareable links).
+  // Keep the URL in sync with all filters (shareable links).
   useEffect(() => {
-    const next = new URLSearchParams(searchParams);
+    const next = new URLSearchParams();
     if (debouncedSearch) next.set("search", debouncedSearch);
-    else next.delete("search");
+    if (selectedCategory && selectedCategory !== "All Products") next.set("category", selectedCategory);
+    if (selectedCharacter && selectedCharacter !== "All Characters") next.set("character", selectedCharacter);
+    if (price && price !== "all") next.set("price", price);
+    if (sort && sort !== "featured") next.set("sort", sort);
     setSearchParams(next, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearch]);
+  }, [debouncedSearch, selectedCategory, selectedCharacter, price, sort]);
 
-  // Adopt a search term arriving from the header while already on this page.
+  // Sync state from URL when navigating to this page with new filter params.
+  // This handles: links from homepage, header search, browser history, direct URLs.
   useEffect(() => {
     const urlSearch = searchParams.get("search") || "";
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setSearch((prev) => (prev !== urlSearch ? urlSearch : prev));
+    const urlCategory = searchParams.get("category") || "All Products";
+    const urlCharacter = searchParams.get("character") || "All Characters";
+    const urlPrice = searchParams.get("price") || "all";
+    const urlSort = searchParams.get("sort") || "featured";
+
+    // Only update state if URL differs from current state (prevents loops)
+    if (search !== urlSearch || selectedCategory !== urlCategory ||
+        selectedCharacter !== urlCharacter || price !== urlPrice || sort !== urlSort) {
+      if (search !== urlSearch) setSearch(urlSearch);
+      if (selectedCategory !== urlCategory) setSelectedCategory(urlCategory);
+      if (selectedCharacter !== urlCharacter) setSelectedCharacter(urlCharacter);
+      if (price !== urlPrice) setPrice(urlPrice);
+      if (sort !== urlSort) setSort(urlSort);
+      setPage(1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   // Filter changes always send the user back to the first page.

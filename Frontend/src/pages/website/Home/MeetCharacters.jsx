@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
 import SectionHeading from "../../../components/common/SectionHeading";
@@ -32,10 +32,18 @@ function getPerView(width) {
 }
 
 export default function MeetCharacters() {
+  const [searchParams] = useSearchParams();
   const [perView, setPerView] = useState(() =>
     typeof window !== "undefined" ? getPerView(window.innerWidth) : 5
   );
   const [index, setIndex] = useState(0);
+
+  // Helper function to preserve existing filters when selecting a character
+  const getCharacterLink = (characterName) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("character", characterName);
+    return `/shop?${params.toString()}`;
+  };
 
   // Track the breakpoint so the slider stays responsive.
   useEffect(() => {
@@ -112,7 +120,7 @@ export default function MeetCharacters() {
 
                     {/* Transparent glass / outlined Explore button */}
                     <Link
-                      to="/shop"
+                      to={getCharacterLink(char.name)}
                       aria-label={`Explore the ${char.name} collection`}
                       className="group/btn mt-3 inline-flex items-center justify-center gap-1.5 rounded-full border border-gray-300/80 bg-white/10 px-5 py-2 text-xs font-semibold tracking-wide text-gray-800 backdrop-blur-md transition-all duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#fe4462]/60 active:scale-95 dark:border-white/25 dark:text-white"
                     >
