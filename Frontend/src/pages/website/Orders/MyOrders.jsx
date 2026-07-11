@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiSearch, FiInbox, FiMapPin, FiTruck, FiSlash, FiEye,
@@ -12,6 +12,7 @@ import CancelOrderModal from "../../../components/orders/CancelOrderModal";
 import { OrderCardSkeletonGrid } from "../../../components/orders/OrderSkeletons";
 import { useApp } from "../../../context/AppContext";
 import { usePageMeta } from "../../../hooks/useHooks";
+import { useNotificationTrigger } from "../../../hooks/useNotificationTrigger";
 import {
   deriveStatus, isCancellable, paymentLabel, paymentStatus, PAYMENT_TONE,
   itemCount, deliveryEstimate, fmtDate, inr,
@@ -24,7 +25,9 @@ const PER_PAGE = 4;
 export default function MyOrders() {
   usePageMeta("My Orders - Mohan Maya", "View, track and manage your Mohan Maya orders.");
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { orders, cancelOrder } = useApp();
+  const trigger = useNotificationTrigger();
 
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
@@ -33,12 +36,39 @@ export default function MyOrders() {
   const [page, setPage] = useState(1);
   const [detailsOrder, setDetailsOrder] = useState(null);
   const [cancelTarget, setCancelTarget] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   // Brief skeleton pass on mount for a polished loading feel (data is local).
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 500);
     return () => clearTimeout(t);
   }, []);
+
+  // Handle auto-filtering and highlighting order from notification click
+  useEffect(() => {
+    const orderId = searchParams.get('orderId');
+    if (!orderId || !orders.length) return;
+
+    const order = orders.find((o) => o.id === orderId);
+    if (!order) {
+      // Order not found - show friendly message
+      setErrorMessage(`Order #${orderId} not found. It may have been deleted.`);
+      // Clear the query param
+      setSearchParams({});
+      return;
+    }
+
+    // Set the correct filter based on order status (but don't open modal)
+    const orderStatus = deriveStatus(order);
+    if (orderStatus !== filter) {
+      setFilter(orderStatus);
+      setFiltering(true);
+    }
+
+    // Clear the query param after setting filter
+    // Do NOT open the modal - just navigate and filter
+    setSearchParams({});
+  }, [searchParams, orders, filter, setSearchParams]);
 
   // Show a short skeleton pass whenever the active filter switches, so the
   // change is clearly perceptible even when data resolves instantly.
@@ -86,7 +116,12 @@ export default function MyOrders() {
   const trackOrder = (id) => navigate(`/track?order=${id}`);
 
   const handleCancel = async ({ reason, note }) => {
-    cancelOrder(cancelTarget.id, { reason, note });
+    const orderId = cancelTarget.id;
+    cancelOrder(orderId, { reason, note });
+
+    // Show notification in the notification bell instead of toast
+    trigger.orderCancelled(orderId);
+
     setCancelTarget(null);
     setDetailsOrder(null);
   };
@@ -113,6 +148,24 @@ export default function MyOrders() {
           </p>
         </ScrollReveal>
 
+        {/* Error Message - Order Not Found */}
+        {errorMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="mb-6 rounded-lg border border-orange-200 bg-orange-50 p-4 text-sm text-orange-800 dark:border-orange-900/30 dark:bg-orange-900/20 dark:text-orange-300"
+          >
+            <p className="font-medium">{errorMessage}</p>
+            <button
+              onClick={() => setErrorMessage(null)}
+              className="mt-2 text-xs font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300"
+            >
+              Dismiss
+            </button>
+          </motion.div>
+        )}
+
         {/* Search */}
         <div className="mb-5">
           <div className="relative max-w-md">
@@ -125,7 +178,7 @@ export default function MyOrders() {
             />
           </div>
         </div>
-        
+
 
         {/* Filter tabs */}
         <div className="mb-7 flex flex-wrap gap-2">

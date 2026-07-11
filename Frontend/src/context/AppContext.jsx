@@ -345,10 +345,10 @@ export function AppProvider({ children }) {
       };
       setOrders((prev) => [order, ...prev]);
       clearCart();
-      addToast("Order placed successfully!", "success");
+      // Notification is triggered by the component calling placeOrder (via useNotificationTrigger)
       return id;
     },
-    [cart, coupon, couponCode, setOrders, clearCart, addToast]
+    [cart, coupon, couponCode, setOrders, clearCart]
   );
 
   const getOrder = useCallback(
@@ -375,10 +375,10 @@ export function AppProvider({ children }) {
           };
         })
       );
-      if (ok) addToast("Your order has been cancelled successfully.", "success");
+      // Notification is now shown via NotificationBell using useNotificationTrigger
       return ok;
     },
-    [setOrders, addToast]
+    [setOrders]
   );
 
   // ── Admin: cross-account order access ───────────────────

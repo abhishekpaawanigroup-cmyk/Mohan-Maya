@@ -5,6 +5,7 @@ import { FiCreditCard, FiTruck, FiSmartphone, FiLock, FiShoppingBag, FiX } from 
 import ScrollReveal from "../../../components/common/ScrollReveal";
 import { useApp } from "../../../context/AppContext";
 import { usePageMeta } from "../../../hooks/useHooks";
+import { useNotificationTrigger } from "../../../hooks/useNotificationTrigger";
 
 const initialForm = {
   fullName: "",
@@ -25,6 +26,7 @@ const paymentMethods = [
 export default function Checkout() {
   usePageMeta("Checkout - Mohan Maya", "Securely complete your Mohan Maya order.");
   const navigate = useNavigate();
+  const trigger = useNotificationTrigger();
   const { cart, totals, coupon, couponCode, applyCoupon, removeCoupon, placeOrder, addToast } = useApp();
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
@@ -74,6 +76,10 @@ export default function Checkout() {
     }
     setSubmitting(true);
     const id = placeOrder({ ...form, payment });
+
+    // Trigger notification for order placement
+    trigger.orderPlaced(id);
+
     navigate(`/track?order=${id}`);
   };
 
