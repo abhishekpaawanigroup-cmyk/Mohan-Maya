@@ -22,10 +22,18 @@ import {
  *  - adminMode        boolean         (shows the owning customer's email)
  */
 export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, adminMode = false }) {
+  // Lock body scroll when modal opens, restore on close
   useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     const onKey = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
   }, [onClose]);
 
   const status = deriveStatus(order);
