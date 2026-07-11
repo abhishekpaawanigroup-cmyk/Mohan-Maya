@@ -12,13 +12,13 @@ import SectionHeading from "../../../components/common/SectionHeading";
  * fades out at the last set -both transition smoothly with position.
  */
 const characters = [
-  { name: "Krishna", image: "/Featured-images/mm4.png" },
-  { name: "Radha", image: "/Featured-images/mm5.png" },
-  { name: "Madhav", image: "/Featured-images/mm6.png" },
+  { name: "Mohan", image: "/Featured-images/mm4.png" },
+  { name: "Maya", image: "/Featured-images/mm5.png" },
+  { name: "Mohan", image: "/Featured-images/mm6.png" },
   { name: "Maya", image: "/Featured-images/mm7.png" },
-  { name: "Shiva", image: "/trandy-images/mm4.png" },
-  { name: "Mohini", image: "/trandy-images/mm6.png" },
-  { name: "Govinda", image: "/bestseller-image/mm6.png" },
+  { name: "Mohan", image: "/trandy-images/mm4.png" },
+  { name: "Maya", image: "/trandy-images/mm6.png" },
+  { name: "Mohan", image: "/bestseller-image/mm6.png" },
 ];
 
 const GAP = 20; // px -must match the track's gap-5
