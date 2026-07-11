@@ -11,6 +11,7 @@ import {
   FiCamera,
   FiZoomIn,
   FiAlertTriangle,
+  FiPlus,
 } from "react-icons/fi";
 import { useApp } from "../../context/AppContext";
 import { useModalA11y } from "../../hooks/useHooks";
@@ -227,7 +228,9 @@ function RatingSummary({ reviews }) {
 }
 
 /* ── Review submission form ── */
-function ReviewForm({ onSubmit }) {
+const MAX_PHOTOS = 6;
+
+function ReviewForm({ onSubmit, onPreviewImagesChange }) {
   const { user, addToast } = useApp();
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState("");
@@ -235,7 +238,13 @@ function ReviewForm({ onSubmit }) {
   const [images, setImages] = useState([]); // { url, file }
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [imageError, setImageError] = useState("");
   const fileRef = useRef(null);
+
+  // Notify parent when images change (for preview display)
+  useEffect(() => {
+    onPreviewImagesChange?.(images.map((img) => img.url));
+  }, [images, onPreviewImagesChange]);
 
   // Revoke object URLs on unmount to avoid leaks.
   useEffect(() => {
@@ -244,9 +253,23 @@ function ReviewForm({ onSubmit }) {
   }, []);
 
   const addFiles = (fileList) => {
-    const picked = Array.from(fileList || []).filter((f) => f.type.startsWith("image/")).slice(0, 6);
+    setImageError(""); // Clear previous errors
+    const imageArray = Array.from(fileList || []);
+    const imageFiles = imageArray.filter((f) => f.type.startsWith("image/"));
+
+    const currentCount = images.length;
+    const availableSlots = MAX_PHOTOS - currentCount;
+
+    // Check if trying to add more files than available slots
+    if (imageFiles.length > availableSlots) {
+      setImageError(`You can upload a maximum of ${MAX_PHOTOS} photos only. You have ${availableSlots} slot${availableSlots !== 1 ? "s" : ""} remaining.`);
+      addToast(`Maximum ${MAX_PHOTOS} photos allowed. ${availableSlots} slot${availableSlots !== 1 ? "s" : ""} available.`, "error");
+      return;
+    }
+
+    const picked = imageFiles.slice(0, MAX_PHOTOS);
     const mapped = picked.map((file) => ({ url: URL.createObjectURL(file), file }));
-    setImages((prev) => [...prev, ...mapped].slice(0, 6));
+    setImages((prev) => [...prev, ...mapped]);
   };
 
   const removeImage = (url) => {
@@ -342,24 +365,48 @@ function ReviewForm({ onSubmit }) {
 
       {/* Image upload */}
       <div className="mb-5">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Add photos (optional)</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
+          Add photos (optional)
+          {images.length > 0 && <span className="text-gray-400 font-normal"> · {images.length}/{MAX_PHOTOS}</span>}
+        </label>
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
-          className="w-full flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gray-200 dark:border-white/15 rounded-xl py-6 text-gray-500 dark:text-gray-400 hover:border-[#fe4462] hover:text-[#fe4462] transition"
+          disabled={images.length >= MAX_PHOTOS}
+          className={`w-full flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-xl py-6 transition ${
+            images.length >= MAX_PHOTOS
+              ? "border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02] text-gray-400 dark:text-gray-500 cursor-not-allowed"
+              : "border-gray-200 dark:border-white/15 text-gray-500 dark:text-gray-400 hover:border-[#fe4462] hover:text-[#fe4462]"
+          }`}
+          aria-disabled={images.length >= MAX_PHOTOS}
         >
           <FiUploadCloud size={26} />
-          <span className="text-sm font-medium">Click to upload images</span>
-          <span className="text-xs">PNG or JPG · up to 6 photos</span>
+          <span className="text-sm font-medium">
+            {images.length >= MAX_PHOTOS ? "Maximum photos reached" : "Click to upload images"}
+          </span>
+          <span className="text-xs">
+            {images.length >= MAX_PHOTOS
+              ? "Remove photos to add more"
+              : `PNG or JPG · up to ${MAX_PHOTOS} photos`
+            }
+          </span>
         </button>
         <input
           ref={fileRef}
           type="file"
           accept="image/*"
           multiple
+          disabled={images.length >= MAX_PHOTOS}
           className="hidden"
           onChange={(e) => addFiles(e.target.files)}
+          aria-disabled={images.length >= MAX_PHOTOS}
         />
+
+        {imageError && (
+          <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+            <FiAlertTriangle size={14} /> {imageError}
+          </p>
+        )}
 
         {images.length > 0 && (
           <div className="flex flex-wrap gap-3 mt-3">
@@ -471,16 +518,23 @@ function ReviewCard({ review, onLike, liked, onOpenImage }) {
 }
 
 /* ── Customer photo gallery ── */
-function PhotoGallery({ images, onOpen }) {
-  if (!images.length) return null;
+function PhotoGallery({ images = [], previewImages = [], onOpen }) {
+  const MAX_PHOTOS = 6;
+  // Only show preview images from form, not gallery images
+  const displayImages = previewImages.slice(0, MAX_PHOTOS);
+  const placeholderCount = Math.max(0, MAX_PHOTOS - displayImages.length);
+
   return (
     <div className="bg-white dark:bg-white/5 rounded-2xl p-6 shadow-sm ring-1 ring-black/5 dark:ring-white/10">
       <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
         <FiCamera size={18} className="text-[#fe4462]" /> Customer Photos
       </h3>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-4">{images.length} photos from buyers</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-4">
+        {displayImages.length > 0 ? `${displayImages.length} photo${displayImages.length !== 1 ? "s" : ""}` : "Uploaded by buyers"}
+      </p>
       <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 gap-2.5">
-        {images.map((src, i) => (
+        {/* Display preview images from form */}
+        {displayImages.map((src, i) => (
           <button
             key={src + i}
             type="button"
@@ -493,6 +547,16 @@ function PhotoGallery({ images, onOpen }) {
               <FiZoomIn size={20} />
             </span>
           </button>
+        ))}
+
+        {/* Display empty placeholder boxes */}
+        {Array.from({ length: placeholderCount }).map((_, i) => (
+          <div
+            key={`placeholder-${i}`}
+            className="relative aspect-square rounded-lg border-2 border-dashed border-gray-200 dark:border-white/20 bg-gray-50 dark:bg-white/5 flex items-center justify-center"
+          >
+            <FiPlus size={24} className="text-gray-300 dark:text-gray-600" />
+          </div>
         ))}
       </div>
     </div>
@@ -605,6 +669,7 @@ export default function Reviews({ title = "Customer Reviews & Ratings" }) {
   const [liked, setLiked] = useState({});
   const [lightbox, setLightbox] = useState(-1); // index into gallery, -1 = closed
   const [page, setPage] = useState(1);
+  const [previewImages, setPreviewImages] = useState([]); // Images being uploaded in ReviewForm
 
   // Mock async fetch on mount - state is only set inside the timeout (async),
   // never synchronously in the effect body.
@@ -632,8 +697,12 @@ export default function Reviews({ title = "Customer Reviews & Ratings" }) {
   const safePage = Math.min(page, totalPages);
   const paginated = reviews.slice((safePage - 1) * REVIEWS_PER_PAGE, safePage * REVIEWS_PER_PAGE);
 
-  // New review → jump to the first page so it's visible.
-  const addReview = (review) => { setReviews((prev) => [review, ...prev]); setPage(1); };
+  // New review → jump to the first page so it's visible, clear preview images.
+  const addReview = (review) => {
+    setReviews((prev) => [review, ...prev]);
+    setPage(1);
+    setPreviewImages([]); // Clear preview after successful submission
+  };
   const toggleLike = (id) => setLiked((prev) => ({ ...prev, [id]: !prev[id] }));
   const openImageBySrc = (src) => {
     const i = gallery.indexOf(src);
@@ -658,9 +727,9 @@ export default function Reviews({ title = "Customer Reviews & Ratings" }) {
             ) : status === "ready" ? (
               <RatingSummary reviews={reviews} />
             ) : null}
-            <PhotoGallery images={gallery} onOpen={setLightbox} />
+            <PhotoGallery images={gallery} previewImages={previewImages} onOpen={setLightbox} />
           </div>
-          <ReviewForm onSubmit={addReview} />
+          <ReviewForm onSubmit={addReview} onPreviewImagesChange={setPreviewImages} />
         </div>
 
         {/* Reviews list */}
