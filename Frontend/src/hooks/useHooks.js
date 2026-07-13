@@ -34,11 +34,20 @@ export function useScrollThreshold(threshold = 0) {
   return passed;
 }
 
+// Same-tab broadcast channel for localStorage writes: the native "storage"
+// event only fires in *other* tabs, so independent useLocalStorage(key, ...)
+// instances in the same tab (e.g. the currency selector and CurrencyContext,
+// both keyed on "mm-currency") would otherwise never see each other's writes.
+const LOCAL_STORAGE_EVENT = "mm-local-storage";
+
 /**
- * Persists a piece of state to localStorage so it survives reloads.
+ * Persists a piece of state to localStorage so it survives reloads. Instances
+ * sharing the same key stay in sync across the whole app (same tab and other
+ * tabs), so any component may read/write a key without needing to be the one
+ * "owner" of that state.
  */
 export function useLocalStorage(key, initialValue) {
-  const [value, setValue] = useState(() => {
+  const read = useCallback(() => {
     if (typeof window === "undefined") return initialValue;
     try {
       const stored = window.localStorage.getItem(key);
@@ -46,19 +55,49 @@ export function useLocalStorage(key, initialValue) {
     } catch {
       return initialValue;
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+
+  const [value, setValue] = useState(read);
+  // Mirrors `value` synchronously so setStored can resolve functional updates
+  // (`next(prev)`) without putting side effects (localStorage write, event
+  // dispatch) inside the setValue updater itself - React may invoke that
+  // updater outside the normal commit flow, and it must stay pure.
+  const valueRef = useRef(value);
+  useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
+
+  // Pick up writes made by other useLocalStorage(key) instances - same tab
+  // (custom event) or other tabs (native "storage" event).
+  useEffect(() => {
+    const onCustom = (e) => {
+      if (e.detail?.key === key) setValue(e.detail.value);
+    };
+    const onStorage = (e) => {
+      if (e.key === key) setValue(read());
+    };
+    window.addEventListener(LOCAL_STORAGE_EVENT, onCustom);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener(LOCAL_STORAGE_EVENT, onCustom);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, [key, read]);
 
   const setStored = useCallback(
     (next) => {
-      setValue((prev) => {
-        const resolved = typeof next === "function" ? next(prev) : next;
-        try {
-          window.localStorage.setItem(key, JSON.stringify(resolved));
-        } catch {
-          /* ignore write errors (private mode / quota) */
-        }
-        return resolved;
-      });
+      const resolved = typeof next === "function" ? next(valueRef.current) : next;
+      valueRef.current = resolved;
+      setValue(resolved);
+      try {
+        window.localStorage.setItem(key, JSON.stringify(resolved));
+        window.dispatchEvent(
+          new CustomEvent(LOCAL_STORAGE_EVENT, { detail: { key, value: resolved } })
+        );
+      } catch {
+        /* ignore write errors (private mode / quota) */
+      }
     },
     [key]
   );

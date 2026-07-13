@@ -4,6 +4,7 @@ import Product3DCanvas from "../../../components/product/Product3DCanvas";
 import ModalPortal from "../../../components/common/ModalPortal";
 import HeartIcon from "../../../components/common/HeartIcon";
 import ExpectedDelivery from "../../../components/common/ExpectedDelivery";
+import { useCurrency } from "../../../hooks/useCurrency";
 import {
   Plus,
   Minus,
@@ -43,6 +44,7 @@ const shipping = [
 
 export default function ProductModal({ product = {}, onClose }) {
   const { addToCart, toggleWishlist, isWishlisted, addToast, addRecentlyViewed } = useApp();
+  const { format } = useCurrency();
   const controlsRef = useRef(null);
   const dialogRef = useRef(null);
 
@@ -331,9 +333,9 @@ export default function ProductModal({ product = {}, onClose }) {
 
           {/* price */}
           <div className="flex items-end gap-3 mt-5">
-            <span className="text-3xl sm:text-4xl font-bold text-[#fe4462]">₹{product.price}</span>
+            <span className="text-3xl sm:text-4xl font-bold text-[#fe4462]">{format(product.price)}</span>
             {product.oldPrice && (
-              <span className="text-lg text-gray-400 line-through mb-1">₹{product.oldPrice}</span>
+              <span className="text-lg text-gray-400 line-through mb-1">{format(product.oldPrice)}</span>
             )}
             {discount > 0 && (
               <span className="mb-1.5 text-xs font-bold text-green-600 bg-green-100 dark:bg-green-500/15 px-2.5 py-1 rounded-full">

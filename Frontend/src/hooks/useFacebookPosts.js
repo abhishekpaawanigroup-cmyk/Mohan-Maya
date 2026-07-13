@@ -41,6 +41,7 @@ export function useFacebookPosts(enabled) {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!enabled) {
       setStatus("idle");
       setPosts([]);

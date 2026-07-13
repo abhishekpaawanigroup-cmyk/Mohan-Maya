@@ -5,6 +5,7 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import HeartIcon from "./HeartIcon";
 import ExpectedDelivery from "./ExpectedDelivery";
 import { useApp } from "../../context/AppContext";
+import { useCurrency } from "../../hooks/useCurrency";
 
 /** Renders 5 stars (full / half / empty) from a numeric rating. */
 function StarRating({ value = 0, size = 13 }) {
@@ -25,6 +26,7 @@ function StarRating({ value = 0, size = 13 }) {
  */
 export default function ProductCard({ product, onQuickView }) {
   const { addToCart, toggleWishlist, isWishlisted } = useApp();
+  const { format } = useCurrency();
   const [imgLoaded, setImgLoaded] = useState(false);
   const wished = isWishlisted(product.id);
 
@@ -109,9 +111,9 @@ export default function ProductCard({ product, onQuickView }) {
         </div>
 
         <div className="flex items-center gap-2 mt-2">
-          <span className="text-lg font-bold text-[#fe4462]">₹{product.price}</span>
+          <span className="text-lg font-bold text-[#fe4462]">{format(product.price)}</span>
           {discount > 0 && (
-            <span className="text-gray-400 line-through text-sm">₹{product.oldPrice}</span>
+            <span className="text-gray-400 line-through text-sm">{format(product.oldPrice)}</span>
           )}
         </div>
 

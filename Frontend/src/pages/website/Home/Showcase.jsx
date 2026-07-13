@@ -9,11 +9,13 @@ import ProductPreviewModal from "./Productmodal";
 import SectionHeading from "../../../components/common/SectionHeading";
 import { newArrivals } from "../../../data/products";
 import { useApp } from "../../../context/AppContext";
+import { useCurrency } from "../../../hooks/useCurrency";
 
 import "swiper/css";
 
 const Showcase = () => {
   const { addToCart, toggleWishlist, isWishlisted } = useApp();
+  const { format } = useCurrency();
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [active, setActive] = useState(0);
   const swiperRef = useRef(null);
@@ -82,11 +84,11 @@ const Showcase = () => {
                     {item.name}
                   </h3>
                   <div className="mt-3 flex items-center justify-center flex-wrap gap-x-2 gap-y-1">
-                    <span className="text-[#fe4462] text-[18px] font-bold">₹{item.price}</span>
+                    <span className="text-[#fe4462] text-[18px] font-bold">{format(item.price)}</span>
                     {item.oldPrice && item.oldPrice > item.price && (
                       <>
                         <span className="text-gray-400 dark:text-gray-500 text-sm line-through">
-                          ₹{item.oldPrice}
+                          {format(item.oldPrice)}
                         </span>
                         <span className="text-[11px] font-semibold text-[#fe4462] bg-[#fe4462]/10 border border-[#fe4462]/20 px-2 py-0.5 rounded-full">
                           {Math.round(((item.oldPrice - item.price) / item.oldPrice) * 100)}% OFF

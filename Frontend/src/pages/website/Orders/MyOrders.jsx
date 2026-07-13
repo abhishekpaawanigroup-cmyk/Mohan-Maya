@@ -15,8 +15,9 @@ import { usePageMeta } from "../../../hooks/useHooks";
 import { useNotificationTrigger } from "../../../hooks/useNotificationTrigger";
 import {
   deriveStatus, isCancellable, paymentLabel, paymentStatus, PAYMENT_TONE,
-  itemCount, deliveryEstimate, fmtDate, inr,
+  itemCount, deliveryEstimate, fmtDate,
 } from "../../../utils/orders";
+import { useCurrency } from "../../../hooks/useCurrency";
 
 // Status filter tabs shown across the top.
 const FILTERS = ["All", "Pending", "Confirmed", "Packed", "Shipped", "Out for Delivery", "Delivered", "Cancelled"];
@@ -313,6 +314,7 @@ export default function MyOrders() {
 
 /* ── Single order card ── */
 function OrderCard({ order, onDetails, onTrack, onCancel }) {
+  const { format } = useCurrency();
   const status = deriveStatus(order);
   const cancelled = status === "Cancelled";
   const pay = paymentStatus(order);
@@ -399,7 +401,7 @@ function OrderCard({ order, onDetails, onTrack, onCancel }) {
           <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
             Total ({count} qty)
           </span>
-          <span className="text-lg font-bold text-[#fe4462]">{inr(order.totals?.total)}</span>
+          <span className="text-lg font-bold text-[#fe4462]">{format(order.totals?.total)}</span>
         </div>
 
         {/* Actions - pinned to the bottom so they align across cards */}

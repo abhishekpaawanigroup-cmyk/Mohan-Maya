@@ -9,8 +9,9 @@ import OrderTimeline from "./OrderTimeline";
 import ModalPortal from "../common/ModalPortal";
 import {
   deriveStatus, paymentLabel, paymentStatus, PAYMENT_TONE, isCancellable,
-  deliveryEstimate, downloadInvoice, fmtDate, fmtDateTime, inr,
+  deliveryEstimate, downloadInvoice, fmtDate, fmtDateTime,
 } from "../../utils/orders";
+import { useCurrency } from "../../hooks/useCurrency";
 
 /**
  * Full order details modal, shared by the customer (My Orders) and admin views.
@@ -22,7 +23,7 @@ import {
  *  - adminMode        boolean         (shows the owning customer's email)
  */
 export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, adminMode = false }) {
-  // Lock body scroll when modal opens, restore on close
+  const { format } = useCurrency();
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -142,9 +143,9 @@ export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, a
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-gray-900 dark:text-white">{item.name}</p>
-                    <p className="text-xs text-gray-500">{inr(item.price)} × {item.qty}</p>
+                    <p className="text-xs text-gray-500">{format(item.price)} × {item.qty}</p>
                   </div>
-                  <span className="shrink-0 text-sm font-semibold text-[#fe4462]">{inr(item.price * item.qty)}</span>
+                  <span className="shrink-0 text-sm font-semibold text-[#fe4462]">{format(item.price * item.qty)}</span>
                 </div>
               ))}
             </div>
@@ -154,15 +155,15 @@ export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, a
           <div className="rounded-2xl border border-gray-100 dark:border-white/10 bg-gray-50/60 dark:bg-white/[0.03] p-4">
             <h4 className="mb-3 text-sm font-bold text-gray-900 dark:text-white">Bill Summary</h4>
             <div className="space-y-1.5 text-sm">
-              <BillRow label="Subtotal" value={inr(t.subtotal)} />
+              <BillRow label="Subtotal" value={format(t.subtotal)} />
               {t.discount > 0 && (
-                <BillRow label={`Discount${order.coupon ? ` (${order.coupon})` : ""}`} value={`−${inr(t.discount)}`} tone="text-green-600" />
+                <BillRow label={`Discount${order.coupon ? ` (${order.coupon})` : ""}`} value={`−${format(t.discount)}`} tone="text-green-600" />
               )}
-              <BillRow label="Delivery Charges" value={t.shipping === 0 ? "Free" : inr(t.shipping)} />
-              {t.gst != null && <BillRow label="GST (18%)" value={inr(t.gst)} />}
+              <BillRow label="Delivery Charges" value={t.shipping === 0 ? "Free" : format(t.shipping)} />
+              {t.gst != null && <BillRow label="GST (18%)" value={format(t.gst)} />}
               <div className="mt-1.5 flex justify-between border-t border-gray-200 dark:border-white/10 pt-2 font-bold text-gray-900 dark:text-white">
                 <span>Total {cancelled ? "" : "Paid"}</span>
-                <span className="text-[#fe4462]">{inr(t.total)}</span>
+                <span className="text-[#fe4462]">{format(t.total)}</span>
               </div>
             </div>
           </div>
