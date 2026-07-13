@@ -86,7 +86,7 @@ function FacebookCard({ post }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Watch this Facebook ${post.type || "post"}`}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 ring-1 ring-inset ring-gray-200 transition-all duration-200 hover:bg-red-600 hover:text-white hover:ring-red-600 dark:bg-slate-700 dark:text-gray-200 dark:ring-slate-600 dark:hover:bg-red-600 dark:hover:text-white dark:hover:ring-red-600"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 ring-1 ring-inset ring-gray-200 transition-all duration-200 hover:bg-blue-600 hover:text-white hover:ring-blue-600 dark:bg-slate-700 dark:text-gray-200 dark:ring-slate-600 dark:hover:bg-blue-600 dark:hover:text-white dark:hover:ring-blue-600"
           >
             <FaFacebookF size={12} /> Watch
           </a>
@@ -105,8 +105,9 @@ function SocialProfileHeader({ profile, profileUrl }) {
   const posts = Number(profile?.postCount ?? 0);
 
   return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-xl p-6 shadow-[0_14px_40px_-24px_rgba(24,119,242,0.45)]">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="relative overflow-hidden rounded-[2rem] border border-white/60 dark:border-white/10 bg-[url('/social/yt-header.png')] bg-cover bg-center bg-no-repeat backdrop-blur-xl p-5 sm:py-14 sm:px-8 shadow-[0_14px_40px_-24px_rgba(24,119,242,0.45)]">
+        <div className="absolute inset-0 bg-black/70"></div>
+      <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <span className="relative grid h-20 w-20 shrink-0 place-items-center overflow-hidden rounded-full bg-[#1877f2] text-white shadow-lg">
             {avatar ? (
@@ -116,9 +117,9 @@ function SocialProfileHeader({ profile, profileUrl }) {
             )}
           </span>
           <div>
-            <p className="text-sm uppercase tracking-[0.22em] text-gray-500 dark:text-gray-400">Facebook</p>
-            <h2 className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{name}</h2>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm uppercase tracking-[0.22em] text-white">Facebook</p>
+            <h2 className="mt-1 text-2xl font-bold text-white">{name}</h2>
+            <p className="mt-2 text-sm text-white">
               {followers > 0 ? `${followers.toLocaleString()} followers` : "Real-time community updates"}
             </p>
           </div>

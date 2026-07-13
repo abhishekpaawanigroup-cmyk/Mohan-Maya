@@ -68,11 +68,11 @@ const FeaturedProduct = () => {
                         className="bg-[#fe4462] hover:bg-[#d93550] text-white"
                       />
                       <ActionButton
-                        label={isWishlisted(item.id) ? "In Wishlist" : "Add to Wishlist"}
-                        onClick={() => toggleWishlist(item)}
+                        label={isWishlisted(item.id, `featured:${item.id}`) ? "In Wishlist" : "Add to Wishlist"}
+                        onClick={() => toggleWishlist(item, `featured:${item.id}`)}
                         className="bg-white/15 hover:bg-white/25 backdrop-blur-md"
                       >
-                        <HeartIcon active={isWishlisted(item.id)} size={22} />
+                        <HeartIcon active={isWishlisted(item.id, `featured:${item.id}`)} size={22} />
                       </ActionButton>
                     </div>
                   </div>

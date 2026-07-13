@@ -23,7 +23,7 @@ const TrendyCollection = () => {
   const items = trendyData[activeTab] || [];
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
+    <section className="py-8 sm:py-10 md:py-12 lg:py-14 xl:py-16 bg-[#fbfefb] dark:bg-[#0d0508]">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-8 mb-14">
@@ -104,11 +104,11 @@ const TrendyCollection = () => {
                         className="bg-[#fe4462] hover:bg-[#d93550] text-white"
                       />
                       <ActionButton
-                        label={isWishlisted(item.id) ? "In Wishlist" : "Add to Wishlist"}
-                        onClick={() => toggleWishlist(item)}
+                        label={isWishlisted(item.id, `trendy:${item.id}`) ? "In Wishlist" : "Add to Wishlist"}
+                        onClick={() => toggleWishlist(item, `trendy:${item.id}`)}
                         className="bg-white/15 hover:bg-white/25 backdrop-blur-md"
                       >
-                        <HeartIcon active={isWishlisted(item.id)} size={22} />
+                        <HeartIcon active={isWishlisted(item.id, `trendy:${item.id}`)} size={22} />
                       </ActionButton>
                     </div>
                   </div>

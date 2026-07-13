@@ -25,9 +25,16 @@ import { useCurrency } from "../../hooks/useCurrency";
 export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, adminMode = false }) {
   const { format } = useCurrency();
   useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     const onKey = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
   }, [onClose]);
 
   const status = deriveStatus(order);
