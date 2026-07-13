@@ -50,7 +50,7 @@ export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, a
   return (
     <ModalPortal>
     <motion.div
-      className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4"
+      className="fixed inset-0 z-1000 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -68,7 +68,7 @@ export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, a
         aria-labelledby="order-details-title"
         className="relative max-h-full w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-[#140a0d] dark:ring-white/10"
       >
-        <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#fe4462] to-[#c48212]" aria-hidden="true" />
+        <span className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-[#fe4462] to-[#c48212]" aria-hidden="true" />
 
         {/* Header */}
         <div className="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-gray-100 bg-white/95 px-6 pb-4 pt-6 backdrop-blur dark:border-white/10 dark:bg-[#140a0d]/95 sm:px-7">
@@ -152,7 +152,7 @@ export default function OrderDetailsModal({ order, onClose, onTrack, onCancel, a
           </Section>
 
           {/* Bill summary */}
-          <div className="rounded-2xl border border-gray-100 dark:border-white/10 bg-gray-50/60 dark:bg-white/[0.03] p-4">
+          <div className="rounded-2xl border border-gray-100 dark:border-white/10 bg-gray-50/60 dark:bg-white/3 p-4">
             <h4 className="mb-3 text-sm font-bold text-gray-900 dark:text-white">Bill Summary</h4>
             <div className="space-y-1.5 text-sm">
               <BillRow label="Subtotal" value={format(t.subtotal)} />

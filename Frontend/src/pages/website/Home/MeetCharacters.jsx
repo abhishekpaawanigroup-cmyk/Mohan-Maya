@@ -127,7 +127,7 @@ export default function MeetCharacters() {
                 >
                   <div className="flex flex-col items-center rounded-xl border border-[#00000024] bg-white/70 p-4 shadow-sm ring-1 ring-black/5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl dark:border-white/10 dark:bg-white/5 dark:ring-white/10">
                     {/* Portrait with subtle zoom on hover */}
-                    <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gradient-to-b from-[#fbfefb] to-[#c7cdd3] dark:from-white/[0.07] dark:to-white/[0.02]">
+                    <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-linear-to-b from-[#fbfefb] to-[#c7cdd3] dark:from-white/7 dark:to-white/2">
                       <img
                         src={char.image}
                         alt={`${char.name} -handcrafted Mohan Maya figurine`}

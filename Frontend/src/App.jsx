@@ -4,6 +4,7 @@ import { AppProvider } from "./context/AppContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import { CurrencyProvider } from "./context/CurrencyContext";
 import { I18nProvider } from "./context/I18nContext";
+import { CountryProvider } from "./context/CountryContext";
 
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
       <NotificationProvider>
         <CurrencyProvider>
           <I18nProvider>
-            <AppRoutes />
+            <CountryProvider>
+              <AppRoutes />
+            </CountryProvider>
           </I18nProvider>
         </CurrencyProvider>
       </NotificationProvider>

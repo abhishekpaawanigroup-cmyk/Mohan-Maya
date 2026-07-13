@@ -26,7 +26,6 @@ const paymentMethods = [
 export default function Checkout() {
   usePageMeta("Checkout - Mohan Maya", "Securely complete your Mohan Maya order.");
   const navigate = useNavigate();
-  const trigger = useNotificationTrigger();
   const { cart, totals, coupon, couponCode, applyCoupon, removeCoupon, placeOrder, addToast } = useApp();
   const { format } = useCurrency();
   const [form, setForm] = useState(initialForm);
@@ -77,9 +76,6 @@ export default function Checkout() {
     }
     setSubmitting(true);
     const id = placeOrder({ ...form, payment });
-
-    // Trigger notification for order placement
-    trigger.orderPlaced(id);
 
     navigate(`/track?order=${id}`);
   };
@@ -220,7 +216,7 @@ export default function Checkout() {
                       placeholder="Coupon code"
                       className="flex-1 bg-gray-100 dark:bg-white/10 rounded-lg px-3 py-2 text-sm outline-none dark:text-white uppercase placeholder:normal-case"
                     />
-                    <button type="button" onClick={handleApplyCoupon} className="btn-outline !py-2 !px-4 text-sm">Apply</button>
+                    <button type="button" onClick={handleApplyCoupon} className="btn-outline py-2! px-4! text-sm">Apply</button>
                   </div>
                 )}
                 <p className="text-xs text-gray-400 mt-2">Try <strong>MOHAN10</strong>, <strong>WELCOME50</strong> or <strong>FREESHIP</strong>.</p>

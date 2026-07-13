@@ -151,7 +151,7 @@ export default function Profile() {
   return (
     <div className="bg-[#fbfefb] dark:bg-[#0d0508]">
       {/* ── Premium profile hero ── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#1b1016] via-[#23121a] to-[#0d0508] pt-28 lg:pt-36 pb-20 sm:pb-24 text-white mt-20">
+      <section className="relative overflow-hidden bg-linear-to-br from-[#1b1016] via-[#23121a] to-[#0d0508] pt-28 lg:pt-36 pb-20 sm:pb-24 text-white mt-20">
         <div className="pointer-events-none absolute -top-24 -left-20 h-80 w-80 rounded-full bg-[#fe4462]/25 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-28 right-0 h-80 w-80 rounded-full bg-[#c48212]/20 blur-3xl" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.05] bg-[radial-gradient(circle_at_1px_1px,#fff_1px,transparent_0)] [background-size:22px_22px]" />
@@ -165,7 +165,7 @@ export default function Profile() {
           >
             {/* Avatar */}
             <div className="relative shrink-0">
-              <div className="grid h-24 w-24 sm:h-28 sm:w-28 place-items-center rounded-full bg-gradient-to-br from-[#fe4462] to-[#c48212] text-4xl font-black shadow-2xl ring-4 ring-white/15">
+              <div className="grid h-24 w-24 sm:h-28 sm:w-28 place-items-center rounded-full bg-linear-to-br from-[#fe4462] to-[#c48212] text-4xl font-black shadow-2xl ring-4 ring-white/15">
                 {initials}
               </div>
               <span className="absolute -bottom-1 -right-1 grid h-8 w-8 place-items-center rounded-full bg-emerald-500 text-white ring-4 ring-[#1b1016]">
@@ -299,7 +299,7 @@ export default function Profile() {
                     {addresses.map((a) => (
                       <div
                         key={a.id}
-                        className="relative rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/60 dark:bg-white/[0.03] p-4"
+                        className="relative rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/60 dark:bg-white/3 p-4"
                       >
                         <div className="flex items-center justify-between">
                           <span className="inline-flex items-center gap-1.5 rounded-full bg-[#fe4462]/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-[#fe4462]">

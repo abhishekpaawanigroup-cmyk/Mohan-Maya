@@ -78,7 +78,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
   return (
     <ModalPortal>
     <motion.div
-      className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4"
+      className="fixed inset-0 z-999 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -106,7 +106,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
         </button>
 
         {/* ── LEFT: media ─────────────────────────── */}
-        <div className="relative bg-gradient-to-br from-[#fbfefb] to-[#f1f3f5] dark:from-[#1f1015] dark:to-[#140a0d] p-5 sm:p-7 flex flex-col lg:w-1/2 lg:shrink-0">
+        <div className="relative bg-linear-to-br from-[#fbfefb] to-[#f1f3f5] dark:from-[#1f1015] dark:to-[#140a0d] p-5 sm:p-7 flex flex-col lg:w-1/2 lg:shrink-0">
           {/* Toggle: View Images / View in 3D */}
           <div
             className="inline-flex self-start gap-1 p-1 rounded-full bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm mb-4"
@@ -138,7 +138,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
           </div>
 
           {/* Stage */}
-          <div className="relative flex-1 min-h-[300px] sm:min-h-[380px] rounded-2xl bg-white/60 dark:bg-white/5 overflow-hidden flex items-center justify-center shadow-inner">
+          <div className="relative flex-1 min-h-75 sm:min-h-95 rounded-2xl bg-white/60 dark:bg-white/5 overflow-hidden flex items-center justify-center shadow-inner">
             {discount > 0 && (
               <span className="absolute top-3 left-3 z-20 bg-[#fe4462] text-white text-xs font-bold px-3 py-1 rounded-full shadow">
                 -{discount}%
@@ -163,7 +163,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: imgLoaded ? 1 : 0, scale: 1 }}
                     transition={{ duration: 0.3 }}
-                    className="max-h-[340px] w-auto object-contain drop-shadow-xl"
+                    className="max-h-85 w-auto object-contain drop-shadow-xl"
                   />
                 </motion.div>
               ) : (
@@ -354,7 +354,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
               whileTap={{ scale: 0.97 }}
               onClick={() => toggleWishlist(product)}
               aria-pressed={wished}
-              className="flex items-center justify-center gap-2 w-[150px] border-2 border-[#fe4462] text-[#fe4462] font-semibold px-5 py-3.5 rounded-2xl hover:bg-[#fe4462] hover:text-white transition"
+              className="flex items-center justify-center gap-2 w-37.5 border-2 border-[#fe4462] text-[#fe4462] font-semibold px-5 py-3.5 rounded-2xl hover:bg-[#fe4462] hover:text-white transition"
               aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
             >
               {/* Keyed by state so each toggle re-mounts and pops */}
