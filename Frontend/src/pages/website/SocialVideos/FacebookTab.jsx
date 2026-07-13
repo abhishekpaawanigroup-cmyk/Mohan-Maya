@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiAlertCircle, FiInbox, FiRefreshCw, FiClock, FiHeart, FiMessageCircle, FiShare2, FiEye, FiExternalLink, FiPlay } from "react-icons/fi";
+import { FiAlertCircle, FiInbox, FiRefreshCw, FiClock, FiHeart, FiMessageCircle, FiShare2, FiEye, FiPlay } from "react-icons/fi";
 import { FaFacebookF } from "react-icons/fa";
 import ScrollReveal from "../../../components/common/ScrollReveal";
 import Pagination from "./Pagination";
@@ -254,7 +254,7 @@ function FeaturedFacebook({ post, profileUrl }) {
   );
 }
 
-export default function FacebookTab({ posts, profile, status, error, configured, retry, profileUrl }) {
+export default function FacebookTab({ posts, profile, status, error, retry, profileUrl }) {
   const [page, setPage] = useState(1);
   const gridRef = useRef(null);
 
