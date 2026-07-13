@@ -3,9 +3,11 @@ import ScrollReveal from "../../../components/common/ScrollReveal";
 import SectionHeading from "../../../components/common/SectionHeading";
 import { bestSellers } from "../../../data/products";
 import { useApp } from "../../../context/AppContext";
+import { useCurrency } from "../../../hooks/useCurrency";
 
 const BestSellers = () => {
   const { addToCart } = useApp();
+  const { format } = useCurrency();
 
   return (
     <section id="best-sellers" className="bg-[#fbfefb] dark:bg-[#0d0508] py-24 scroll-mt-24 lg:scroll-mt-36">
@@ -34,7 +36,7 @@ const BestSellers = () => {
                   <h3 className="text-lg sm:text-[20px] font-bold text-[#111] dark:text-white mb-2 group-hover:text-[#c48212] transition-colors duration-300">
                     {item.name}
                   </h3>
-                  <p className="text-[#ff7f50] text-lg font-medium mb-2">INR {item.price.toFixed(2)}</p>
+                  <p className="text-[#ff7f50] text-lg font-medium mb-2">{format(item.price)}</p>
 
                   <div className="flex gap-1 text-[#ff7f50] mb-3" aria-label={`${item.rating} star rating`}>
                     {Array.from({ length: 5 }).map((_, i) => (

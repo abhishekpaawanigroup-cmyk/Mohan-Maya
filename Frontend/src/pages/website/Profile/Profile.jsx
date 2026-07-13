@@ -26,6 +26,7 @@ import {
 import { HiSparkles } from "react-icons/hi2";
 import { useApp } from "../../../context/AppContext";
 import { usePageMeta } from "../../../hooks/useHooks";
+import { useCurrency } from "../../../hooks/useCurrency";
 import ScrollReveal from "../../../components/common/ScrollReveal";
 import RecentlyViewed from "../../../components/product/RecentlyViewed";
 import { AccountModals } from "./accountModals";
@@ -118,6 +119,7 @@ export default function Profile() {
     darkMode,
     toggleDarkMode,
   } = useApp();
+  const { format } = useCurrency();
   const navigate = useNavigate();
 
   // [modal, editingAddress] - only one modal is mounted at a time.
@@ -212,7 +214,7 @@ export default function Profile() {
             <StatTile icon={FiPackage} value={orders.length} label="Orders" to="/orders" />
             <StatTile icon={FiHeart} value={wishlist.length} label="Wishlist" to="/wishlist" accent="#fe4462" />
             <StatTile icon={FiShoppingBag} value={cartCount} label="In Cart" to="/cart" accent="#c48212" />
-            <StatTile icon={FiCreditCard} value={`₹${totalSpent}`} label="Total Spent" accent="#c48212" />
+            <StatTile icon={FiCreditCard} value={format(totalSpent)} label="Total Spent" accent="#c48212" />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -407,7 +409,7 @@ export default function Profile() {
                             <FiClock size={12} /> {fmtDate(o.createdAt)} · {o.items?.length || 0} item{(o.items?.length || 0) === 1 ? "" : "s"}
                           </p>
                         </div>
-                        <span className="font-bold text-[#fe4462]">₹{o.totals?.total ?? 0}</span>
+                        <span className="font-bold text-[#fe4462]">{format(o.totals?.total ?? 0)}</span>
                       </li>
                     ))}
                   </ul>

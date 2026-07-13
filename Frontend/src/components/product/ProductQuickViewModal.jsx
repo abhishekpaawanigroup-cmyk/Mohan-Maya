@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import { useModalA11y } from "../../hooks/useHooks";
+import { useCurrency } from "../../hooks/useCurrency";
 import ExpectedDelivery from "../common/ExpectedDelivery";
 import Product3DViewerModal from "./Product3DViewerModal";
 
@@ -35,6 +36,7 @@ function InlineCanvasSkeleton() {
 
 export default function ProductQuickViewModal({ product = {}, onClose }) {
   const { addToCart, toggleWishlist, isWishlisted, addRecentlyViewed } = useApp();
+  const { format } = useCurrency();
   const dialogRef = useModalA11y(onClose);
   const controlsRef = useRef(null);
 
@@ -284,9 +286,9 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
 
           {/* price */}
           <div className="flex items-end gap-3 mt-5">
-            <span className="text-3xl font-bold text-[#fe4462]">₹{product.price}</span>
+            <span className="text-3xl font-bold text-[#fe4462]">{format(product.price)}</span>
             {product.oldPrice && (
-              <span className="text-lg text-gray-400 line-through mb-1">₹{product.oldPrice}</span>
+              <span className="text-lg text-gray-400 line-through mb-1">{format(product.oldPrice)}</span>
             )}
             {discount > 0 && (
               <span className="mb-1.5 text-xs font-bold text-green-600 bg-green-100 dark:bg-green-500/15 px-2.5 py-1 rounded-full">

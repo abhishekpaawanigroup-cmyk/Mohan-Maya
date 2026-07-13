@@ -12,6 +12,7 @@ import ScrollReveal from "../../../components/common/ScrollReveal";
 import PageHero from "../../../components/common/PageHero";
 import { useApp } from "../../../context/AppContext";
 import { usePageMeta } from "../../../hooks/useHooks";
+import { useCurrency } from "../../../hooks/useCurrency";
 
 const itemVariants = {
   initial: { opacity: 0, y: 16 },
@@ -26,6 +27,7 @@ export default function Wishlist() {
   );
 
   const { wishlist, toggleWishlist, addToCart } = useApp();
+  const { format } = useCurrency();
 
   // Add to cart, then drop from the wishlist - but only if it was actually
   // added (a signed-out user is redirected to login and nothing is moved).
@@ -138,7 +140,7 @@ export default function Wishlist() {
                   </div>
                   <div className="flex items-center justify-between border-t border-gray-200/70 pt-3 dark:border-white/10">
                     <span className="text-base font-bold text-gray-900 dark:text-white">Total Value</span>
-                    <span className="text-xl font-bold text-[#fe4462]">₹{totalValue}</span>
+                    <span className="text-xl font-bold text-[#fe4462]">{format(totalValue)}</span>
                   </div>
                   <p className="text-[11px] text-gray-400">
                     Saved on this device · prices may change over time.
@@ -168,6 +170,7 @@ export default function Wishlist() {
 
 /** A single saved item with a graceful image-loading state and row actions. */
 function WishlistItem({ item, onMoveToCart, onRemove }) {
+  const { format } = useCurrency();
   const [imgLoaded, setImgLoaded] = useState(false);
   // Catch already-cached images synchronously so the skeleton never flashes.
   const imgRef = useCallback((node) => {
@@ -217,7 +220,7 @@ function WishlistItem({ item, onMoveToCart, onRemove }) {
           <h3 className="truncate text-base font-semibold text-gray-900 dark:text-white">
             {item.name}
           </h3>
-          <p className="mt-0.5 text-base font-bold text-[#fe4462]">₹{item.price}</p>
+          <p className="mt-0.5 text-base font-bold text-[#fe4462]">{format(item.price)}</p>
           <span className={`mt-1 inline-flex items-center gap-1.5 text-xs font-medium ${stock.text}`}>
             <span className={`h-1.5 w-1.5 rounded-full ${stock.dot}`} />
             {stock.label}

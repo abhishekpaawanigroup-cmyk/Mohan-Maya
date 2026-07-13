@@ -18,6 +18,7 @@ import ScrollReveal from "../../../components/common/ScrollReveal";
 import PageHero from "../../../components/common/PageHero";
 import { useApp } from "../../../context/AppContext";
 import { usePageMeta } from "../../../hooks/useHooks";
+import { useCurrency } from "../../../hooks/useCurrency";
 import { FREE_SHIPPING_THRESHOLD } from "../../../data/shop";
 
 const itemVariants = {
@@ -45,6 +46,7 @@ export default function Cart() {
     removeCoupon,
     requireAuth,
   } = useApp();
+  const { format } = useCurrency();
   const navigate = useNavigate();
 
   // Checkout is a protected action: signed-out users get the auth modal, then
@@ -171,7 +173,7 @@ export default function Cart() {
                             {item.name}
                           </h3>
                           <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
-                            ₹{item.price} <span className="text-xs">each</span>
+                            {format(item.price)} <span className="text-xs">each</span>
                           </p>
                         </div>
 
@@ -200,7 +202,7 @@ export default function Cart() {
 
                           {/* Line subtotal */}
                           <p className="w-20 text-right text-base font-bold text-[#fe4462]">
-                            ₹{item.price * item.qty}
+                            {format(item.price * item.qty)}
                           </p>
 
                           {/* Remove */}
@@ -281,7 +283,7 @@ export default function Cart() {
                   <p className="flex items-center gap-2 text-xs font-medium text-gray-600 dark:text-gray-300">
                     <FiTruck className="text-[#fe4462]" size={15} />
                     {remainingForFreeShip > 0 ? (
-                      <>Add <strong className="text-[#fe4462]">₹{remainingForFreeShip}</strong> more for free shipping</>
+                      <>Add <strong className="text-[#fe4462]">{format(remainingForFreeShip)}</strong> more for free shipping</>
                     ) : (
                       <>You've unlocked <strong className="text-[#fe4462]">free shipping!</strong></>
                     )}
@@ -318,18 +320,18 @@ export default function Cart() {
 
                 {/* Totals */}
                 <div className="mt-5 space-y-2 border-t border-gray-200/70 pt-5 text-sm dark:border-white/10">
-                  <Row label="Subtotal" value={`₹${totals.subtotal}`} />
+                  <Row label="Subtotal" value={format(totals.subtotal)} />
                   {totals.discount > 0 && (
-                    <Row label="Discount" value={`−₹${totals.discount}`} accent="text-green-600" />
+                    <Row label="Discount" value={`−${format(totals.discount)}`} accent="text-green-600" />
                   )}
                   <Row
                     label="Shipping"
-                    value={totals.shipping === 0 ? "Free" : `₹${totals.shipping}`}
+                    value={totals.shipping === 0 ? "Free" : format(totals.shipping)}
                   />
-                  <Row label="GST (18%)" value={`₹${totals.gst}`} />
+                  <Row label="GST (18%)" value={format(totals.gst)} />
                   <div className="flex items-center justify-between border-t border-gray-200/70 pt-3 dark:border-white/10">
                     <span className="text-base font-bold text-gray-900 dark:text-white">Grand Total</span>
-                    <span className="text-xl font-bold text-[#fe4462]">₹{totals.total}</span>
+                    <span className="text-xl font-bold text-[#fe4462]">{format(totals.total)}</span>
                   </div>
                   <p className="text-[11px] text-gray-400">GST (18%) included in the total above.</p>
                 </div>

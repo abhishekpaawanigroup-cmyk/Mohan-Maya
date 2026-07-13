@@ -5,6 +5,7 @@ import { FiCreditCard, FiTruck, FiSmartphone, FiLock, FiShoppingBag, FiX } from 
 import ScrollReveal from "../../../components/common/ScrollReveal";
 import { useApp } from "../../../context/AppContext";
 import { usePageMeta } from "../../../hooks/useHooks";
+import { useCurrency } from "../../../hooks/useCurrency";
 
 const initialForm = {
   fullName: "",
@@ -26,6 +27,7 @@ export default function Checkout() {
   usePageMeta("Checkout - Mohan Maya", "Securely complete your Mohan Maya order.");
   const navigate = useNavigate();
   const { cart, totals, coupon, couponCode, applyCoupon, removeCoupon, placeOrder, addToast } = useApp();
+  const { format } = useCurrency();
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [payment, setPayment] = useState("cod");
@@ -191,7 +193,7 @@ export default function Checkout() {
                       <p className="text-sm font-medium truncate dark:text-white">{item.name}</p>
                       <p className="text-xs text-gray-500">Qty {item.qty}</p>
                     </div>
-                    <span className="text-sm font-semibold text-[#fe4462]">₹{item.price * item.qty}</span>
+                    <span className="text-sm font-semibold text-[#fe4462]">{format(item.price * item.qty)}</span>
                   </div>
                 ))}
               </div>
@@ -221,11 +223,11 @@ export default function Checkout() {
 
               {/* Totals */}
               <div className="mt-5 pt-5 border-t dark:border-white/10 space-y-1.5 text-sm">
-                <div className="flex justify-between text-gray-600 dark:text-gray-300"><span>Subtotal</span><span>₹{totals.subtotal}</span></div>
-                {totals.discount > 0 && <div className="flex justify-between text-green-600"><span>Discount</span><span>−₹{totals.discount}</span></div>}
-                <div className="flex justify-between text-gray-600 dark:text-gray-300"><span>Shipping</span><span>{totals.shipping === 0 ? "Free" : `₹${totals.shipping}`}</span></div>
-                <div className="flex justify-between text-gray-600 dark:text-gray-300"><span>GST (18%)</span><span>₹{totals.gst}</span></div>
-                <div className="flex justify-between pt-2 border-t dark:border-white/10 font-bold text-base dark:text-white"><span>Total</span><span className="text-[#fe4462]">₹{totals.total}</span></div>
+                <div className="flex justify-between text-gray-600 dark:text-gray-300"><span>Subtotal</span><span>{format(totals.subtotal)}</span></div>
+                {totals.discount > 0 && <div className="flex justify-between text-green-600"><span>Discount</span><span>−{format(totals.discount)}</span></div>}
+                <div className="flex justify-between text-gray-600 dark:text-gray-300"><span>Shipping</span><span>{totals.shipping === 0 ? "Free" : format(totals.shipping)}</span></div>
+                <div className="flex justify-between text-gray-600 dark:text-gray-300"><span>GST (18%)</span><span>{format(totals.gst)}</span></div>
+                <div className="flex justify-between pt-2 border-t dark:border-white/10 font-bold text-base dark:text-white"><span>Total</span><span className="text-[#fe4462]">{format(totals.total)}</span></div>
               </div>
 
               <motion.button
