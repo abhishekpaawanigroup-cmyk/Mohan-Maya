@@ -119,9 +119,9 @@ export default function MeetCharacters() {
               className="flex gap-5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform"
               style={{ transform: trackTransform }}
             >
-              {characters.map((char) => (
+              {characters.map((char, index) => (
                 <article
-                  key={char.name}
+                  key={`${char.name}-${index}`}
                   style={{ width: cardWidth }}
                   className="group shrink-0"
                 >

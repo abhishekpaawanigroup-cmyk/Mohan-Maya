@@ -354,7 +354,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
               whileTap={{ scale: 0.97 }}
               onClick={() => toggleWishlist(product)}
               aria-pressed={wished}
-              className="flex items-center justify-center gap-2 border-2 border-[#fe4462] text-[#fe4462] font-semibold px-5 py-3.5 rounded-2xl hover:bg-[#fe4462] hover:text-white transition"
+              className="flex items-center justify-center gap-2 w-[150px] border-2 border-[#fe4462] text-[#fe4462] font-semibold px-5 py-3.5 rounded-2xl hover:bg-[#fe4462] hover:text-white transition"
               aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
             >
               {/* Keyed by state so each toggle re-mounts and pops */}
@@ -367,7 +367,7 @@ export default function ProductQuickViewModal({ product = {}, onClose }) {
               >
                 <Heart size={18} className={wished ? "fill-current" : ""} />
               </motion.span>
-              <span className="sm:hidden lg:inline">{wished ? "Saved" : "Wishlist"}</span>
+              <span className="sm:hidden lg:inline">{wished ? "Wishlisted" : "Wishlist"}</span>
             </motion.button>
           </div>
 
