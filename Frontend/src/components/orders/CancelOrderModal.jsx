@@ -16,9 +16,17 @@ export default function CancelOrderModal({ order, onClose, onConfirm }) {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    // Lock body scroll when modal opens, restore on close
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     const onKey = (e) => e.key === "Escape" && !submitting && onClose();
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
   }, [onClose, submitting]);
 
   const isOther = reason === "Other";

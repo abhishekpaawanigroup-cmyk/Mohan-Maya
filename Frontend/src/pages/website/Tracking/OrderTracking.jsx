@@ -32,7 +32,7 @@ export default function OrderTracking() {
   };
 
   return (
-    <section className="min-h-screen bg-[#fbfefb] pb-20 pt-28 lg:pt-36 dark:bg-[#0d0508]">
+    <section className="min-h-screen bg-[#fbfefb] pb-20 pt-28 lg:pt-36 dark:bg-[#0d0508] mt-20">
       <div className="mx-auto max-w-3xl px-5">
         <ScrollReveal className="mb-10 text-center">
           <span className="inline-block rounded-full border border-[#fe4462] px-4 py-2 text-sm font-bold uppercase text-[#fe4462]">

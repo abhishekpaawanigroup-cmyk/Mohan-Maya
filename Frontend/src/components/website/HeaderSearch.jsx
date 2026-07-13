@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoSearch } from "react-icons/io5";
 import { FiX, FiMic, FiChevronDown, FiCheck } from "react-icons/fi";
@@ -20,6 +20,7 @@ import { products, categories } from "../../data/products";
  */
 export default function HeaderSearch({ onNavigate, autoFocus = false, className = "" }) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { addToast } = useApp();
   const { t } = useI18n();
   const [query, setQuery] = useState("");
@@ -49,16 +50,46 @@ export default function HeaderSearch({ onNavigate, autoFocus = false, className 
 
   const go = (term) => {
     const t = (term ?? "").trim();
-    const final = t || (category !== categories[0] ? category : "");
-    if (!final) {
-      inputRef.current?.focus();
+    const isCategorySelected = category !== categories[0];
+
+    // Preserve existing filter parameters and merge with new ones
+    const params = new URLSearchParams(searchParams);
+
+    // If no search term but category is selected, update category filter (preserve other filters)
+    if (!t && isCategorySelected) {
+      params.set("category", category);
+      navigate(`/shop?${params.toString()}`);
+      setQuery("");
+      setOpen(false);
+      setActive(-1);
+      onNavigate?.();
       return;
     }
-    navigate(`/shop?search=${encodeURIComponent(final)}`);
-    setQuery("");
-    setOpen(false);
-    setActive(-1);
-    onNavigate?.();
+
+    // If search term provided, update search parameter (preserve other filters like category, character, price, sort)
+    if (t) {
+      params.set("search", t);
+      navigate(`/shop?${params.toString()}`);
+      setQuery("");
+      setOpen(false);
+      setActive(-1);
+      onNavigate?.();
+      return;
+    }
+
+    // If no search term and no category selected, clear category filter but preserve other filters
+    if (!isCategorySelected) {
+      params.delete("category");
+      navigate(`/shop?${params.toString()}`);
+      setQuery("");
+      setOpen(false);
+      setActive(-1);
+      onNavigate?.();
+      return;
+    }
+
+    // No search term and no category selected - just focus input
+    inputRef.current?.focus();
   };
 
   // Selecting a suggestion fills the input with the product name (does not
@@ -94,7 +125,7 @@ export default function HeaderSearch({ onNavigate, autoFocus = false, className 
   };
 
   return (
-    <form ref={wrapRef} role="search" onSubmit={onSubmit} className={`relative ${className}`}>
+    <form ref={wrapRef} role="search" onSubmit={onSubmit} className={`header-search relative ${className}`}>
       <div className="flex items-stretch rounded-full bg-white ring-1 ring-gray-200 dark:bg-white/5 dark:ring-white/10">
         {/* Category scope - custom dropdown; label reflects the current choice
             and only the hovered option ever highlights. */}
@@ -155,7 +186,7 @@ export default function HeaderSearch({ onNavigate, autoFocus = false, className 
             aria-activedescendant={active >= 0 ? `header-sugg-${active}` : undefined}
             aria-label={t("search.button")}
             placeholder={t("search.placeholder")}
-            className="w-full bg-transparent py-3 pl-4 pr-9 text-sm text-gray-800 outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500"
+            className="w-full bg-transparent py-3 pl-4 pr-9 text-sm text-gray-800 outline-none placeholder:text-gray-400 focus:outline-none focus-visible:outline-none dark:text-white dark:placeholder:text-gray-500"
           />
           {query && (
             <button

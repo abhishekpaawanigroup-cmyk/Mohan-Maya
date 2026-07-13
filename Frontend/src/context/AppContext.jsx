@@ -19,6 +19,9 @@ export function AppProvider({ children }) {
   // Wishlist & orders are also kept per account (keyed by email) so no user
   // ever sees another user's data after logout/login.
   const [userWishlists, setUserWishlists] = useLocalStorage("mm-wishlist-users", {});
+  // Guests also get a browser-scoped wishlist so heart toggles work before any
+  // sign-in or account selection happens.
+  const [guestWishlist, setGuestWishlist] = useLocalStorage("mm-wishlist-guest", []);
   const [couponCode, setCouponCode] = useLocalStorage("mm-coupon", null);
   // Persist ONLY product ids (not full objects). The ids are the stable source
   // of truth; full product data is always re-resolved from the catalog below.
@@ -189,35 +192,72 @@ export function AppProvider({ children }) {
   }, [setCart, setCouponCode]);
 
   // ── Wishlist ────────────────────────────────────────────
-  // Active wishlist = the signed-in user's wishlist (empty when signed out).
-  const wishlist = useMemo(() => (user ? userWishlists[user.email] || [] : []), [user, userWishlists]);
+  // Active wishlist = the signed-in user's wishlist, or a browser-scoped guest
+  // wishlist when no account is active.
+  const wishlist = useMemo(
+    () => (user ? userWishlists[user.email] || [] : guestWishlist || []),
+    [user, userWishlists, guestWishlist]
+  );
   const setWishlist = useCallback(
     (updater) => {
       const u = userRef.current;
-      if (!u) return;
-      setUserWishlists((prev) => {
-        const next = typeof updater === "function" ? updater(prev[u.email] || []) : updater;
-        return { ...prev, [u.email]: next };
-      });
-    },
-    [setUserWishlists]
-  );
+      if (u) {
+        setUserWishlists((prev) => {
+          const next = typeof updater === "function" ? updater(prev[u.email] || []) : updater;
+          return { ...prev, [u.email]: next };
+        });
+        return;
+      }
 
-  const isWishlisted = useCallback((id) => wishlist.some((i) => i.id === id), [wishlist]);
-
-  const toggleWishlist = useCallback(
-    (product) => {
-      // Wishlist is open to everyone - no authentication required. Toggle
-      // silently; the heart icon's filled/outline state is the only feedback.
-      // The functional updater stays pure, so Strict Mode's double-invoke can't
-      // duplicate the item.
-      setWishlist((prev) =>
-        prev.some((i) => i.id === product.id)
-          ? prev.filter((i) => i.id !== product.id)
-          : [...prev, product]
+      setGuestWishlist((prev) =>
+        typeof updater === "function" ? updater(prev || []) : updater
       );
     },
-    [setWishlist]
+    [setUserWishlists, setGuestWishlist]
+  );
+
+  const isWishlisted = useCallback(
+    (id, wishlistKey = null) =>
+      wishlist.some((i) => {
+        if (wishlistKey) return i.wishlistKey === wishlistKey;
+        return i.id === id || (i.wishlistKey == null && i.id === id);
+      }),
+    [wishlist]
+  );
+
+  const toggleWishlist = useCallback(
+    (product, wishlistKey = null) => {
+      const commit = () => {
+        // Toggle silently; the heart icon's filled/outline state is the only feedback.
+        // The functional updater stays pure, so Strict Mode's double-invoke can't
+        // duplicate the item.
+        const key = wishlistKey || product?.wishlistKey;
+        setWishlist((prev) => {
+          const exists = prev.some((i) => {
+            if (key) return i.wishlistKey === key;
+            return i.id === product.id;
+          });
+
+          if (exists) {
+            return prev.filter((i) => {
+              if (key) return i.wishlistKey !== key;
+              return i.id !== product.id;
+            });
+          }
+
+          return [...prev, key ? { ...product, wishlistKey: key } : product];
+        });
+      };
+
+      // Require authentication to add/remove wishlist items
+      if (!user) {
+        requireAuth(commit);
+        return false; // deferred - caller should skip any post-toggle side effects
+      }
+      commit();
+      return true;
+    },
+    [user, requireAuth, setWishlist]
   );
 
   // ── Coupons ─────────────────────────────────────────────
@@ -305,10 +345,10 @@ export function AppProvider({ children }) {
       };
       setOrders((prev) => [order, ...prev]);
       clearCart();
-      addToast("Order placed successfully!", "success");
+      // Notification is triggered by the component calling placeOrder (via useNotificationTrigger)
       return id;
     },
-    [cart, coupon, couponCode, setOrders, clearCart, addToast]
+    [cart, coupon, couponCode, setOrders, clearCart]
   );
 
   const getOrder = useCallback(
@@ -335,10 +375,10 @@ export function AppProvider({ children }) {
           };
         })
       );
-      if (ok) addToast("Your order has been cancelled successfully.", "success");
+      // Notification is now shown via NotificationBell using useNotificationTrigger
       return ok;
     },
-    [setOrders, addToast]
+    [setOrders]
   );
 
   // ── Admin: cross-account order access ───────────────────

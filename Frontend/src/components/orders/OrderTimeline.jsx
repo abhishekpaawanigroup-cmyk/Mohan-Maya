@@ -47,7 +47,7 @@ export default function OrderTimeline({ order }) {
               initial={{ scale: 0.6, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: i * 0.06 }}
-              className={`relative z-10 grid h-9 w-9 place-items-center rounded-full shrink-0 ${
+              className={`relative grid h-9 w-9 place-items-center rounded-full shrink-0 ${
                 done ? "bg-[#fe4462] text-white" : "bg-gray-100 dark:bg-white/10 text-gray-400"
               }`}
             >

@@ -100,7 +100,7 @@ export default function ReelCard({ reel }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Watch ${type.toLowerCase()} on Instagram`}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 ring-1 ring-inset ring-gray-200 transition-all duration-200 hover:bg-red-600 hover:text-white hover:ring-red-600 dark:bg-slate-700 dark:text-gray-200 dark:ring-slate-600 dark:hover:bg-red-600 dark:hover:text-white dark:hover:ring-red-600"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 ring-1 ring-inset ring-gray-200 transition-all duration-200 hover:bg-[#e95061] hover:text-white hover:ring-[#e95061] dark:bg-slate-700 dark:text-gray-200 dark:ring-slate-600 dark:hover:bg-[#e95061] dark:hover:text-white dark:hover:ring-[#e95061]"
           >
             <FaInstagram size={16} /> Watch
           </a>

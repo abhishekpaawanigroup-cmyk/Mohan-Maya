@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
 import SectionHeading from "../../../components/common/SectionHeading";
@@ -12,13 +12,13 @@ import SectionHeading from "../../../components/common/SectionHeading";
  * fades out at the last set -both transition smoothly with position.
  */
 const characters = [
-  { name: "Krishna", image: "/Featured-images/mm4.png" },
-  { name: "Radha", image: "/Featured-images/mm5.png" },
-  { name: "Madhav", image: "/Featured-images/mm6.png" },
+  { name: "Mohan", image: "/Featured-images/mm4.png" },
+  { name: "Maya", image: "/Featured-images/mm5.png" },
+  { name: "Mohan", image: "/Featured-images/mm6.png" },
   { name: "Maya", image: "/Featured-images/mm7.png" },
-  { name: "Shiva", image: "/trandy-images/mm4.png" },
-  { name: "Mohini", image: "/trandy-images/mm6.png" },
-  { name: "Govinda", image: "/bestseller-image/mm6.png" },
+  { name: "Mohan", image: "/trandy-images/mm4.png" },
+  { name: "Maya", image: "/trandy-images/mm6.png" },
+  { name: "Mohan", image: "/bestseller-image/mm6.png" },
 ];
 
 const GAP = 20; // px -must match the track's gap-5
@@ -32,10 +32,42 @@ function getPerView(width) {
 }
 
 export default function MeetCharacters() {
+  const [searchParams] = useSearchParams();
   const [perView, setPerView] = useState(() =>
     typeof window !== "undefined" ? getPerView(window.innerWidth) : 5
   );
   const [index, setIndex] = useState(0);
+
+  // Helper function to preserve shop filters when selecting a character
+  // If on home page, restore last used shop filters from localStorage
+  const getCharacterLink = (characterName) => {
+    let params = new URLSearchParams(searchParams);
+
+    // If searchParams is empty (on home page), restore filters from shop page
+    if (params.toString() === "") {
+      try {
+        const savedFilters = localStorage.getItem("shopFilters");
+        if (savedFilters) {
+          const filters = JSON.parse(savedFilters);
+          if (filters.category && filters.category !== "All Products") {
+            params.set("category", filters.category);
+          }
+          if (filters.price && filters.price !== "all") {
+            params.set("price", filters.price);
+          }
+          if (filters.sort && filters.sort !== "featured") {
+            params.set("sort", filters.sort);
+          }
+        }
+      } catch (e) {
+        // Silently ignore localStorage errors
+      }
+    }
+
+    // Set or update the character parameter
+    params.set("character", characterName);
+    return `/shop?${params.toString()}`;
+  };
 
   // Track the breakpoint so the slider stays responsive.
   useEffect(() => {
@@ -60,7 +92,7 @@ export default function MeetCharacters() {
   const trackTransform = `translateX(calc(${safeIndex} * (100% + ${GAP}px) / ${perView} * -1))`;
 
   return (
-    <section className="relative overflow-hidden py-20 bg-[#fbfefb] dark:bg-[#0d0508]">
+    <section className="relative overflow-hidden py-8 sm:py-10 md:py-12 lg:py-14 xl:py-16 bg-[#fbfefb] dark:bg-[#0d0508]">
       {/* Soft blurred gradient orbs for depth (decorative, non-interactive) */}
      
       
@@ -87,9 +119,9 @@ export default function MeetCharacters() {
               className="flex gap-5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform"
               style={{ transform: trackTransform }}
             >
-              {characters.map((char) => (
+              {characters.map((char, i) => (
                 <article
-                  key={char.name}
+                  key={`${char.name}-${i}`}
                   style={{ width: cardWidth }}
                   className="group shrink-0"
                 >
@@ -112,7 +144,7 @@ export default function MeetCharacters() {
 
                     {/* Transparent glass / outlined Explore button */}
                     <Link
-                      to="/shop"
+                      to={getCharacterLink(char.name)}
                       aria-label={`Explore the ${char.name} collection`}
                       className="group/btn mt-3 inline-flex items-center justify-center gap-1.5 rounded-full border border-gray-300/80 bg-white/10 px-5 py-2 text-xs font-semibold tracking-wide text-gray-800 backdrop-blur-md transition-all duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#fe4462]/60 active:scale-95 dark:border-white/25 dark:text-white"
                     >

@@ -5,7 +5,11 @@ import { FiCreditCard, FiTruck, FiSmartphone, FiLock, FiShoppingBag, FiX } from 
 import ScrollReveal from "../../../components/common/ScrollReveal";
 import { useApp } from "../../../context/AppContext";
 import { usePageMeta } from "../../../hooks/useHooks";
+ community
 import { useCurrency } from "../../../hooks/useCurrency";
+
+import { useNotificationTrigger } from "../../../hooks/useNotificationTrigger";
+ main
 
 const initialForm = {
   fullName: "",
@@ -26,6 +30,7 @@ const paymentMethods = [
 export default function Checkout() {
   usePageMeta("Checkout - Mohan Maya", "Securely complete your Mohan Maya order.");
   const navigate = useNavigate();
+  const trigger = useNotificationTrigger();
   const { cart, totals, coupon, couponCode, applyCoupon, removeCoupon, placeOrder, addToast } = useApp();
   const { format } = useCurrency();
   const [form, setForm] = useState(initialForm);
@@ -76,13 +81,17 @@ export default function Checkout() {
     }
     setSubmitting(true);
     const id = placeOrder({ ...form, payment });
+
+    // Trigger notification for order placement
+    trigger.orderPlaced(id);
+
     navigate(`/track?order=${id}`);
   };
 
   // Empty cart guard
   if (!cart.length) {
     return (
-      <section className="pt-28 lg:pt-36 pb-20 bg-[#fbfefb] dark:bg-[#0d0508] min-h-screen flex items-center">
+      <section className="pt-28 lg:pt-36 mt-20 pb-20 bg-[#fbfefb] dark:bg-[#0d0508] min-h-screen flex items-center">
         <div className="max-w-md mx-auto text-center px-5">
           <FiShoppingBag size={56} className="text-gray-300 mx-auto mb-4" />
           <h1 className="text-2xl font-bold dark:text-white">Your cart is empty</h1>
@@ -94,7 +103,7 @@ export default function Checkout() {
   }
 
   return (
-    <section className="pt-28 lg:pt-36 pb-20 bg-[#fbfefb] dark:bg-[#0d0508] min-h-screen">
+    <section className="pt-28 lg:pt-36 mt-20 pb-20 bg-[#fbfefb] dark:bg-[#0d0508] min-h-screen">
       <div className="max-w-6xl mx-auto px-5">
         <ScrollReveal className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-[#fe4462]">Checkout</h1>
