@@ -1,0 +1,328 @@
+/* International Phone Input - Styling for react-international-phone library */
+
+/* Container */
+.react-international-phone-input {
+  display: flex;
+  width: 100%;
+}
+
+/* Input field styling */
+.react-international-phone-input input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 150ms ease;
+  background-color: #ffffff;
+  color: #1f2937;
+}
+
+.react-international-phone-input input:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: #fe4462;
+  border-color: #fe4462;
+  box-shadow: 0 0 0 3px rgba(254, 68, 98, 0.1);
+}
+
+.react-international-phone-input input::placeholder {
+  color: #9ca3af;
+}
+
+.react-international-phone-input input:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Dark mode - Input */
+@media (prefers-color-scheme: dark) {
+  .react-international-phone-input input {
+    background-color: #1f2937;
+    color: #f3f4f6;
+    border-color: #4b5563;
+  }
+
+  .react-international-phone-input input::placeholder {
+    color: #6b7280;
+  }
+
+  .react-international-phone-input input:focus {
+    border-color: #fe4462;
+    box-shadow: 0 0 0 3px rgba(254, 68, 98, 0.2);
+  }
+
+  .react-international-phone-input input:disabled {
+    background-color: #111827;
+    color: #6b7280;
+  }
+}
+
+.dark .react-international-phone-input input {
+  background-color: #1f2937;
+  color: #f3f4f6;
+  border-color: #4b5563;
+}
+
+.dark .react-international-phone-input input::placeholder {
+  color: #6b7280;
+}
+
+.dark .react-international-phone-input input:focus {
+  border-color: #fe4462;
+  box-shadow: 0 0 0 3px rgba(254, 68, 98, 0.2);
+}
+
+.dark .react-international-phone-input input:disabled {
+  background-color: #111827;
+  color: #6b7280;
+}
+
+/* Error state */
+.react-international-phone-input--error input {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.react-international-phone-input--error input:focus {
+  ring-color: #ef4444;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-international-phone-input--error input {
+    background-color: #7f1d1d;
+    border-color: #ef4444;
+  }
+
+  .react-international-phone-input--error input:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+  }
+}
+
+.dark .react-international-phone-input--error input {
+  background-color: #7f1d1d;
+  border-color: #ef4444;
+}
+
+.dark .react-international-phone-input--error input:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* Disabled state */
+.react-international-phone-input--disabled input {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Country selector button */
+.react-international-phone-input button {
+  padding: 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-right: none;
+  border-radius: 0.5rem 0 0 0.5rem;
+  background-color: #f9fafb;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  transition: all 150ms ease;
+  font-size: 1.25rem;
+  line-height: 1;
+  min-width: 3rem;
+}
+
+.react-international-phone-input button:hover {
+  background-color: #f3f4f6;
+}
+
+.react-international-phone-input button:focus {
+  outline: none;
+  background-color: #f3f4f6;
+}
+
+/* Dark mode - Button */
+@media (prefers-color-scheme: dark) {
+  .react-international-phone-input button {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .react-international-phone-input button:hover {
+    background-color: #4b5563;
+  }
+
+  .react-international-phone-input button:focus {
+    background-color: #4b5563;
+  }
+}
+
+.dark .react-international-phone-input button {
+  background-color: #374151;
+  border-color: #4b5563;
+}
+
+.dark .react-international-phone-input button:hover {
+  background-color: #4b5563;
+}
+
+.dark .react-international-phone-input button:focus {
+  background-color: #4b5563;
+}
+
+/* Error state - Button */
+.react-international-phone-input--error button {
+  background-color: #fee2e2;
+  border-color: #ef4444;
+}
+
+.react-international-phone-input--error button:hover {
+  background-color: #fecaca;
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-international-phone-input--error button {
+    background-color: #7f1d1d;
+    border-color: #ef4444;
+  }
+
+  .react-international-phone-input--error button:hover {
+    background-color: #991b1b;
+  }
+}
+
+.dark .react-international-phone-input--error button {
+  background-color: #7f1d1d;
+  border-color: #ef4444;
+}
+
+.dark .react-international-phone-input--error button:hover {
+  background-color: #991b1b;
+}
+
+/* Dropdown/Popup */
+.react-international-phone-select {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 0.5rem 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 50;
+  min-width: 200px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-international-phone-select {
+    background-color: #1f2937;
+    border-color: #4b5563;
+    color: #f3f4f6;
+  }
+}
+
+.dark .react-international-phone-select {
+  background-color: #1f2937;
+  border-color: #4b5563;
+  color: #f3f4f6;
+}
+
+/* Dropdown item */
+.react-international-phone-select div {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.react-international-phone-select div:hover {
+  background-color: #f3f4f6;
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-international-phone-select div:hover {
+    background-color: #374151;
+  }
+}
+
+.dark .react-international-phone-select div:hover {
+  background-color: #374151;
+}
+
+/* Selected item in dropdown */
+.react-international-phone-select div[data-selected='true'] {
+  background-color: #fce7f3;
+  color: #be185d;
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-international-phone-select div[data-selected='true'] {
+    background-color: #83153b;
+    color: #fecdd3;
+  }
+}
+
+.dark .react-international-phone-select div[data-selected='true'] {
+  background-color: #83153b;
+  color: #fecdd3;
+}
+
+/* Scrollbar styling for dropdown */
+.react-international-phone-select::-webkit-scrollbar {
+  width: 6px;
+}
+
+.react-international-phone-select::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.react-international-phone-select::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 3px;
+}
+
+.react-international-phone-select::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af;
+}
+
+@media (prefers-color-scheme: dark) {
+  .react-international-phone-select::-webkit-scrollbar-thumb {
+    background-color: #4b5563;
+  }
+
+  .react-international-phone-select::-webkit-scrollbar-thumb:hover {
+    background-color: #6b7280;
+  }
+}
+
+.dark .react-international-phone-select::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+}
+
+.dark .react-international-phone-select::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
+
+/* Responsive - Mobile */
+@media (max-width: 640px) {
+  .react-international-phone-input input {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .react-international-phone-select {
+    min-width: 160px;
+  }
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1024px) {
+  .react-international-phone-input {
+    width: 100%;
+  }
+}

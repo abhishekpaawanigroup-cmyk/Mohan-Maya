@@ -6,6 +6,7 @@ import ScrollReveal from "../../../components/common/ScrollReveal";
 import { useApp } from "../../../context/AppContext";
 import { usePageMeta } from "../../../hooks/useHooks";
 import { useCurrency } from "../../../hooks/useCurrency";
+import InternationalPhone from "../../../components/phone/InternationalPhone";
 
 const initialForm = {
   fullName: "",
@@ -51,7 +52,7 @@ export default function Checkout() {
     if (!form.email.trim()) e.email = "Email is required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Enter a valid email";
     if (!form.phone.trim()) e.phone = "Phone is required";
-    else if (!/^\d{10}$/.test(form.phone.replace(/\s/g, ""))) e.phone = "Enter a 10-digit phone number";
+    else if (!/^\+\d{7,15}$/.test(form.phone.replace(/\s/g, ""))) e.phone = "Enter a valid phone number";
     if (!form.address.trim()) e.address = "Address is required";
     if (!form.city.trim()) e.city = "City is required";
     if (!form.state.trim()) e.state = "State is required";
@@ -120,9 +121,16 @@ export default function Checkout() {
                   {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium mb-1 dark:text-gray-200">Phone</label>
-                  <input id="phone" name="phone" inputMode="numeric" value={form.phone} onChange={handleChange} className={field("phone")} placeholder="10-digit number" />
-                  {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                  <InternationalPhone
+                    name="phone"
+                    value={form.phone}
+                    onChange={(phone) => {
+                      setForm((prev) => ({ ...prev, phone }));
+                      setErrors((prev) => ({ ...prev, phone: undefined }));
+                    }}
+                    label="Phone"
+                    error={errors.phone}
+                  />
                 </div>
               </div>
             </ScrollReveal>

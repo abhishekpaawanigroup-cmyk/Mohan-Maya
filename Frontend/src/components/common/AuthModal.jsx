@@ -1,10 +1,11 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiMail, FiLock, FiUser, FiPhone, FiEye, FiEyeOff, FiX } from "react-icons/fi";
+import { FiMail, FiLock, FiUser, FiEye, FiEyeOff, FiX } from "react-icons/fi";
 import { FaGoogle } from "react-icons/fa";
 import { useApp } from "../../context/AppContext";
 import { useModalA11y } from "../../hooks/useHooks";
+import InternationalPhone from "../phone/InternationalPhone";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^[+\d][\d\s-]{6,}$/;
@@ -250,17 +251,18 @@ function AuthDialog() {
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <Field
-                  icon={FiPhone}
-                  type="tel"
+                <InternationalPhone
                   name="phone"
                   value={form.phone}
-                  onChange={set("phone")}
+                  onChange={(phone) => {
+                    setForm((p) => ({ ...p, phone }));
+                    setServerErrors((p) => ({ ...p, phone: undefined }));
+                  }}
                   onBlur={markTouched("phone")}
                   placeholder="Mobile number"
                   autoComplete="tel"
-                  error={fieldError("phone")}
-                  touched={touched.phone}
+                  error={touched.phone ? fieldError("phone") : null}
+                  label=""
                 />
               </motion.div>
             )}

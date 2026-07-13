@@ -4,7 +4,6 @@ import {
   FiX,
   FiUser,
   FiMail,
-  FiPhone,
   FiLock,
   FiEye,
   FiEyeOff,
@@ -13,6 +12,7 @@ import {
 } from "react-icons/fi";
 import { useApp } from "../../../context/AppContext";
 import ModalPortal from "../../../components/common/ModalPortal";
+import InternationalPhone from "../../../components/phone/InternationalPhone";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -136,7 +136,7 @@ export function EditProfileModal({ onClose }) {
       <form onSubmit={submit} noValidate className="space-y-4">
         <Field icon={FiUser} value={form.name} onChange={set("name")} placeholder="Full name" autoComplete="name" error={errors.name} />
         <Field icon={FiMail} type="email" value={form.email} onChange={set("email")} placeholder="Email address" autoComplete="email" error={errors.email} />
-        <Field icon={FiPhone} value={form.phone} onChange={set("phone")} placeholder="Phone (optional)" autoComplete="tel" />
+        <InternationalPhone name="phone" value={form.phone} onChange={(phone) => setForm((p) => ({ ...p, phone }))} placeholder="Phone (optional)" autoComplete="tel" label="" />
         <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
           <button type="button" onClick={onClose} className={ghostBtn}>Cancel</button>
           <button type="submit" disabled={saving} className={primaryBtn}>{saving ? "Saving…" : "Save Changes"}</button>
@@ -269,7 +269,7 @@ export function AddressModal({ address = null, onClose }) {
         </div>
 
         <Field icon={FiUser} value={form.fullName} onChange={set("fullName")} placeholder="Full name" autoComplete="name" error={errors.fullName} />
-        <Field icon={FiPhone} value={form.phone} onChange={set("phone")} placeholder="Phone" autoComplete="tel" />
+        <InternationalPhone name="phone" value={form.phone} onChange={(phone) => setForm((p) => ({ ...p, phone }))} placeholder="Phone" autoComplete="tel" label="" />
         <Field icon={FiMapPin} value={form.line1} onChange={set("line1")} placeholder="Address (house no, street, area)" error={errors.line1} />
         <div className="grid grid-cols-2 gap-3">
           <Field icon={FiMapPin} value={form.city} onChange={set("city")} placeholder="City" error={errors.city} />

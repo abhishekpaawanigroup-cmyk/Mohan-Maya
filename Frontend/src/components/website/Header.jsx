@@ -397,7 +397,7 @@ export default function Header() {
                   onClick={() => setCatOpen((v) => !v)}
                   aria-haspopup="menu"
                   aria-expanded={catOpen}
-                  className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-bold text-gray-800 transition hover:bg-[#fe4462]/10 hover:text-[#fe4462] dark:text-white"
+                  className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-bold text-gray-800 transition  dark:text-white"
                 >
                   <FiGrid size={15} /> {t("nav.categories")}
                 </button>
