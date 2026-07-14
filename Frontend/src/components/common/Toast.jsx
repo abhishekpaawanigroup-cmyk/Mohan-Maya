@@ -12,7 +12,7 @@ export default function ToastContainer() {
   const { toasts, removeToast } = useApp();
 
   return (
-    <div className="fixed top-24 right-4 z-[1000] flex flex-col gap-3 w-[min(92vw,340px)] pointer-events-none">
+    <div className="fixed top-24 right-4 z-[9999] flex flex-col gap-3 w-[min(92vw,340px)] pointer-events-none">
       <AnimatePresence>
         {toasts.map((toast) => {
           const { icon: Icon, ring, text } = config[toast.type] || config.info;
