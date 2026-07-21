@@ -52,9 +52,7 @@ export default function MyOrders() {
 
     const order = orders.find((o) => o.id === orderId);
     if (!order) {
-      // Order not found - show friendly message
-      setErrorMessage(`Order #${orderId} not found. It may have been deleted.`);
-      // Clear the query param
+      // Order not found - clear the query param
       setSearchParams({});
       return;
     }
@@ -62,12 +60,14 @@ export default function MyOrders() {
     // Set the correct filter based on order status (but don't open modal)
     const orderStatus = deriveStatus(order);
     if (orderStatus !== filter) {
-      setFilter(orderStatus);
-      setFiltering(true);
+      // Use a stable callback approach to avoid cascading renders
+      Promise.resolve().then(() => {
+        setFilter(orderStatus);
+        setFiltering(true);
+      });
     }
 
     // Clear the query param after setting filter
-    // Do NOT open the modal - just navigate and filter
     setSearchParams({});
   }, [searchParams, orders, filter, setSearchParams]);
 
@@ -342,7 +342,7 @@ function OrderCard({ order, onDetails, onTrack, onCancel }) {
       className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10 dark:bg-white/5"
     >
       {/* Header */}
-      <div className="flex items-center justify-between gap-3 border-b border-gray-100 bg-gray-50/60 px-4 py-3 dark:border-white/10 dark:bg-white/[0.03] sm:px-5">
+      <div className="flex items-center justify-between gap-3 border-b border-gray-100 bg-gray-50/60 px-4 py-3 dark:border-white/10 dark:bg-white/3 sm:px-5">
         <div className="min-w-0">
           <p className="text-[10px] uppercase tracking-wide text-gray-400">Order ID</p>
           <p className="truncate text-sm font-bold text-gray-900 dark:text-white">#{order.id}</p>
@@ -354,7 +354,7 @@ function OrderCard({ order, onDetails, onTrack, onCancel }) {
       <div className="flex flex-1 flex-col p-4 sm:p-5">
         {/* Product */}
         <div className="flex items-center gap-3 sm:gap-4">
-          <div className="relative flex h-[76px] w-[76px] shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#fbfefb] dark:bg-white/10">
+          <div className="relative flex h-19 w-19 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#fbfefb] dark:bg-white/10">
             <img
               src={first?.image}
               alt={first?.name}
@@ -408,14 +408,14 @@ function OrderCard({ order, onDetails, onTrack, onCancel }) {
         <div className="mt-auto flex flex-wrap gap-2 pt-4">
           <button
             onClick={onDetails}
-            className="inline-flex min-w-[6rem] flex-1 items-center justify-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-[#fe4462] hover:text-[#fe4462] dark:border-white/15 dark:bg-transparent dark:text-gray-200"
+            className="inline-flex min-w-24 flex-1 items-center justify-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-[#fe4462] hover:text-[#fe4462] dark:border-white/15 dark:bg-transparent dark:text-gray-200"
           >
             <FiEye size={15} /> View Details
           </button>
           {!cancelled && (
             <button
               onClick={onTrack}
-              className="inline-flex min-w-[6rem] flex-1 items-center justify-center gap-1.5 rounded-full bg-[#fe4462] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#d93550] active:scale-[0.98]"
+              className="inline-flex min-w-24 flex-1 items-center justify-center gap-1.5 rounded-full bg-[#fe4462] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#d93550] active:scale-[0.98]"
             >
               <FiTruck size={15} /> Track
             </button>

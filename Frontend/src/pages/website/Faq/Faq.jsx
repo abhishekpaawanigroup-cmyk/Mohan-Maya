@@ -70,7 +70,7 @@ function FaqItem({ id, item, isOpen, onToggle }) {
           onClick={onToggle}
           aria-expanded={isOpen}
           aria-controls={panelId}
-          className="w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#fe4462] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+          className="w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left rounded-2xl focus:outline-none focus-visible: focus-visible:ring-[#fe4462] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
         >
           <span className="font-semibold text-base sm:text-lg text-gray-800 dark:text-white">
             {item.q}

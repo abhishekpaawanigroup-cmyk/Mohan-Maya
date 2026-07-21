@@ -6,6 +6,7 @@ import ScrollReveal from "../../../components/common/ScrollReveal";
 import { useApp } from "../../../context/AppContext";
 import { usePageMeta } from "../../../hooks/useHooks";
 import { useCurrency } from "../../../hooks/useCurrency";
+import InternationalPhone from "../../../components/phone/InternationalPhone";
 
 const initialForm = {
   fullName: "",
@@ -26,7 +27,6 @@ const paymentMethods = [
 export default function Checkout() {
   usePageMeta("Checkout - Mohan Maya", "Securely complete your Mohan Maya order.");
   const navigate = useNavigate();
-  const trigger = useNotificationTrigger();
   const { cart, totals, coupon, couponCode, applyCoupon, removeCoupon, placeOrder, addToast } = useApp();
   const { format } = useCurrency();
   const [form, setForm] = useState(initialForm);
@@ -52,7 +52,7 @@ export default function Checkout() {
     if (!form.email.trim()) e.email = "Email is required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Enter a valid email";
     if (!form.phone.trim()) e.phone = "Phone is required";
-    else if (!/^\d{10}$/.test(form.phone.replace(/\s/g, ""))) e.phone = "Enter a 10-digit phone number";
+    else if (!/^\+\d{7,15}$/.test(form.phone.replace(/\s/g, ""))) e.phone = "Enter a valid phone number";
     if (!form.address.trim()) e.address = "Address is required";
     if (!form.city.trim()) e.city = "City is required";
     if (!form.state.trim()) e.state = "State is required";
@@ -77,9 +77,6 @@ export default function Checkout() {
     }
     setSubmitting(true);
     const id = placeOrder({ ...form, payment });
-
-    // Trigger notification for order placement
-    trigger.orderPlaced(id);
 
     navigate(`/track?order=${id}`);
   };
@@ -124,9 +121,16 @@ export default function Checkout() {
                   {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium mb-1 dark:text-gray-200">Phone</label>
-                  <input id="phone" name="phone" inputMode="numeric" value={form.phone} onChange={handleChange} className={field("phone")} placeholder="10-digit number" />
-                  {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                  <InternationalPhone
+                    name="phone"
+                    value={form.phone}
+                    onChange={(phone) => {
+                      setForm((prev) => ({ ...prev, phone }));
+                      setErrors((prev) => ({ ...prev, phone: undefined }));
+                    }}
+                    label="Phone"
+                    error={errors.phone}
+                  />
                 </div>
               </div>
             </ScrollReveal>
@@ -220,7 +224,7 @@ export default function Checkout() {
                       placeholder="Coupon code"
                       className="flex-1 bg-gray-100 dark:bg-white/10 rounded-lg px-3 py-2 text-sm outline-none dark:text-white uppercase placeholder:normal-case"
                     />
-                    <button type="button" onClick={handleApplyCoupon} className="btn-outline !py-2 !px-4 text-sm">Apply</button>
+                    <button type="button" onClick={handleApplyCoupon} className="btn-outline py-2! px-4! text-sm">Apply</button>
                   </div>
                 )}
                 <p className="text-xs text-gray-400 mt-2">Try <strong>MOHAN10</strong>, <strong>WELCOME50</strong> or <strong>FREESHIP</strong>.</p>

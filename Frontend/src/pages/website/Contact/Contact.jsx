@@ -54,8 +54,8 @@ export default function Contact() {
 
   // Reference-style input: soft grey fill, no border, smooth brand focus ring.
   const inputBase =
-    "w-full bg-gray-100 dark:bg-white/5 rounded-md px-4 py-3.5 text-sm text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 outline-none transition-all duration-200 focus:ring-2 focus:ring-[#fe4462]/30 focus-visible:!outline-none";
-  const errRing = "ring-2 ring-red-400/60";
+    "w-full bg-gray-100 dark:bg-white/5 rounded-md px-4 py-3.5 text-sm text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 outline-none transition-all duration-200 focus:/30 focus-visible:!outline-none";
+  const errRing = " ring-red-400/60";
 
   return (
     <>

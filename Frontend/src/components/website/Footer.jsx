@@ -59,7 +59,7 @@ export default function Footer() {
           {/* Logo */}
           <div>
             <div className="flex justify-start items-center gap-3 mb-3">
-             <div className="w-14 h-14 rounded-full overflow-hidden ring-2 ring-[#fe4462]/30 group-hover:ring-[#fe4462] transition-all duration-300">
+             <div className="w-14 h-14 rounded-full overflow-hidden  ring-[#fe4462]/30 group-hover:ring-[#fe4462] transition-all duration-300">
               <img src="/header/logo.png" alt="Mohan Maya logo" className="w-full h-full object-cover" loading="lazy" />
             </div>
             <div className="block">

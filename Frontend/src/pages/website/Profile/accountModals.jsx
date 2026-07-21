@@ -4,7 +4,6 @@ import {
   FiX,
   FiUser,
   FiMail,
-  FiPhone,
   FiLock,
   FiEye,
   FiEyeOff,
@@ -13,11 +12,12 @@ import {
 } from "react-icons/fi";
 import { useApp } from "../../../context/AppContext";
 import ModalPortal from "../../../components/common/ModalPortal";
+import InternationalPhone from "../../../components/phone/InternationalPhone";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const inputCls = (invalid) =>
-  `w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-11 pr-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition focus:ring-2 focus:ring-[#fe4462]/30 focus:border-[#fe4462] focus-visible:!outline-none ${
+  `w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-11 pr-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition focus:/30 focus:border-[#fe4462] focus-visible:!outline-none ${
     invalid ? "border-red-400 focus:ring-red-400/20" : "border-gray-200 dark:border-white/10"
   }`;
 
@@ -136,7 +136,7 @@ export function EditProfileModal({ onClose }) {
       <form onSubmit={submit} noValidate className="space-y-4">
         <Field icon={FiUser} value={form.name} onChange={set("name")} placeholder="Full name" autoComplete="name" error={errors.name} />
         <Field icon={FiMail} type="email" value={form.email} onChange={set("email")} placeholder="Email address" autoComplete="email" error={errors.email} />
-        <Field icon={FiPhone} value={form.phone} onChange={set("phone")} placeholder="Phone (optional)" autoComplete="tel" />
+        <InternationalPhone name="phone" value={form.phone} onChange={(phone) => setForm((p) => ({ ...p, phone }))} placeholder="Phone (optional)" autoComplete="tel" label="" />
         <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
           <button type="button" onClick={onClose} className={ghostBtn}>Cancel</button>
           <button type="submit" disabled={saving} className={primaryBtn}>{saving ? "Saving…" : "Save Changes"}</button>
@@ -269,7 +269,7 @@ export function AddressModal({ address = null, onClose }) {
         </div>
 
         <Field icon={FiUser} value={form.fullName} onChange={set("fullName")} placeholder="Full name" autoComplete="name" error={errors.fullName} />
-        <Field icon={FiPhone} value={form.phone} onChange={set("phone")} placeholder="Phone" autoComplete="tel" />
+        <InternationalPhone name="phone" value={form.phone} onChange={(phone) => setForm((p) => ({ ...p, phone }))} placeholder="Phone" autoComplete="tel" label="" />
         <Field icon={FiMapPin} value={form.line1} onChange={set("line1")} placeholder="Address (house no, street, area)" error={errors.line1} />
         <div className="grid grid-cols-2 gap-3">
           <Field icon={FiMapPin} value={form.city} onChange={set("city")} placeholder="City" error={errors.city} />

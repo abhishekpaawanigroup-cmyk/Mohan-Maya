@@ -140,7 +140,7 @@ export default function ProductModal({ product = {}, onClose }) {
   return (
     <ModalPortal>
     <motion.div
-      className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4"
+      className="fixed inset-0 z-999 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -169,7 +169,7 @@ export default function ProductModal({ product = {}, onClose }) {
         </button>
 
         {/* ── LEFT: media ─────────────────────────── */}
-        <div className="relative bg-gradient-to-br from-[#fbfefb] to-[#f1f3f5] dark:from-[#1f1015] dark:to-[#140a0d] p-5 sm:p-8 flex flex-col lg:w-1/2 lg:shrink-0">
+        <div className="relative bg-linear-to-br from-[#fbfefb] to-[#f1f3f5] dark:from-[#1f1015] dark:to-[#140a0d] p-5 sm:p-8 flex flex-col lg:w-1/2 lg:shrink-0">
           {/* media tabs */}
           <div className="inline-flex self-start gap-1 p-1 rounded-full bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm mb-4">
             {[
@@ -191,7 +191,7 @@ export default function ProductModal({ product = {}, onClose }) {
           </div>
 
           {/* stage */}
-          <div className="relative flex-1 min-h-[300px] sm:min-h-[380px] rounded-2xl bg-white/60 dark:bg-white/5 overflow-hidden flex items-center justify-center shadow-inner">
+          <div className="relative flex-1 min-h-75 sm:min-h-95 rounded-2xl bg-white/60 dark:bg-white/5 overflow-hidden flex items-center justify-center shadow-inner">
             {discount > 0 && (
               <span className="absolute top-3 left-3 z-20 bg-[#fe4462] text-white text-xs font-bold px-3 py-1 rounded-full shadow">
                 -{discount}%
@@ -216,7 +216,7 @@ export default function ProductModal({ product = {}, onClose }) {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: imgLoaded ? 1 : 0, scale: 1 }}
                     transition={{ duration: 0.3 }}
-                    className="max-h-[360px] w-auto object-contain drop-shadow-xl"
+                    className="max-h-90 w-auto object-contain drop-shadow-xl"
                   />
                 </motion.div>
               ) : (

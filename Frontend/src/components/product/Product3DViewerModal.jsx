@@ -136,7 +136,7 @@ export default function Product3DViewerModal({ product = {}, modelPath, onClose 
             <button
               onClick={handleClose}
               aria-label="Close fullscreen viewer"
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[60] w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/50 backdrop-blur-md text-white ring-1 ring-white/25 flex items-center justify-center hover:bg-[#fe4462] hover:scale-105 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[60] w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/50 backdrop-blur-md text-white ring-1 ring-white/25 flex items-center justify-center hover:bg-[#fe4462] hover:scale-105 transition-all duration-200 focus:outline-none focus-visible: focus-visible:ring-white"
             >
               <X size={22} />
             </button>

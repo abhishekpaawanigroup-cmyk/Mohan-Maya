@@ -119,15 +119,15 @@ export default function MeetCharacters() {
               className="flex gap-5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform"
               style={{ transform: trackTransform }}
             >
-              {characters.map((char) => (
+              {characters.map((char, index) => (
                 <article
-                  key={char.name}
+                  key={`${char.name}-${index}`}
                   style={{ width: cardWidth }}
                   className="group shrink-0"
                 >
                   <div className="flex flex-col items-center rounded-xl border border-[#00000024] bg-white/70 p-4 shadow-sm ring-1 ring-black/5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl dark:border-white/10 dark:bg-white/5 dark:ring-white/10">
                     {/* Portrait with subtle zoom on hover */}
-                    <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gradient-to-b from-[#fbfefb] to-[#c7cdd3] dark:from-white/[0.07] dark:to-white/[0.02]">
+                    <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-linear-to-b from-[#fbfefb] to-[#c7cdd3] dark:from-white/7 dark:to-white/2">
                       <img
                         src={char.image}
                         alt={`${char.name} -handcrafted Mohan Maya figurine`}
@@ -146,7 +146,7 @@ export default function MeetCharacters() {
                     <Link
                       to={getCharacterLink(char.name)}
                       aria-label={`Explore the ${char.name} collection`}
-                      className="group/btn mt-3 inline-flex items-center justify-center gap-1.5 rounded-full border border-gray-300/80 bg-white/10 px-5 py-2 text-xs font-semibold tracking-wide text-gray-800 backdrop-blur-md transition-all duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#fe4462]/60 active:scale-95 dark:border-white/25 dark:text-white"
+                      className="group/btn mt-3 inline-flex items-center justify-center gap-1.5 rounded-full border border-gray-300/80 bg-white/10 px-5 py-2 text-xs font-semibold tracking-wide text-gray-800 backdrop-blur-md transition-all duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible: focus-visible:ring-[#fe4462]/60 active:scale-95 dark:border-white/25 dark:text-white"
                     >
                       Explore
                       <FiArrowRight className="transition-transform duration-300 group-hover/btn:translate-x-0.5" />
@@ -173,7 +173,7 @@ export default function MeetCharacters() {
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className={`flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white/80 text-gray-700 shadow-md backdrop-blur-md transition-colors duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#fe4462]/60 dark:border-white/20 dark:bg-white/10 dark:text-white ${
+                className={`flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white/80 text-gray-700 shadow-md backdrop-blur-md transition-colors duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible: focus-visible:ring-[#fe4462]/60 dark:border-white/20 dark:bg-white/10 dark:text-white ${
                   canPrev ? "" : "pointer-events-none"
                 }`}
               >
@@ -191,7 +191,7 @@ export default function MeetCharacters() {
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className={`flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white/80 text-gray-700 shadow-md backdrop-blur-md transition-colors duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#fe4462]/60 dark:border-white/20 dark:bg-white/10 dark:text-white ${
+                className={`flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white/80 text-gray-700 shadow-md backdrop-blur-md transition-colors duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible: focus-visible:ring-[#fe4462]/60 dark:border-white/20 dark:bg-white/10 dark:text-white ${
                   canNext ? "" : "pointer-events-none"
                 }`}
               >

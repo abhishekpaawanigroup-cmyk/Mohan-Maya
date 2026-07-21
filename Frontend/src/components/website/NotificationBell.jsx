@@ -226,7 +226,7 @@ export default function NotificationBell({ buttonClass = "", iconSize = 18 }) {
                 </p>
               </div>
             ) : (
-              <div className={`py-1 ${notifications.length > 4 ? "max-h-[360px] overflow-y-auto" : ""}`}>
+              <div className={`py-1 ${notifications.length > 4 ? "max-h-90 overflow-y-auto" : ""}`}>
                 {/* Today */}
                 {groupedNotifications.Today.length > 0 && (
                   <div>
@@ -367,7 +367,7 @@ function NotificationItem({
       onClick={onClick}
       className={`group flex items-start gap-3 px-4 py-3.5 transition-colors cursor-pointer ${
         isUnread
-          ? "bg-[#fe4462]/[0.05] hover:bg-[#fe4462]/[0.08]"
+          ? "bg-[#fe4462]/5 hover:bg-[#fe4462]/8"
           : "hover:bg-gray-50"
       }`}
     >
