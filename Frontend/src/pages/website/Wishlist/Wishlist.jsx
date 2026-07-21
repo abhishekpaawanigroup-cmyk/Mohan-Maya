@@ -26,19 +26,24 @@ export default function Wishlist() {
     "Keep track of the handcrafted miniatures you love and move them to your cart whenever you're ready."
   );
 
-  const { wishlist, toggleWishlist, addToCart } = useApp();
+  const { wishlist, toggleWishlist, addToCart, cart } = useApp();
   const { format } = useCurrency();
 
-  // Add to cart, then drop from the wishlist - but only if it was actually
-  // added (a signed-out user is redirected to login and nothing is moved).
+  // Add to cart only if it isn't already there - repeat clicks must never bump
+  // quantity from here (that's the Cart page's job). The wishlist itself is
+  // left untouched - items are only removed via the trash icon or "Clear wishlist".
   const moveToCart = (item, e) => {
-    if (addToCart(item, 1, e)) toggleWishlist(item);
+    if (cart.some((i) => i.id === item.id)) return;
+    addToCart(item, 1, e);
   };
-  // Add every wishlist item to the cart. The wishlist itself is left
-  // untouched - items are only removed via the trash icon, the per-item
+  // Add every wishlist item that isn't already in the cart. Existing cart
+  // entries are left as-is (no quantity bump), and the wishlist itself is
+  // left untouched - items are only removed via the trash icon, the per-item
   // "Move to Cart" button, or "Clear wishlist".
   const moveAllToCart = () => {
-    wishlist.forEach((item) => addToCart(item, 1));
+    wishlist
+      .filter((item) => !cart.some((i) => i.id === item.id))
+      .forEach((item) => addToCart(item, 1));
   };
   const clearWishlist = () => {
     [...wishlist].forEach((item) => toggleWishlist(item));
