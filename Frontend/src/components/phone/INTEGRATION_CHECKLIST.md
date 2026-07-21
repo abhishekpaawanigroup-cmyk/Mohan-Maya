@@ -379,7 +379,7 @@ export default function Checkout() {
           value={formData.fullName}
           onChange={handleInputChange}
           placeholder="John Doe"
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fe4462] ${
+          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus: ${
             errors.fullName
               ? "border-red-500 focus:ring-red-500"
               : "border-gray-300"
@@ -402,7 +402,7 @@ export default function Checkout() {
           value={formData.email}
           onChange={handleInputChange}
           placeholder="john@example.com"
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fe4462] ${
+          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus: ${
             errors.email
               ? "border-red-500 focus:ring-red-500"
               : "border-gray-300"
@@ -436,7 +436,7 @@ export default function Checkout() {
           value={formData.address}
           onChange={handleInputChange}
           placeholder="123 Main Street"
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fe4462] ${
+          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus: ${
             errors.address
               ? "border-red-500 focus:ring-red-500"
               : "border-gray-300"
@@ -459,7 +459,7 @@ export default function Checkout() {
             name="city"
             value={formData.city}
             onChange={handleInputChange}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fe4462] ${
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus: ${
               errors.city
                 ? "border-red-500 focus:ring-red-500"
                 : "border-gray-300"
@@ -480,7 +480,7 @@ export default function Checkout() {
             name="state"
             value={formData.state}
             onChange={handleInputChange}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fe4462] ${
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus: ${
               errors.state
                 ? "border-red-500 focus:ring-red-500"
                 : "border-gray-300"
@@ -501,7 +501,7 @@ export default function Checkout() {
             name="zipcode"
             value={formData.zipcode}
             onChange={handleInputChange}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fe4462] ${
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus: ${
               errors.zipcode
                 ? "border-red-500 focus:ring-red-500"
                 : "border-gray-300"

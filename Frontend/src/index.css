@@ -22,6 +22,11 @@ html {
      menu) never changes the page width - no horizontal shift/flicker on open
      or close. Stabilises normal flow and fixed elements (header, toasts) alike. */
   scrollbar-gutter: stable;
+  /* Prevent horizontal overflow here (not on body) - if body sets overflow-x
+     alone, its overflow-y computes to "auto" per the CSS overflow spec, which
+     turns body into its own scroll container alongside html and silently
+     breaks Element.scrollIntoView() (used by pagination, anchor nav, etc.). */
+  overflow-x: hidden;
 }
 
 /* Accessible keyboard focus ring on interactive elements (page content). Uses
@@ -65,7 +70,6 @@ label[for] {
 
 body {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  overflow-x: hidden;
   /* Crisper type across the site for a more premium feel. */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

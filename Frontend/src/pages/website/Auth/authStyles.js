@@ -1,8 +1,8 @@
 // Shared input + button styling for the auth flow pages (forgot / reset / verify),
 // kept consistent with the main Auth page.
 export const fieldCls = (invalid) =>
-  `w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-11 pr-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition-all duration-200 focus:ring-4 focus:ring-[#fe4462]/15 focus:border-[#fe4462] focus:bg-white dark:focus:bg-white/[0.07] focus-visible:!outline-none ${
-    invalid ? "border-red-400 focus:ring-red-400/15" : "border-gray-200 dark:border-white/10"
+  `w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-11 pr-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition-all duration-200  focus:bg-white dark:focus:bg-white/[0.07] focus-visible:!outline-none ${
+    invalid ? "border-red-400 " : "border-gray-200 dark:border-white/10"
   }`;
 
 export const btnPrimary =

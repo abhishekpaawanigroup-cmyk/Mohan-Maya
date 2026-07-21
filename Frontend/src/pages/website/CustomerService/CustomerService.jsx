@@ -97,7 +97,7 @@ function TopicItem({ id, topic, isOpen, onToggle }) {
           onClick={onToggle}
           aria-expanded={isOpen}
           aria-controls={panelId}
-          className="flex w-full items-center justify-between gap-4 rounded-2xl p-5 text-left sm:p-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#fe4462] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+          className="flex w-full items-center justify-between gap-4 rounded-2xl p-5 text-left sm:p-6 focus:outline-none focus-visible: focus-visible:ring-[#fe4462] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
         >
           <span className="text-base font-semibold text-gray-800 dark:text-white sm:text-lg">
             {topic.q}

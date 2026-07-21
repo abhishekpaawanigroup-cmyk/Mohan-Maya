@@ -312,7 +312,7 @@ function ReviewForm({ onSubmit, onPreviewImagesChange }) {
   };
 
   const inputCls = (k) =>
-    `w-full bg-gray-50 dark:bg-white/5 border rounded-xl px-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition focus:ring-2 focus:ring-[#fe4462]/30 focus:border-[#fe4462] focus-visible:!outline-none ${
+    `w-full bg-gray-50 dark:bg-white/5 border rounded-xl px-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition focus:/30 focus:border-[#fe4462] focus-visible:!outline-none ${
       errors[k] ? "border-red-400" : "border-gray-200 dark:border-white/10"
     }`;
 

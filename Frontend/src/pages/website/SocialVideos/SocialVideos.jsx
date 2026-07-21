@@ -74,7 +74,7 @@ export default function SocialVideos() {
                 aria-pressed={isActive}
                 aria-label={`Show ${p.label} content`}
                 className={`group inline-flex items-center gap-2 rounded-full px-5 py-3 font-semibold text-white transition-all duration-300 ${
-                  isActive ? "scale-105 ring-2 ring-white/80" : "opacity-80 hover:opacity-100 hover:-translate-y-0.5"
+                  isActive ? "scale-105  ring-white/80" : "opacity-80 hover:opacity-100 hover:-translate-y-0.5"
                 }`}
                 style={{
                   background: `linear-gradient(135deg, ${p.accent}, ${p.accent2})`,

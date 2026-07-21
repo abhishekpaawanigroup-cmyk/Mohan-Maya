@@ -168,7 +168,7 @@ export default function Header() {
         <div className="mx-auto flex h-14 w-full max-w-[1600px] items-center gap-2 px-3 sm:gap-3 sm:px-4 lg:px-10 py-8">
           {/* Logo */}
           <NavLink to="/" className="group flex shrink-0 items-center gap-2" aria-label="Mohan Maya - home">
-            <span className="h-12 w-12 overflow-hidden rounded-full ring-2 ring-[#fe4462]/30 transition group-hover:ring-[#fe4462]">
+            <span className="h-12 w-12 overflow-hidden rounded-full  ring-[#fe4462]/30 transition group-hover:ring-[#fe4462]">
               <img src="/header/logo.png" alt="" className="h-full w-full object-cover" />
             </span>
             <span className="hidden leading-none min-[360px]:block">
@@ -310,7 +310,7 @@ export default function Header() {
                   >
                     <div className="border-b border-gray-100 bg-gray-50/60 p-4 dark:border-white/10 dark:bg-white/5">
                       <div className="flex items-center gap-3">
-                        <span className="grid h-11 w-11 place-items-center rounded-full bg-[#fe4462] font-bold text-white ring-2 ring-[#fe4462]/20">{initials}</span>
+                        <span className="grid h-11 w-11 place-items-center rounded-full bg-[#fe4462] font-bold text-white  ring-[#fe4462]/20">{initials}</span>
                         <div className="min-w-0">
                           <p className="truncate font-semibold text-gray-900 dark:text-white">{user.name}</p>
                           <p className="truncate text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
@@ -470,7 +470,7 @@ export default function Header() {
               {/* Drawer header */}
               <div className="flex shrink-0 items-center justify-between border-b border-gray-200 p-4 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <img src="/header/logo.png" alt="" className="h-10 w-10 rounded-full ring-2 ring-[#fe4462]/30" />
+                  <img src="/header/logo.png" alt="" className="h-10 w-10 rounded-full  ring-[#fe4462]/30" />
                   <div className="leading-none">
                     <span className="block text-lg font-black text-gradient">M&amp;M</span>
                     <span className="block text-[9px] uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Mohan Maya</span>

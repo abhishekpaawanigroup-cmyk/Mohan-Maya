@@ -111,7 +111,7 @@ export function CountryIntegrationExample() {
           <select
             value={country}
             onChange={handleCountryChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#fe4462] focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus: focus:border-transparent"
           >
             {countries.map((c) => (
               <option key={c.code} value={c.code}>
@@ -142,7 +142,7 @@ export function CountryIntegrationExample() {
               value={formData.phone}
               onChange={handleInputChange}
               placeholder="Enter your number"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#fe4462] focus:border-transparent"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus: focus:border-transparent"
             />
           </div>
         </div>
@@ -165,7 +165,7 @@ export function CountryIntegrationExample() {
             value={formData.state}
             onChange={handleInputChange}
             placeholder="Enter your state"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#fe4462] focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus: focus:border-transparent"
           />
         </div>
 
@@ -180,7 +180,7 @@ export function CountryIntegrationExample() {
             value={formData.city}
             onChange={handleInputChange}
             placeholder="Enter your city"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#fe4462] focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus: focus:border-transparent"
           />
         </div>
 
@@ -195,7 +195,7 @@ export function CountryIntegrationExample() {
             value={formData.zipcode}
             onChange={handleInputChange}
             placeholder="Enter your postal code"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#fe4462] focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus: focus:border-transparent"
           />
         </div>
 

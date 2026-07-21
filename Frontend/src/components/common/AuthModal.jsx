@@ -11,8 +11,8 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^[+\d][\d\s-]{6,}$/;
 
 const fieldCls = (invalid) =>
-  `w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-11 pr-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition-all duration-200 focus:ring-4 focus:ring-[#fe4462]/15 focus:border-[#fe4462] focus:bg-white dark:focus:bg-white/[0.07] focus-visible:!outline-none ${
-    invalid ? "border-red-400 focus:ring-red-400/15" : "border-gray-200 dark:border-white/10"
+  `w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-11 pr-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition-all duration-200  dark:focus:bg-white/[0.07] focus-visible:!outline-none ${
+    invalid ? "border-red-400 " : "border-gray-200 dark:border-white/10"
   }`;
 
 /** Labelled input with icon + inline error (shown once the field is touched). */
@@ -153,7 +153,7 @@ function AuthDialog() {
 
         {/* Logo + heading */}
         <div className="flex flex-col items-center text-center">
-          <div className="h-14 w-14 overflow-hidden rounded-full ring-2 ring-[#fe4462]/30">
+          <div className="h-14 w-14 overflow-hidden rounded-full  ring-[#fe4462]/30">
             <img src="/header/logo.png" alt="Mohan Maya" className="h-full w-full object-cover" />
           </div>
           <h2 id="auth-modal-title" className="mt-3 text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">

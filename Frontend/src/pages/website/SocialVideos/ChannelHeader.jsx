@@ -39,7 +39,7 @@ function Avatar({ src, alt, size }) {
   const [ok, setOk] = useState(true);
   return (
     <span
-      className="relative grid shrink-0 place-items-center overflow-hidden rounded-full bg-[#ff0000] text-white ring-2 ring-white/80 dark:ring-white/10 shadow-lg"
+      className="relative grid shrink-0 place-items-center overflow-hidden rounded-full bg-[#ff0000] text-white  ring-white/80 dark:ring-white/10 shadow-lg"
       style={{ height: size, width: size }}
     >
       {src && ok ? (

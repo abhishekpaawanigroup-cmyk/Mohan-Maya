@@ -34,10 +34,11 @@ export default function Wishlist() {
   const moveToCart = (item, e) => {
     if (addToCart(item, 1, e)) toggleWishlist(item);
   };
+  // Add every wishlist item to the cart. The wishlist itself is left
+  // untouched - items are only removed via the trash icon, the per-item
+  // "Move to Cart" button, or "Clear wishlist".
   const moveAllToCart = () => {
-    [...wishlist].forEach((item) => {
-      if (addToCart(item, 1)) toggleWishlist(item);
-    });
+    wishlist.forEach((item) => addToCart(item, 1));
   };
   const clearWishlist = () => {
     [...wishlist].forEach((item) => toggleWishlist(item));

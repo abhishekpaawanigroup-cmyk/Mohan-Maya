@@ -102,7 +102,7 @@ export default function InternationalPhone({
         className={`react-international-phone-container ${className}`.trim()}
         inputClassName={`
           w-full px-4 py-2 border rounded-lg
-          focus:outline-none focus:ring-2 focus:ring-[#fe4462]
+          focus:outline-none focus:
           dark:bg-gray-800 dark:text-white dark:border-gray-600
           ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600'}
         `.trim()}

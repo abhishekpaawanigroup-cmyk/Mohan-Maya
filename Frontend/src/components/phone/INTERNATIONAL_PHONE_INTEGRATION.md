@@ -207,7 +207,7 @@ export default function Checkout() {
           value={form.fullName}
           onChange={handleInputChange}
           placeholder="John Doe"
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fe4462] dark:bg-gray-800 dark:text-white ${
+          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus: dark:bg-gray-800 dark:text-white ${
             errors.fullName
               ? 'border-red-500'
               : 'border-gray-300 dark:border-gray-600'
@@ -232,7 +232,7 @@ export default function Checkout() {
           value={form.email}
           onChange={handleInputChange}
           placeholder="john@example.com"
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fe4462] dark:bg-gray-800 dark:text-white ${
+          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus: dark:bg-gray-800 dark:text-white ${
             errors.email
               ? 'border-red-500'
               : 'border-gray-300 dark:border-gray-600'
@@ -269,7 +269,7 @@ export default function Checkout() {
           value={form.address}
           onChange={handleInputChange}
           placeholder="123 Main Street"
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fe4462] dark:bg-gray-800 dark:text-white ${
+          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus: dark:bg-gray-800 dark:text-white ${
             errors.address
               ? 'border-red-500'
               : 'border-gray-300 dark:border-gray-600'
@@ -294,7 +294,7 @@ export default function Checkout() {
             name="city"
             value={form.city}
             onChange={handleInputChange}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fe4462] dark:bg-gray-800 dark:text-white ${
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus: dark:bg-gray-800 dark:text-white ${
               errors.city
                 ? 'border-red-500'
                 : 'border-gray-300 dark:border-gray-600'
@@ -317,7 +317,7 @@ export default function Checkout() {
             name="state"
             value={form.state}
             onChange={handleInputChange}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fe4462] dark:bg-gray-800 dark:text-white ${
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus: dark:bg-gray-800 dark:text-white ${
               errors.state
                 ? 'border-red-500'
                 : 'border-gray-300 dark:border-gray-600'
@@ -340,7 +340,7 @@ export default function Checkout() {
             name="zipcode"
             value={form.zipcode}
             onChange={handleInputChange}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fe4462] dark:bg-gray-800 dark:text-white ${
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus: dark:bg-gray-800 dark:text-white ${
               errors.zipcode
                 ? 'border-red-500'
                 : 'border-gray-300 dark:border-gray-600'

@@ -285,7 +285,7 @@
  * All styling is built-in, no additional CSS needed.
  * 
  * To customize colors, modify these className values:
- * - Ring color: focus:ring-[#fe4462]
+ * - Ring color:
  * - Hover: hover:bg-gray-100 dark:hover:bg-white/10
  * - Selected: bg-[#fe4462]/10 text-[#fe4462]
  * - Error: text-red-600

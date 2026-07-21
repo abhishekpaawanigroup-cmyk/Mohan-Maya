@@ -165,10 +165,10 @@ export function AdvancedPhoneInput({
           disabled={disabled}
           required={required}
           placeholder={placeholder}
-          className={`flex-1 px-4 py-2.5 border rounded-lg bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:border-transparent outline-none transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+          className={`flex-1 px-4 py-2.5 border rounded-lg bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus: focus:border-transparent outline-none transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
             error
               ? "border-red-300 dark:border-red-500 focus:ring-red-500"
-              : "border-gray-300 dark:border-white/10 focus:ring-[#fe4462]"
+              : "border-gray-300 dark:border-white/10"
           }`}
         />
 
@@ -190,7 +190,7 @@ export function AdvancedPhoneInput({
                   placeholder="Search country..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 py-1.5 border border-gray-300 dark:border-white/10 rounded bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm focus:outline-none focus:ring-1 focus:ring-[#fe4462]"
+                  className="w-full px-3 py-1.5 border border-gray-300 dark:border-white/10 rounded bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm focus:outline-none focus:ring-1"
                 />
               </div>
 

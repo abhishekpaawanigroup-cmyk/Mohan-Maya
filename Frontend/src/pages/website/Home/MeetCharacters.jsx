@@ -146,7 +146,7 @@ export default function MeetCharacters() {
                     <Link
                       to={getCharacterLink(char.name)}
                       aria-label={`Explore the ${char.name} collection`}
-                      className="group/btn mt-3 inline-flex items-center justify-center gap-1.5 rounded-full border border-gray-300/80 bg-white/10 px-5 py-2 text-xs font-semibold tracking-wide text-gray-800 backdrop-blur-md transition-all duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#fe4462]/60 active:scale-95 dark:border-white/25 dark:text-white"
+                      className="group/btn mt-3 inline-flex items-center justify-center gap-1.5 rounded-full border border-gray-300/80 bg-white/10 px-5 py-2 text-xs font-semibold tracking-wide text-gray-800 backdrop-blur-md transition-all duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible: focus-visible:ring-[#fe4462]/60 active:scale-95 dark:border-white/25 dark:text-white"
                     >
                       Explore
                       <FiArrowRight className="transition-transform duration-300 group-hover/btn:translate-x-0.5" />
@@ -173,7 +173,7 @@ export default function MeetCharacters() {
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className={`flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white/80 text-gray-700 shadow-md backdrop-blur-md transition-colors duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#fe4462]/60 dark:border-white/20 dark:bg-white/10 dark:text-white ${
+                className={`flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white/80 text-gray-700 shadow-md backdrop-blur-md transition-colors duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible: focus-visible:ring-[#fe4462]/60 dark:border-white/20 dark:bg-white/10 dark:text-white ${
                   canPrev ? "" : "pointer-events-none"
                 }`}
               >
@@ -191,7 +191,7 @@ export default function MeetCharacters() {
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className={`flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white/80 text-gray-700 shadow-md backdrop-blur-md transition-colors duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#fe4462]/60 dark:border-white/20 dark:bg-white/10 dark:text-white ${
+                className={`flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white/80 text-gray-700 shadow-md backdrop-blur-md transition-colors duration-300 hover:border-[#fe4462] hover:bg-[#fe4462] hover:text-white focus-visible:outline-none focus-visible: focus-visible:ring-[#fe4462]/60 dark:border-white/20 dark:bg-white/10 dark:text-white ${
                   canNext ? "" : "pointer-events-none"
                 }`}
               >

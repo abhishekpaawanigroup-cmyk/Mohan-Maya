@@ -17,7 +17,7 @@ import InternationalPhone from "../../../components/phone/InternationalPhone";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const inputCls = (invalid) =>
-  `w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-11 pr-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition focus:ring-2 focus:ring-[#fe4462]/30 focus:border-[#fe4462] focus-visible:!outline-none ${
+  `w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-11 pr-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition focus:/30 focus:border-[#fe4462] focus-visible:!outline-none ${
     invalid ? "border-red-400 focus:ring-red-400/20" : "border-gray-200 dark:border-white/10"
   }`;
 

@@ -96,8 +96,8 @@ export default function Auth() {
   };
 
   const fieldCls = (name) =>
-    `w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-11 pr-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition-all duration-200 focus:ring-4 focus:ring-[#fe4462]/15 focus:border-[#fe4462] focus:bg-white dark:focus:bg-white/[0.07] focus-visible:!outline-none ${
-      errors[name] ? "border-red-400 focus:ring-red-400/15" : "border-gray-200 dark:border-white/10"
+    `w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-11 pr-4 py-3 text-sm text-gray-800 dark:text-white placeholder-gray-400 outline-none transition-all duration-200 dark:focus:bg-white/[0.07] focus-visible:!outline-none ${
+      errors[name] ? "border-red-400 " : "border-gray-200 dark:border-white/10"
     }`;
 
   /* ── A single auth form (used for both Sign In and Sign Up panels) ── */
@@ -180,7 +180,7 @@ export default function Auth() {
                 autoComplete={registering ? "new-password" : "current-password"}
                 aria-label="Password"
                 aria-invalid={Boolean(errors.password)}
-                className={`${fieldCls("password")} !pr-11`}
+                className={`${fieldCls("password")} pr-11!`}
               />
               <button
                 type="button"
