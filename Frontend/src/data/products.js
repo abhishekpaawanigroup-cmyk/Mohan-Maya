@@ -13,28 +13,31 @@ export const categories = [
   "Limited Edition",
 ];
 
-// Character groups: Mohan (male) and Maya (female)
+// The six characters the catalog is organised around. Every product's
+// `character` field must be one of these (see `characterProfiles` below for
+// the portrait shown on the "Meet Our Characters" section and filters).
 export const characters = [
   "All Characters",
   "Mohan",
   "Maya",
+  "Madhvi",
+  "Rajkumari",
+  "Shiva",
+  "Moti",
 ];
 
-// Character mapping: maps individual character names to groups
-const characterMapping = {
-  "Krishna": "Mohan",
-  "Madhav": "Mohan",
-  "Shiva": "Mohan",
-  "Govinda": "Mohan",
-  "Radha": "Maya",
-  "Mohini": "Maya",
-  "Maya": "Maya",
-};
-
-// Helper function to map character names to groups
-export const mapCharacter = (characterName) => {
-  return characterMapping[characterName] || characterName;
-};
+// One portrait per character, used by the "Meet Our Characters" home section
+// and anywhere else a character needs a representative image. Data-driven so
+// a new character only needs an entry here (plus catalog products) to appear
+// everywhere in the app.
+export const characterProfiles = [
+  { name: "Mohan", image: "/Featured-images/mm4.png" },
+  { name: "Maya", image: "/Featured-images/mm5.png" },
+  { name: "Madhvi", image: "/character/Madhvi.png" },
+  { name: "Rajkumari", image: "/character/Princess.png" },
+  { name: "Shiva", image: "/character/Shiva.png" },
+  { name: "Moti", image: "/character/dog.png" },
+];
 
 export const sortOptions = [
   { label: "Featured", value: "featured" },
@@ -183,6 +186,99 @@ export const products = [
     character: "Mohan",
     image: "/bestseller-image/mm7.png",
     gallery: gallery("/bestseller-image/mm7.png", "/bestseller-image/mm4.png", "/bestseller-image/mm5.png", "/bestseller-image/mm6.png"),
+  },
+  {
+    id: 13,
+    name: "Mohan Maya - Madhvi",
+    price: 240,
+    oldPrice: 300,
+    rating: 4.7,
+    category: "Festival Collection",
+    character: "Madhvi",
+    badge: "New",
+    image: "/character/Madhvi.png",
+    gallery: ["/character/Madhvi.png"],
+  },
+  {
+    id: 14,
+    name: "Mohan Maya - Madhvi",
+    price: 260,
+    oldPrice: 320,
+    rating: 4.6,
+    category: "Wedding Collection",
+    character: "Madhvi",
+    image: "/character/Madhvi.png",
+    gallery: ["/character/Madhvi.png"],
+  },
+  {
+    id: 15,
+    name: "Mohan Maya - Rajkumari",
+    price: 210,
+    oldPrice: 270,
+    rating: 4.8,
+    category: "Birthday Collection",
+    character: "Rajkumari",
+    badge: "Top Sale",
+    image: "/character/Princess.png",
+    gallery: ["/character/Princess.png"],
+  },
+  {
+    id: 16,
+    name: "Mohan Maya - Rajkumari",
+    price: 300,
+    oldPrice: 380,
+    rating: 4.9,
+    category: "Limited Edition",
+    character: "Rajkumari",
+    badge: "Limited",
+    image: "/character/Princess.png",
+    gallery: ["/character/Princess.png"],
+  },
+  {
+    id: 17,
+    name: "Mohan Maya - Shiva",
+    price: 275,
+    oldPrice: 340,
+    rating: 5.0,
+    category: "Festival Collection",
+    character: "Shiva",
+    badge: "Top Sale",
+    image: "/character/Shiva.png",
+    gallery: ["/character/Shiva.png"],
+  },
+  {
+    id: 18,
+    name: "Mohan Maya - Shiva",
+    price: 190,
+    oldPrice: 240,
+    rating: 4.5,
+    category: "Seasonal Collection",
+    character: "Shiva",
+    image: "/character/Shiva.png",
+    gallery: ["/character/Shiva.png"],
+  },
+  {
+    id: 19,
+    name: "Mohan Maya - Moti",
+    price: 160,
+    oldPrice: 210,
+    rating: 4.6,
+    category: "Birthday Collection",
+    character: "Moti",
+    badge: "New",
+    image: "/character/dog.png",
+    gallery: ["/character/dog.png"],
+  },
+  {
+    id: 20,
+    name: "Mohan Maya - Moti",
+    price: 175,
+    oldPrice: 225,
+    rating: 4.4,
+    category: "Wedding Collection",
+    character: "Moti",
+    image: "/character/dog.png",
+    gallery: ["/character/dog.png"],
   },
 ];
 

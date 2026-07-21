@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
 import SectionHeading from "../../../components/common/SectionHeading";
+import { characterProfiles } from "../../../data/products";
 
 /**
  * "Meet Our Characters" -a clean, premium horizontal slider placed directly
@@ -10,16 +11,11 @@ import SectionHeading from "../../../components/common/SectionHeading";
  * the rest reachable via a carousel. Navigation arrows sit at the bottom-right:
  * the left arrow only appears once you've scrolled forward, and the right arrow
  * fades out at the last set -both transition smoothly with position.
+ *
+ * Cards are driven entirely by `characterProfiles` (data/products.js) - adding
+ * a new character only requires a new entry there, nothing here.
  */
-const characters = [
-  { name: "Mohan", image: "/Featured-images/mm4.png" },
-  { name: "Maya", image: "/Featured-images/mm5.png" },
-  { name: "Mohan", image: "/Featured-images/mm6.png" },
-  { name: "Maya", image: "/Featured-images/mm7.png" },
-  { name: "Mohan", image: "/trandy-images/mm4.png" },
-  { name: "Maya", image: "/trandy-images/mm6.png" },
-  { name: "Mohan", image: "/bestseller-image/mm6.png" },
-];
+const characters = characterProfiles;
 
 const GAP = 20; // px -must match the track's gap-5
 

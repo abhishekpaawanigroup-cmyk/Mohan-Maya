@@ -117,7 +117,7 @@ const WhyChooseUs = () => {
               </h3>
  
               <p className="text-gray-500 mt-3 leading-6">
-                Our creations reflect the universal teachings of kindness, patience, courage, and compassion inspired by Lord Krishna's wisdom.
+                Inspired by Lord Krishna's timeless wisdom of kindness, patience, courage, and compassion.
               </p>
  
             </div>
