@@ -88,25 +88,23 @@ const Hero = () => {
  
             <div className="space-y-5">
  
-              <h1 className="text-white text-4xl md:text-6xl xl:text-7xl leading-[1.05] font-bold">
+              <h1 className="text-white text-4xl md:text-6xl leading-tight font-bold">
  
-                Where Tiny Art
+                Where Imagination 
  
                 <br />
  
-                Comes to
+                Becomes 
  
                 <span className="bg-[#fe4462] bg-clip-text text-transparent">
-                  {" "}Life
+                  {" "}Art
                 </span>
  
               </h1>
  
               <p className="text-gray-300 text-sm md:text-lg max-w-xl mx-auto md:mx-0">
  
-                Discover beautifully handcrafted miniature creations
-                designed with precision, passion, and timeless artistry.
-                Every piece tells a unique story.
+                Discover handcrafted miniature masterpieces created with precision, passion, and timeless craftsmanship. Every piece captures a story, turning tiny details into unforgettable works of art.
  
               </p>
  
@@ -118,7 +116,7 @@ const Hero = () => {
  
               <a href="#products" className="group px-8 py-4 rounded-full bg-[#fe4462] border border-[#fe4462] text-white font-semibold flex items-center gap-3 hover:bg-transparent hover:text-[#fe4462] duration-200 shadow-xl cursor-pointer">
 
-                Shop Collection
+                 Explore Collection
 
                 <FaArrowRight className="group-hover:translate-x-1 duration-300" />
 
@@ -154,7 +152,7 @@ const Hero = () => {
                 <div className="text-left">
                   <p className="font-bold text-white leading-tight">
                     10,000+{" "}
-                    <span className="font-medium text-gray-300">Happy Customers</span>
+                    <span className="font-medium text-gray-300">Happy Collectors</span>
                   </p>
                   <div className="mt-1 flex items-center gap-1.5">
                     <span className="flex text-[#ffb400]" aria-hidden="true">
@@ -163,7 +161,7 @@ const Hero = () => {
                       ))}
                     </span>
                     <span className="text-sm font-semibold text-white">4.9/5</span>
-                    <span className="text-xs text-gray-400">Customer Rating</span>
+                    <span className="text-xs text-gray-400">Average Rating</span>
                   </div>
                 </div>
               </motion.div>

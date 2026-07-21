@@ -27,9 +27,9 @@ const MissionVision = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.5 }}
-            className="max-w-[400px] bg-transparent border border-[#fe4462] p-8 rounded-3xl shadow-lg mb-8 lg:mb-0"
+            className="max-w-[420px] bg-transparent border border-[#fe4462] p-8 rounded-3xl shadow-lg mb-8 lg:mb-0"
           >
-            <div className="w-16 h-16 rounded-full bg-[#d1d0d09e] flex items-center justify-center mb-6">
+            <div className="w-16 h-16 rounded-full bg-[#d1d0d09e] flex items-center justify-center mb-4">
               <Target size={30} className="text-[#fe4462]" />
             </div>
 
@@ -38,7 +38,7 @@ const MissionVision = () => {
             </h3>
 
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              To bring people closer to India's culture, spirituality, and craftsmanship through meaningful miniature creations that inspire joy, devotion, and imagination
+              Our mission is to create handcrafted miniature art that inspires people through meaningful stories and exceptional craftsmanship. We are dedicated to spreading values of faith, kindness, gratitude, courage, and hope by transforming memorable moments into timeless collectibles. Every creation is designed to spark emotions, strengthen connections, and remind people that even the smallest stories can have the greatest impact.
             </p>
           </motion.div>
 
@@ -48,9 +48,9 @@ const MissionVision = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="max-w-[400px] bg-transparent border border-[#fe4462] p-8 rounded-3xl shadow-lg"
+            className="max-w-[420px] bg-transparent border border-[#fe4462] p-8 rounded-3xl shadow-lg"
           >
-            <div className="w-16 h-16 rounded-full bg-[#d1d0d09e] flex items-center justify-center mb-6">
+            <div className="w-16 h-16 rounded-full bg-[#d1d0d09e] flex items-center justify-center mb-4">
               <Eye size={30} className="text-[#fe4462]" />
             </div>
 
@@ -59,7 +59,7 @@ const MissionVision = () => {
             </h3>
 
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              To become a global destination for handcrafted miniature art where every creation tells a story, preserves tradition, and brings hearts closer together.
+              Our vision is to become the world's most loved storytelling miniature brand, where every handcrafted creation inspires positivity, celebrates meaningful moments, and preserves timeless values for future generations. We aspire to create a community that cherishes art, storytelling, and craftsmanship while bringing the wisdom of Mohan and Maya into homes across the globe.
             </p>
           </motion.div>
 

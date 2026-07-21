@@ -16,15 +16,15 @@ const Hero = () => {
             Every Miniature Holds <br/> <span className="text-[#fe4462]">A Story</span>
           </h1>
 
-          <p className="text-xl leading-normal max-w-[650px] mx-auto mt-4">
-            Handcrafted miniatures inspired by Krishna's divine world, created to bring beauty, faith, and timeless memories into your home. 
+          <p className="text-xl leading-normal max-w-[700px] mx-auto mt-4">
+            Every handcrafted miniature is a masterpiece of precision and creativity. Designed by skilled artisans, our collections celebrate stories, emotions, and timeless craftsmanship that deserve a special place in your home. 
           </p>
 
           <Link
             to="/shop"
             className="mt-6 inline-block px-6 py-3 bg-[#ef4462] border border-[#ef4462] rounded-[30px] hover:bg-transparent hover:border-white transition-all duration-300 cursor-pointer font-semibold"
           >
-            Discover the Collection 
+            Explore Collection 
           </Link>
         </div>
       </div>

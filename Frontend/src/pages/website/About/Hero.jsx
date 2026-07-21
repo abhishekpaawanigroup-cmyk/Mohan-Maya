@@ -38,11 +38,11 @@ const HeroSection = () => {
             <Breadcrumb items={[{ label: "Home", to: "/" }, { label: "About" }]} light className="mb-4 flex justify-center lg:justify-start" />
 
             <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4">
-              Every Creation Begins With <br/> <span className="text-[#fe4462]">A Story</span>
+              Every Story Begins <br/> with <span className="text-[#fe4462]">Faith</span>
             </h1>
 
             <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-xl mx-auto md:mx-0">
-              We transform imagination into handcrafted miniatures, designed to capture emotions , memories and timeless moments.
+              At MohanMaya, we believe that every story has the power to inspire, heal, and transform lives.
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center lg:justify-start">

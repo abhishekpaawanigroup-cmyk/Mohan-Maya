@@ -33,11 +33,11 @@ const UpcomingCollection = () => {
           className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-16 py-8 sm:py-12 md:py-16"
         >
           <span className="inline-block text-white text-xs sm:text-sm md:text-lg font-semibold uppercase tracking-wider border border-white px-3 py-2 sm:px-4 rounded-full">
-            Upcoming Collection
+            Launching Soon
           </span>
 
-          <h2 className="mt-4 text-2xl sm:text-4xl md:text-5xl font-bold text-white max-w-3xl">
-            A New World of Miniature <br /> Magic is <span className="text-[#fe4462]">Coming Soon</span>
+          <h2 className="mt-4 text-2xl sm:text-4xl md:text-5xl font-bold text-white max-w-3xl leading-tight">
+            Every Miniature Has a Story, <br /> A New One is About <span className="text-[#fe4462]">to Begin.</span>
           </h2>
 
           <p className="mt-4 text-white/90 text-sm sm:text-base md:text-lg max-w-xl leading-relaxed">

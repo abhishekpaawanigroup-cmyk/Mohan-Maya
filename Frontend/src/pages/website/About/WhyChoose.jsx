@@ -1,9 +1,6 @@
-import {
-  FaPaintBrush,
-  FaGem,
-  FaGift,
-  FaHandsHelping,
-} from "react-icons/fa";
+import { FaGem } from "react-icons/fa";
+import { GiOpenBook, GiDove } from "react-icons/gi";
+import { IoIosGift } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 const WhyChooseUs = () => {
@@ -46,17 +43,15 @@ const WhyChooseUs = () => {
             <div className="text-center">
  
               <div className="w-16 h-16 rounded-full bg-[#ffd8df] flex justify-center items-center mx-auto text-[#fe4462] text-2xl">
-                <FaPaintBrush />
+                <GiOpenBook />
               </div>
  
               <h3 className="font-bold text-2xl mt-4 text-[#2b2626] dark:text-white">
-                Exceptional Craftsmanship
+                Meaningful Storytelling
               </h3>
  
-              <p className="text-gray-500 mt-3 leading-7">
-                Every miniature is handcrafted with remarkable attention to
-                detail, creating a masterpiece that reflects true artistic
-                excellence.
+              <p className="text-gray-500 mt-3 leading-6">
+               Every miniature represents a heartfelt story inspired by values, emotions, and everyday life.
               </p>
  
             </div>
@@ -68,12 +63,11 @@ const WhyChooseUs = () => {
               </div>
  
               <h3 className="font-bold text-2xl mt-4 text-[#2b2626] dark:text-white">
-                Exclusive Designs
+                Premium Handcrafted Quality
               </h3>
  
-              <p className="text-gray-500 mt-3 leading-7">
-                Unique and limited-edition creations inspired by culture,
-                mythology, and imagination for collectors worldwide.
+              <p className="text-gray-500 mt-3 leading-6">
+                Each piece is carefully handmade with intricate detailing and superior craftsmanship.
               </p>
  
             </div>
@@ -115,16 +109,15 @@ const WhyChooseUs = () => {
             <div className="text-center">
  
               <div className="w-16 h-16 rounded-full bg-[#ffd8df] flex justify-center items-center mx-auto text-[#fe4462] text-2xl">
-                <FaGift />
+                <GiDove />
               </div>
  
               <h3 className="font-bold text-2xl mt-4 text-[#2b2626] dark:text-white">
-                Perfect for Gifting
+                Inspired by Timeless Wisdom
               </h3>
  
-              <p className="text-gray-500 mt-3 leading-7">
-                Thoughtfully designed keepsakes that make unforgettable gifts
-                for birthdays, festivals, weddings, and special occasions.
+              <p className="text-gray-500 mt-3 leading-6">
+                Our creations reflect the universal teachings of kindness, patience, courage, and compassion inspired by Lord Krishna's wisdom.
               </p>
  
             </div>
@@ -132,16 +125,15 @@ const WhyChooseUs = () => {
             <div className="text-center">
  
               <div className="w-16 h-16 rounded-full bg-[#ffd8df] flex justify-center items-center mx-auto text-[#fe4462] text-2xl">
-                <FaHandsHelping />
+                <IoIosGift />
               </div>
  
               <h3 className="font-bold text-2xl mt-4 text-[#2b2626] dark:text-white">
-                Crafted with Passion
+               More Than a Collectible
               </h3>
  
-              <p className="text-gray-500 mt-3 leading-7">
-                Our skilled artisans combine creativity and dedication to bring
-                imagination to life through timeless miniature art.
+              <p className="text-gray-500 mt-3 leading-6">
+                MohanMaya miniatures are keepsakes that preserve memories, inspire conversations, and remind us of life's beautiful lessons.
               </p>
  
             </div>
