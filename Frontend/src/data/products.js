@@ -282,9 +282,31 @@ export const products = [
   },
 ];
 
-// Curated subsets for the home page sliders (derived, not duplicated).
-export const featuredProducts = products.slice(0, 5);
-export const bestSellers = products.slice(6, 12);
+// Curated subsets for the home page sliders. Built by picking across every
+// character group (rather than a fixed id range) so each curated section
+// always represents all characters, not just whichever happen to occupy the
+// lowest product ids - adding a 7th character's products to `products` above
+// is automatically picked up here too.
+const charactersInCatalog = characters.filter((c) => c !== "All Characters");
+const byCharacter = charactersInCatalog
+  .map((name) => products.filter((p) => p.character === name))
+  .filter((group) => group.length);
+
+// One product per character, `offset`'th best-rated within that character's
+// group (wrapping if a character has fewer products than the offset) - this
+// is what keeps sibling sections (Featured/Best Sellers/Trending) from all
+// surfacing the exact same picks while still never skipping a character.
+function pickOnePerCharacter(offset) {
+  return byCharacter.map((group) => {
+    const ranked = [...group].sort((a, b) => b.rating - a.rating);
+    return ranked[offset % ranked.length];
+  });
+}
+
+const topPickPerCharacter = pickOnePerCharacter(0);
+
+export const featuredProducts = topPickPerCharacter;
+export const bestSellers = pickOnePerCharacter(1);
 
 export const trendyTabs = [
   { label: "All Collection", value: "all" },
@@ -294,8 +316,8 @@ export const trendyTabs = [
 ];
 
 export const trendyData = {
-  all: products.slice(0, 5),
+  all: topPickPerCharacter,
   newIn: products.filter((p) => p.badge === "New" || p.id > 8),
-  topRated: [...products].sort((a, b) => b.rating - a.rating).slice(0, 4),
-  trending: products.slice(4, 9),
+  topRated: [...topPickPerCharacter].sort((a, b) => b.rating - a.rating),
+  trending: pickOnePerCharacter(2),
 };
