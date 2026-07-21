@@ -23,7 +23,7 @@ const FeaturedProduct = () => {
   return (
     <section className="bg-[#fbfefb] dark:bg-[#0d0508] pb-20 pt-10">
       <div className="mx-auto px-4 sm:px-8 relative max-w-[1440px]">
-        <SectionHeading badge="Top Sale" title="Featured Characters" className="mb-14" />
+        <SectionHeading badge="Top Sale" title="Featured Products" className="mb-14" />
 
         <Swiper
           modules={[Keyboard]}
